@@ -13,7 +13,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			: this() => nativeShellItem = shellItem;
 
 		/// <summary>Indicates whether this feature is supported on the current platform.</summary>
-		public new static bool IsPlatformSupported =>
+		public static new bool IsPlatformSupported =>
 				// We need Windows 7 onwards ...
 				CoreHelpers.RunningOnWin7;
 	}

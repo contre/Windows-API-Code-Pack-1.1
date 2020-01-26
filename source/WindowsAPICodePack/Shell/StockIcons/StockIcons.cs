@@ -13,9 +13,6 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		#region Private Members
 
 		private readonly IDictionary<StockIconIdentifier, StockIcon> stockIconCache;
-		private readonly StockIconSize defaultSize = StockIconSize.Large;
-		private readonly bool isSelected;
-		private readonly bool isLinkOverlay;
 
 		#endregion
 
@@ -49,9 +46,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <param name="selected">Selection state for all the icons in the collection.</param>
 		public StockIcons(StockIconSize size, bool linkOverlay, bool selected)
 		{
-			defaultSize = size;
-			isLinkOverlay = linkOverlay;
-			isSelected = selected;
+			DefaultSize = size;
+			DefaultLinkOverlay = linkOverlay;
+			DefaultSelectedState = selected;
 
 			// Create an empty dictionary. Stock icons will be created when requested
 			// or when they are enumerated on this collection
@@ -73,19 +70,19 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// Gets the default stock icon size in one of the StockIconSize values.
 		/// This size applies to all the stock icons in the collection.
 		/// </summary>
-		public StockIconSize DefaultSize => defaultSize;
+		public StockIconSize DefaultSize { get; private set; } = StockIconSize.Large;
 
 		/// <summary>
 		/// Gets the default link overlay state for the icon. This property 
 		/// applies to all the stock icons in the collection.
 		/// </summary>
-		public bool DefaultLinkOverlay => isLinkOverlay;
+		public bool DefaultLinkOverlay { get; private set; }
 
 		/// <summary>
 		/// Gets the default selected state for the icon. This property 
 		/// applies to all the stock icons in the collection.
 		/// </summary>
-		public bool DefaultSelectedState => isSelected;
+		public bool DefaultSelectedState { get; private set; }
 
 		/// <summary>
 		/// Gets a collection of all the system stock icons
@@ -575,7 +572,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			else
 			{
 				// Create a new icon based on our default settings
-				var icon = new StockIcon(stockIconIdentifier, defaultSize, isLinkOverlay, isSelected);
+				var icon = new StockIcon(stockIconIdentifier, DefaultSize, DefaultLinkOverlay, DefaultSelectedState);
 
 				try
 				{

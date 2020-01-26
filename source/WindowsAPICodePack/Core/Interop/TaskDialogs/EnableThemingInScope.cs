@@ -114,7 +114,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 
 						// Note this will fail gracefully if file specified by manifestLoc doesn't exist.
 						hActCtx = CreateActCtx(ref enableThemingActivationContext);
-						contextCreationSucceeded = (hActCtx != new IntPtr(-1));
+						contextCreationSucceeded = hActCtx != new IntPtr(-1);
 					}
 				}
 

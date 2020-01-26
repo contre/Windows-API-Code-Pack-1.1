@@ -1,32 +1,5 @@
 ﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
 
-/* Unmerged change from project 'Shell (net452)'
-Before:
-using System;
-using System.Runtime.InteropServices;
-After:
-using Microsoft.WindowsAPICodePack.Shell;
-using Microsoft.Runtime.Shell.Interop;
-*/
-
-/* Unmerged change from project 'Shell (net462)'
-Before:
-using System;
-using System.Runtime.InteropServices;
-After:
-using Microsoft.WindowsAPICodePack.Shell;
-using Microsoft.Runtime.Shell.Interop;
-*/
-
-/* Unmerged change from project 'Shell (net472)'
-Before:
-using System;
-using System.Runtime.InteropServices;
-After:
-using Microsoft.WindowsAPICodePack.Shell;
-using Microsoft.Runtime.Shell.Interop;
-*/
-
 using Microsoft.WindowsAPICodePack.Shell;
 using System;
 using System.Runtime.InteropServices;
@@ -48,7 +21,7 @@ namespace MS.WindowsAPICodePack.Internal
 		public int TopHeight;      // height of top border that retains its size
 		public int BottomHeight;   // height of bottom border that retains its size
 
-		public Margins(bool fullWindow) => LeftWidth = RightWidth = TopHeight = BottomHeight = (fullWindow ? -1 : 0);
+		public Margins(bool fullWindow) => LeftWidth = RightWidth = TopHeight = BottomHeight = fullWindow ? -1 : 0;
 	};
 
 	/// <summary>Internal class that contains interop declarations for functions that are not benign and are performance critical.</summary>

@@ -26,7 +26,7 @@ namespace Microsoft.WindowsAPICodePack.Sensors
 		/// <param name="report">The sensor report to evaluate.</param>
 		public Acceleration3D(SensorReport report)
 		{
-			if (report == null) { throw new ArgumentNullException("report"); }
+			if (report == null) { throw new ArgumentNullException(nameof(report)); }
 
 			acceleration[(int)AccelerationAxis.XAxis] =
 				(float)report.Values[SensorPropertyKeys.SensorDataTypeAccelerationXG.FormatId][0];

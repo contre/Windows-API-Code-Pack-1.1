@@ -87,8 +87,8 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			}
 		}
 
-		public ShellObjectChangeTypes RegisteredTypes => _events.Keys.Aggregate<ShellObjectChangeTypes, ShellObjectChangeTypes>(
+		public ShellObjectChangeTypes RegisteredTypes => _events.Keys.Aggregate(
 					ShellObjectChangeTypes.None,
-					(accumulator, changeType) => (changeType | accumulator));
+					(accumulator, changeType) => changeType | accumulator);
 	}
 }

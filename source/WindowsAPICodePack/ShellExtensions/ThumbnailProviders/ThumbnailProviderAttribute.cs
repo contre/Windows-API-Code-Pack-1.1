@@ -49,8 +49,8 @@ namespace Microsoft.WindowsAPICodePack.ShellExtensions
 		/// <param name="extensions">Semi-colon-separated list of extensions supported by this provider.</param>
 		public ThumbnailProviderAttribute(string name, string extensions)
 		{
-			if (name == null) throw new ArgumentNullException("name");
-			if (extensions == null) throw new ArgumentNullException("extensions");
+			if (name == null) throw new ArgumentNullException(nameof(name));
+			if (extensions == null) throw new ArgumentNullException(nameof(extensions));
 
 			Name = name;
 			Extensions = extensions;

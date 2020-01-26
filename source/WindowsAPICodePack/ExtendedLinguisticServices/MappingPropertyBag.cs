@@ -53,7 +53,7 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 		/// <returns></returns>
 		public T[] FormatData<T>(IMappingFormatter<T> formatter)
 		{
-			if (formatter == null) { throw new ArgumentNullException("formatter"); }
+			if (formatter == null) throw new ArgumentNullException(nameof(formatter));
 			return formatter.FormatAll(this);
 		}
 
@@ -69,7 +69,7 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 				var range = new MappingDataRange
 				{
 					_win32DataRange = InteropTools.Unpack<Win32DataRange>(
-					(IntPtr)((ulong)_win32PropertyBag._ranges + ((ulong)i * InteropTools.SizeOfWin32DataRange)))
+					(IntPtr)((ulong)_win32PropertyBag._ranges + (ulong)i * InteropTools.SizeOfWin32DataRange))
 				};
 				result[i] = range;
 			}
@@ -80,16 +80,12 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 		/// <param name="disposed"></param>
 		protected virtual void Dispose(bool disposed)
 		{
-			if (Interlocked.CompareExchange(ref _isFinalized, 0, 0) == 0)
+			if (Interlocked.CompareExchange(ref _isFinalized, 0, 0) == 0 && DisposeInternal())
 			{
-				var result = DisposeInternal();
-				if (result)
-				{
-					_serviceCache.UnregisterResource();
-					InteropTools.Free<Win32Options>(ref _options);
-					_text.Free();
-					Interlocked.CompareExchange(ref _isFinalized, 1, 0);
-				}
+				_serviceCache.UnregisterResource();
+				InteropTools.Free<Win32Options>(ref _options);
+				_text.Free();
+				Interlocked.CompareExchange(ref _isFinalized, 1, 0);
 			}
 		}
 

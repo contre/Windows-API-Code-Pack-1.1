@@ -57,7 +57,7 @@ namespace Microsoft.WindowsAPICodePack.ShellExtensions
 			Justification = "The object remains reachable through the Controls collection which can be disposed at a later time.")]
 		protected override void HandleInitializeException(Exception caughtException)
 		{
-			if (caughtException == null) { throw new ArgumentNullException("caughtException"); }
+			if (caughtException == null) { throw new ArgumentNullException(nameof(caughtException)); }
 
 			Control = new UserControl();
 			Control.Controls.Add(new TextBox

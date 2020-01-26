@@ -24,12 +24,12 @@ namespace Microsoft.WindowsAPICodePack.Net
 		}
 
 		/// <summary>Gets the local date and time when the network was connected.</summary>
-		/// <value>A <see cref="System.DateTime"/> object.</value>
+		/// <value>A <see cref="DateTime"/> object.</value>
 		public DateTime ConnectedTime
 		{
 			get
 			{
-				network.GetTimeCreatedAndConnected(out var dummy1, out var dummy2, out var low, out var high);
+				network.GetTimeCreatedAndConnected(out _, out _, out var low, out var high);
 				long time = high;
 				// Shift the day info into the high order bits.
 				time <<= 32;
@@ -48,12 +48,12 @@ namespace Microsoft.WindowsAPICodePack.Net
 		public ConnectivityStates Connectivity => network.GetConnectivity();
 
 		/// <summary>Gets the local date and time when the network was created.</summary>
-		/// <value>A <see cref="System.DateTime"/> object.</value>
+		/// <value>A <see cref="DateTime"/> object.</value>
 		public DateTime CreatedTime
 		{
 			get
 			{
-				network.GetTimeCreatedAndConnected(out var low, out var high, out var dummy1, out var dummy2);
+				network.GetTimeCreatedAndConnected(out var low, out var high, out _, out _);
 				long time = high;
 				//Shift the value into the high order bits.
 				time <<= 32;
@@ -63,7 +63,7 @@ namespace Microsoft.WindowsAPICodePack.Net
 		}
 
 		/// <summary>Gets or sets a description for the network.</summary>
-		/// <value>A <see cref="System.String"/> value.</value>
+		/// <value>A <see cref="string"/> value.</value>
 		public string Description
 		{
 			get => network.GetDescription();
@@ -80,7 +80,7 @@ namespace Microsoft.WindowsAPICodePack.Net
 		public DomainType DomainType => network.GetDomainType();
 
 		/// <summary>Gets or sets the name of the network.</summary>
-		/// <value>A <see cref="System.String"/> value.</value>
+		/// <value>A <see cref="string"/> value.</value>
 		public string Name
 		{
 			get => network.GetName();
@@ -89,15 +89,15 @@ namespace Microsoft.WindowsAPICodePack.Net
 		}
 
 		/// <summary>Gets a unique identifier for the network.</summary>
-		/// <value>A <see cref="System.Guid"/> value.</value>
+		/// <value>A <see cref="Guid"/> value.</value>
 		public Guid NetworkId => network.GetNetworkId();
 
 		/// <summary>Gets a value that indicates whether there is network connectivity.</summary>
-		/// <value>A <see cref="System.Boolean"/> value.</value>
+		/// <value>A <see cref="bool"/> value.</value>
 		public bool IsConnected => network.IsConnected;
 
 		/// <summary>Gets a value that indicates whether there is Internet connectivity.</summary>
-		/// <value>A <see cref="System.Boolean"/> value.</value>
+		/// <value>A <see cref="bool"/> value.</value>
 		public bool IsConnectedToInternet => network.IsConnectedToInternet;
 	}
 }

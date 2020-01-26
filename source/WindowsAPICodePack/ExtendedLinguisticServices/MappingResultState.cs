@@ -7,20 +7,17 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 	/// <summary>This class serves as the result status of asynchronous calls to ELS and as the result status of linguistic exceptions.</summary>
 	public struct MappingResultState
 	{
-		private readonly string _errorMessage;
-		private readonly int _hResult;
-
 		internal MappingResultState(int hResult, string errorMessage)
 		{
-			_hResult = hResult;
-			_errorMessage = errorMessage;
+			HResult = hResult;
+			ErrorMessage = errorMessage;
 		}
 
 		/// <summary>Gets a human-readable description of the HResult error code, as constructed by <see cref="System.ComponentModel.Win32Exception">Win32Exception</see>.</summary>
-		public string ErrorMessage => _errorMessage;
+		public string ErrorMessage { get; private set; }
 
 		/// <summary>Gets the HResult error code associated with this structure.</summary>
-		public int HResult => _hResult;
+		public int HResult { get; private set; }
 
 		/// <summary>Compares two <see cref="MappingResultState">MappingResultState</see> objs against value equality.</summary>
 		/// <param name="one">First <see cref="MappingResultState">MappingResultState</see> to compare.</param>
@@ -37,33 +34,15 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 		/// <summary>Compares an Object for value equality.</summary>
 		/// <param name="obj">Object to compare.</param>
 		/// <returns>True if obj is equal to this instance, false otherwise.</returns>
-		public override bool Equals(object obj)
-		{
-			if (obj == null)
-			{
-				return false;
-			}
-
-			if (Object.ReferenceEquals(obj, this))
-			{
-				return true;
-			}
-
-			if (obj is MappingResultState)
-			{
-				return Equals((MappingResultState)obj);
-			}
-
-			return false;
-		}
+		public override bool Equals(object obj) => obj == null ? false : ReferenceEquals(obj, this) ? true : obj is MappingResultState ? Equals((MappingResultState)obj) : false;
 
 		/// <summary>Compares a <see cref="MappingResultState">MappingResultState</see> obj for value equality.</summary>
 		/// <param name="obj"><see cref="MappingResultState">MappingResultState</see> to compare.</param>
 		/// <returns>True if obj is equal to this instance, false otherwise.</returns>
-		public bool Equals(MappingResultState obj) => obj._hResult == _hResult;
+		public bool Equals(MappingResultState obj) => obj.HResult == HResult;
 
 		/// <summary>Uses the HResult param as the object hashcode.</summary>
 		/// <returns>An integer hashcode</returns>
-		public override int GetHashCode() => _hResult;
+		public override int GetHashCode() => HResult;
 	}
 }

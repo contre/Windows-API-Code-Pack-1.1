@@ -227,7 +227,7 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsPresentationFoundation
 			InitializeComponent();
 
 			// the ExplorerBrowser WinForms control
-			ExplorerBrowserControl = new Microsoft.WindowsAPICodePack.Controls.WindowsForms.ExplorerBrowser();
+			ExplorerBrowserControl = new WindowsForms.ExplorerBrowser();
 
 			// back the dependency collection properties with instances
 			SelectedItems = selectedItems = new ObservableCollection<ShellObject>();
@@ -322,7 +322,7 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsPresentationFoundation
 		}
 
 		/// <summary>The underlying WinForms control</summary>
-		public Microsoft.WindowsAPICodePack.Controls.WindowsForms.ExplorerBrowser ExplorerBrowserControl
+		public WindowsForms.ExplorerBrowser ExplorerBrowserControl
 		{
 			get;
 			set;

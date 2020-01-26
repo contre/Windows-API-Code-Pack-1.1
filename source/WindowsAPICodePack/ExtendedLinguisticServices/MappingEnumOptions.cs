@@ -7,7 +7,7 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 	/// <summary>Contains options used to enumerate ELS services.</summary>
 	public class MappingEnumOptions
 	{
-		internal Nullable<Guid> _guid;
+		internal Guid? _guid;
 		internal Win32EnumOptions _win32EnumOption;
 
 		/// <summary>Public constructor. Initializes an empty instance of <see cref="MappingEnumOptions">MappingEnumOptions</see>.</summary>
@@ -27,7 +27,7 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 		/// Optional. A globally unique identifier (guid) structure for a specific service. The application must avoid setting this member at
 		/// all if the guid is not a search criterion.
 		/// </summary>
-		public Nullable<Guid> Guid
+		public Guid? Guid
 		{
 			get => _guid;
 			set => _guid = value;

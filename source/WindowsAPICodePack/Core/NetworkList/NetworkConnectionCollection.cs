@@ -13,7 +13,7 @@ namespace Microsoft.WindowsAPICodePack.Net
 		internal NetworkConnectionCollection(IEnumerable networkConnectionEnumerable) => this.networkConnectionEnumerable = networkConnectionEnumerable;
 
 		/// <summary>Returns the strongly typed enumerator for this collection.</summary>
-		/// <returns>A <see cref="System.Collections.Generic.IEnumerator{T}"/> object.</returns>
+		/// <returns>A <see cref="IEnumerator{T}"/> object.</returns>
 		public IEnumerator<NetworkConnection> GetEnumerator()
 		{
 			foreach (INetworkConnection networkConnection in networkConnectionEnumerable)
@@ -25,7 +25,7 @@ namespace Microsoft.WindowsAPICodePack.Net
 		/// <summary>
 		/// Returns the enumerator for this collection.
 		/// </summary>
-		///<returns>A <see cref="System.Collections.IEnumerator"/> object.</returns>
+		///<returns>A <see cref="IEnumerator"/> object.</returns>
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			foreach (INetworkConnection networkConnection in networkConnectionEnumerable)

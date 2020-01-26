@@ -18,15 +18,15 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 
 		internal static void Free<T>(ref IntPtr pointer) where T : struct
 		{
-			if (pointer != IntPtr.Zero)
-			{
-				// Thus we clear the strings previously allocated to the struct:
-				Marshal.StructureToPtr(default(T), pointer, true);
-				// Here we clean up the memory for the struct itself:
-				Marshal.FreeHGlobal(pointer);
-				// This is to avoid calling freeing this pointer multiple times:
-				pointer = IntPtr.Zero;
-			}
+			if (pointer == IntPtr.Zero)
+				return;
+
+			// Thus we clear the strings previously allocated to the struct:
+			Marshal.StructureToPtr(default(T), pointer, true);
+			// Here we clean up the memory for the struct itself:
+			Marshal.FreeHGlobal(pointer);
+			// This is to avoid calling freeing this pointer multiple times:
+			pointer = IntPtr.Zero;
 		}
 
 		internal static IntPtr Pack<T>(ref T data) where T : struct
@@ -36,15 +36,7 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 			return pointer;
 		}
 
-		internal static T Unpack<T>(IntPtr value) where T : struct
-		{
-			if (value == IntPtr.Zero)
-			{
-				return default(T);
-			}
-
-			return (T)Marshal.PtrToStructure(value, typeof(T));
-		}
+		internal static T Unpack<T>(IntPtr value) where T : struct => value == IntPtr.Zero ? default : (T)Marshal.PtrToStructure(value, typeof(T));
 
 		internal static string[] UnpackStringArray(IntPtr strPtr, uint count)
 		{

@@ -8,11 +8,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.Interop
 	/// <summary>Wraps the native Windows MSG structure.</summary>
 	public struct Message
 	{
-		private readonly IntPtr lparam;
-		private readonly uint msg;
-		private readonly int time;
-		private readonly IntPtr windowHandle;
-		private readonly IntPtr wparam;
 		private NativePoint point;
 
 		/// <summary>Creates a new instance of the Message struct</summary>
@@ -25,31 +20,31 @@ namespace Microsoft.WindowsAPICodePack.Shell.Interop
 		internal Message(IntPtr windowHandle, uint msg, IntPtr wparam, IntPtr lparam, int time, NativePoint point)
 			: this()
 		{
-			this.windowHandle = windowHandle;
-			this.msg = msg;
-			this.wparam = wparam;
-			this.lparam = lparam;
-			this.time = time;
+			WindowHandle = windowHandle;
+			Msg = msg;
+			WParam = wparam;
+			LParam = lparam;
+			Time = time;
 			this.point = point;
 		}
 
 		/// <summary>Gets the LParam</summary>
-		public IntPtr LParam => lparam;
+		public IntPtr LParam { get; private set; }
 
 		/// <summary>Gets the window message</summary>
-		public uint Msg => msg;
+		public uint Msg { get; private set; }
 
 		/// <summary>Gets the point</summary>
 		public NativePoint Point => point;
 
 		/// <summary>Gets the time</summary>
-		public int Time => time;
+		public int Time { get; private set; }
 
 		/// <summary>Gets the window handle</summary>
-		public IntPtr WindowHandle => windowHandle;
+		public IntPtr WindowHandle { get; private set; }
 
 		/// <summary>Gets the WParam</summary>
-		public IntPtr WParam => wparam;
+		public IntPtr WParam { get; private set; }
 
 		/// <summary>Determines if two messages are not equal.</summary>
 		/// <param name="first">First message</param>

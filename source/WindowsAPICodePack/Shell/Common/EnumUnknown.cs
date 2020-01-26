@@ -44,7 +44,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		{
 			var temp = current + (int)number;
 
-			if (temp > (conditionList.Count - 1))
+			if (temp > conditionList.Count - 1)
 			{
 				return HResult.False;
 			}

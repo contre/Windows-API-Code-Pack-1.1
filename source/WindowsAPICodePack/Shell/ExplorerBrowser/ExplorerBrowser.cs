@@ -15,8 +15,8 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsForms
 {
 	/// <summary>This class is a wrapper around the Windows Explorer Browser control.</summary>
 	public sealed class ExplorerBrowser :
-		System.Windows.Forms.UserControl,
-		Microsoft.WindowsAPICodePack.Controls.IServiceProvider,
+		UserControl,
+		IServiceProvider,
 		IExplorerPaneVisibility,
 		IExplorerBrowserEvents,
 		ICommDlgBrowser3,
@@ -152,12 +152,12 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsForms
 		/// Travel Log.
 		/// </summary>
 		/// <param name="shellObject">The shell container to navigate to.</param>
-		/// <exception cref="System.Runtime.InteropServices.COMException">Will throw if navigation fails for any other reason.</exception>
+		/// <exception cref="COMException">Will throw if navigation fails for any other reason.</exception>
 		public void Navigate(ShellObject shellObject)
 		{
 			if (shellObject == null)
 			{
-				throw new ArgumentNullException("shellObject");
+				throw new ArgumentNullException(nameof(shellObject));
 			}
 
 			if (explorerBrowserControl == null)
@@ -358,7 +358,7 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsForms
 		}
 
 		//return HResult.Ok;
-		bool IMessageFilter.PreFilterMessage(ref System.Windows.Forms.Message m)
+		bool IMessageFilter.PreFilterMessage(ref Message m)
 		{
 			var hr = HResult.False;
 			if (explorerBrowserControl != null)
@@ -366,7 +366,7 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsForms
 				// translate keyboard input
 				hr = ((IInputObject)explorerBrowserControl).TranslateAcceleratorIO(ref m);
 			}
-			return (hr == HResult.Ok);
+			return hr == HResult.Ok;
 		}
 
 		/// <summary></summary>
@@ -374,11 +374,10 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsForms
 		/// <param name="riid">requested interface guid</param>
 		/// <param name="ppvObject">caller-allocated memory for interface pointer</param>
 		/// <returns></returns>
-		HResult Microsoft.WindowsAPICodePack.Controls.IServiceProvider.QueryService(
+		HResult IServiceProvider.QueryService(
 			ref Guid guidService, ref Guid riid, out IntPtr ppvObject)
 		{
-			var hr = HResult.Ok;
-
+			HResult hr;
 			if (guidService.CompareTo(new Guid(ExplorerBrowserIIDGuid.IExplorerPaneVisibility)) == 0)
 			{
 				// Responding to this SID allows us to control the visibility of the explorer browser panes
@@ -447,13 +446,7 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsForms
 			}
 		}
 
-		internal void FireSelectionChanged()
-		{
-			if (SelectionChanged != null)
-			{
-				SelectionChanged(this, EventArgs.Empty);
-			}
-		}
+		internal void FireSelectionChanged() => SelectionChanged?.Invoke(this, EventArgs.Empty);
 
 		/// <summary>Returns the current view mode of the browser</summary>
 		/// <returns></returns>
@@ -471,7 +464,6 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsForms
 				finally
 				{
 					Marshal.ReleaseComObject(ifv2);
-					ifv2 = null;
 				}
 			}
 			return (FolderViewMode)viewMode;
@@ -532,7 +524,6 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsForms
 				finally
 				{
 					Marshal.ReleaseComObject(iFV2);
-					iFV2 = null;
 				}
 			}
 			return iArray;
@@ -559,7 +550,6 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsForms
 				finally
 				{
 					Marshal.ReleaseComObject(iFV2);
-					iFV2 = null;
 				}
 			}
 
@@ -589,7 +579,6 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsForms
 				finally
 				{
 					Marshal.ReleaseComObject(iFV2);
-					iFV2 = null;
 				}
 			}
 
@@ -617,7 +606,6 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsForms
 				finally
 				{
 					Marshal.ReleaseComObject(iFV2);
-					iFV2 = null;
 				}
 			}
 

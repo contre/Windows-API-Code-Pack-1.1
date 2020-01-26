@@ -14,7 +14,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 	/// <typeparam name="T">The type of this property's value. Because a property value can be empty, only nullable types are allowed.</typeparam>
 	public class ShellProperty<T> : IShellProperty
 	{
-		private readonly ShellPropertyDescription description = null;
 		private int? imageReferenceIconIndex;
 		private string imageReferencePath = null;
 		private PropertyKey propertyKey;
@@ -29,7 +28,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 			ShellObject parent)
 		{
 			this.propertyKey = propertyKey;
-			this.description = description;
+			Description = description;
 			ParentShellObject = parent;
 			AllowSetTruncatedValue = false;
 		}
@@ -44,7 +43,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 			IPropertyStore propertyStore)
 		{
 			this.propertyKey = propertyKey;
-			this.description = description;
+			Description = description;
 			NativePropertyStore = propertyStore;
 			AllowSetTruncatedValue = false;
 		}
@@ -57,7 +56,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 		public bool AllowSetTruncatedValue { get; set; }
 
 		/// <summary>Get the property description object.</summary>
-		public ShellPropertyDescription Description => description;
+		public ShellPropertyDescription Description { get; private set; } = null;
 
 		/// <summary>Gets the image reference path and icon index associated with a property value (Windows 7 only).</summary>
 		public IconReference IconReference
@@ -70,7 +69,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 				}
 
 				GetImageReference();
-				var index = (imageReferenceIconIndex.HasValue ? imageReferenceIconIndex.Value : -1);
+				var index = imageReferenceIconIndex.HasValue ? imageReferenceIconIndex.Value : -1;
 
 				return new IconReference(imageReferencePath, index);
 			}
@@ -82,7 +81,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 		/// <summary>
 		/// Gets or sets the strongly-typed value of this property. The value of the property is cleared if the value is set to null.
 		/// </summary>
-		/// <exception cref="System.Runtime.InteropServices.COMException">
+		/// <exception cref="COMException">
 		/// If the property value cannot be retrieved or updated in the Property System
 		/// </exception>
 		/// <exception cref="NotSupportedException">If the type of this property is not supported; e.g. writing a binary object.</exception>
@@ -154,7 +153,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 				{
 					using (var propertyWriter = ParentShellObject.Properties.GetPropertyWriter())
 					{
-						propertyWriter.WriteProperty<T>(this, value, AllowSetTruncatedValue);
+						propertyWriter.WriteProperty(this, value, AllowSetTruncatedValue);
 					}
 				}
 				else if (NativePropertyStore != null)
@@ -181,7 +180,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 						store.GetValue(ref propertyKey, propVar);
 
 						Marshal.ReleaseComObject(store);
-						store = null;
 					}
 					else if (NativePropertyStore != null)
 					{
@@ -355,7 +353,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 				if (writablePropStore != null)
 				{
 					Marshal.ReleaseComObject(writablePropStore);
-					writablePropStore = null;
 				}
 			}
 		}

@@ -11,13 +11,12 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 	public struct PropertyKey : IEquatable<PropertyKey>
 	{
 		private Guid formatId;
-		private readonly int propertyId;
 
 		/// <summary>A unique GUID for the property</summary>
 		public Guid FormatId => formatId;
 
 		/// <summary>Property identifier (PID)</summary>
-		public int PropertyId => propertyId;
+		public int PropertyId { get; private set; }
 
 		/// <summary>PropertyKey Constructor</summary>
 		/// <param name="formatId">A unique GUID for the property</param>
@@ -25,7 +24,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 		public PropertyKey(Guid formatId, int propertyId)
 		{
 			this.formatId = formatId;
-			this.propertyId = propertyId;
+			PropertyId = propertyId;
 		}
 
 		/// <summary>PropertyKey Constructor</summary>
@@ -34,7 +33,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 		public PropertyKey(string formatId, int propertyId)
 		{
 			this.formatId = new Guid(formatId);
-			this.propertyId = propertyId;
+			PropertyId = propertyId;
 		}
 
 		/// <summary>Returns whether this object is equal to another. This is vital for performance of value types.</summary>
@@ -44,7 +43,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 
 		/// <summary>Returns the hash code of the object. This is vital for performance of value types.</summary>
 		/// <returns></returns>
-		public override int GetHashCode() => formatId.GetHashCode() ^ propertyId;
+		public override int GetHashCode() => formatId.GetHashCode() ^ PropertyId;
 
 		/// <summary>Returns whether this object is equal to another. This is vital for performance of value types.</summary>
 		/// <param name="obj">The object to compare against.</param>
@@ -58,7 +57,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 				return false;
 
 			var other = (PropertyKey)obj;
-			return other.formatId.Equals(formatId) && (other.propertyId == propertyId);
+			return other.formatId.Equals(formatId) && other.PropertyId == PropertyId;
 		}
 
 		/// <summary>Implements the == (equality) operator.</summary>
@@ -77,6 +76,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 		/// <returns>String representing the property key</returns>
 		public override string ToString() => string.Format(System.Globalization.CultureInfo.InvariantCulture,
 				LocalizedMessages.PropertyKeyFormatString,
-				formatId.ToString("B"), propertyId);
+				formatId.ToString("B"), PropertyId);
 	}
 }

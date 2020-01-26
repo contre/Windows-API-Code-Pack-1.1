@@ -56,7 +56,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		}
 
 		/// <summary>
-		/// Gets the <see cref="Microsoft.WindowsAPICodePack.Shell.SearchCondition"/> of the search. When this property is not set, the
+		/// Gets the <see cref="Shell.SearchCondition"/> of the search. When this property is not set, the
 		/// resulting search will have no filters applied.
 		/// </summary>
 		public SearchCondition SearchCondition
@@ -89,7 +89,6 @@ namespace Microsoft.WindowsAPICodePack.Shell
 				var shellItems = new List<IShellItem>(searchScopePaths.Length);
 
 				var shellItemGuid = new Guid(ShellIIDGuid.IShellItem);
-				var shellItemArrayGuid = new Guid(ShellIIDGuid.IShellItemArray);
 
 				// Create IShellItem for all the scopes we were given
 				foreach (var path in searchScopePaths)
@@ -177,10 +176,10 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
 		/// <summary>Creates a list of stack keys, as specified. If this method is not called, by default the folder will not be stacked.</summary>
 		/// <param name="canonicalNames">Array of canonical names for properties on which the folder is stacked.</param>
-		/// <exception cref="System.ArgumentException">If one of the given canonical names is invalid.</exception>
+		/// <exception cref="ArgumentException">If one of the given canonical names is invalid.</exception>
 		public void SetStacks(params string[] canonicalNames)
 		{
-			if (canonicalNames == null) { throw new ArgumentNullException("canonicalNames"); }
+			if (canonicalNames == null) { throw new ArgumentNullException(nameof(canonicalNames)); }
 			var propertyKeyList = new List<PropertyKey>();
 
 			foreach (var prop in canonicalNames)

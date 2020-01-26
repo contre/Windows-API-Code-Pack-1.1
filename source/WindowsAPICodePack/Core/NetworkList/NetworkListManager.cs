@@ -24,7 +24,7 @@ namespace Microsoft.WindowsAPICodePack.Net
 		}
 
 		/// <summary>Gets a value that indicates whether this machine has network connectivity.</summary>
-		/// <value>A <see cref="System.Boolean"/> value.</value>
+		/// <value>A <see cref="bool"/> value.</value>
 		public static bool IsConnected
 		{
 			get
@@ -37,7 +37,7 @@ namespace Microsoft.WindowsAPICodePack.Net
 		}
 
 		/// <summary>Gets a value that indicates whether this machine has Internet connectivity.</summary>
-		/// <value>A <see cref="System.Boolean"/> value.</value>
+		/// <value>A <see cref="bool"/> value.</value>
 		public static bool IsConnectedToInternet
 		{
 			get
@@ -50,7 +50,7 @@ namespace Microsoft.WindowsAPICodePack.Net
 		}
 
 		/// <summary>Retrieves the <see cref="Network"/> identified by the specified network identifier.</summary>
-		/// <param name="networkId">A <see cref="System.Guid"/> that specifies the unique identifier for the network.</param>
+		/// <param name="networkId">A <see cref="Guid"/> that specifies the unique identifier for the network.</param>
 		/// <returns>The <see cref="Network"/> that represents the network identified by the identifier.</returns>
 		public static Network GetNetwork(Guid networkId)
 		{
@@ -61,7 +61,7 @@ namespace Microsoft.WindowsAPICodePack.Net
 		}
 
 		/// <summary>Retrieves the <see cref="NetworkConnection"/> identified by the specified connection identifier.</summary>
-		/// <param name="networkConnectionId">A <see cref="System.Guid"/> that specifies the unique identifier for the network connection.</param>
+		/// <param name="networkConnectionId">A <see cref="Guid"/> that specifies the unique identifier for the network connection.</param>
 		/// <returns>The <see cref="NetworkConnection"/> identified by the specified identifier.</returns>
 		public static NetworkConnection GetNetworkConnection(Guid networkConnectionId)
 		{

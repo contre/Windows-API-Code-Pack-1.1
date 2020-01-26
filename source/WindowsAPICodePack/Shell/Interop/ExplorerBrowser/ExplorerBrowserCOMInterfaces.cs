@@ -391,48 +391,48 @@ namespace Microsoft.WindowsAPICodePack.Controls
 		// IFolderView
 		[PreserveSig]
 		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-		HResult GetCurrentViewMode(out uint pViewMode);
+		new HResult GetCurrentViewMode(out uint pViewMode);
 
 		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-		void SetCurrentViewMode(uint ViewMode);
+		new void SetCurrentViewMode(uint ViewMode);
 
 		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-		void GetFolder(ref Guid riid, [MarshalAs(UnmanagedType.IUnknown)] out object ppv);
+		new void GetFolder(ref Guid riid, [MarshalAs(UnmanagedType.IUnknown)] out object ppv);
 
 		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-		void Item(int iItemIndex, out IntPtr ppidl);
-
-		[PreserveSig]
-		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-		HResult ItemCount(uint uFlags, out int pcItems);
+		new void Item(int iItemIndex, out IntPtr ppidl);
 
 		[PreserveSig]
 		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-		HResult Items(uint uFlags, ref Guid riid, [Out, MarshalAs(UnmanagedType.IUnknown)] out object ppv);
+		new HResult ItemCount(uint uFlags, out int pcItems);
+
+		[PreserveSig]
+		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
+		new HResult Items(uint uFlags, ref Guid riid, [Out, MarshalAs(UnmanagedType.IUnknown)] out object ppv);
 
 		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-		void GetSelectionMarkedItem(out int piItem);
+		new void GetSelectionMarkedItem(out int piItem);
 
 		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-		void GetFocusedItem(out int piItem);
+		new void GetFocusedItem(out int piItem);
 
 		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-		void GetItemPosition(IntPtr pidl, out NativePoint ppt);
+		new void GetItemPosition(IntPtr pidl, out NativePoint ppt);
 
 		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-		void GetSpacing([Out] out NativePoint ppt);
+		new void GetSpacing([Out] out NativePoint ppt);
 
 		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-		void GetDefaultSpacing(out NativePoint ppt);
+		new void GetDefaultSpacing(out NativePoint ppt);
 
 		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-		void GetAutoArrange();
+		new void GetAutoArrange();
 
 		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-		void SelectItem(int iItem, uint dwFlags);
+		new void SelectItem(int iItem, uint dwFlags);
 
 		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-		void SelectAndPositionItems(uint cidl, IntPtr apidl, ref NativePoint apt, uint dwFlags);
+		new void SelectAndPositionItems(uint cidl, IntPtr apidl, ref NativePoint apt, uint dwFlags);
 
 		// IFolderView2
 		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]

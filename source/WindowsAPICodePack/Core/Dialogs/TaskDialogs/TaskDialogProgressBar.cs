@@ -39,7 +39,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 			get => _maximum;
 			set
 			{
-				CheckPropertyChangeAllowed("Maximum");
+				CheckPropertyChangeAllowed();
 
 				// Check if min / max differ
 				if (value < Minimum)
@@ -47,7 +47,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 					throw new System.ArgumentException(LocalizedMessages.TaskDialogProgressBarMaxValueGreaterThanMin, "value");
 				}
 				_maximum = value;
-				ApplyPropertyChange("Maximum");
+				ApplyPropertyChange();
 			}
 		}
 
@@ -57,7 +57,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 			get => _minimum;
 			set
 			{
-				CheckPropertyChangeAllowed("Minimum");
+				CheckPropertyChangeAllowed();
 
 				// Check for positive numbers
 				if (value < 0)
@@ -72,7 +72,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 				}
 
 				_minimum = value;
-				ApplyPropertyChange("Minimum");
+				ApplyPropertyChange();
 			}
 		}
 
@@ -82,14 +82,14 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 			get => _value;
 			set
 			{
-				CheckPropertyChangeAllowed("Value");
+				CheckPropertyChangeAllowed();
 				// Check for positive numbers
 				if (value < Minimum || value > Maximum)
 				{
 					throw new System.ArgumentException(LocalizedMessages.TaskDialogProgressBarValueInRange, "value");
 				}
 				_value = value;
-				ApplyPropertyChange("Value");
+				ApplyPropertyChange();
 			}
 		}
 

@@ -13,7 +13,6 @@ namespace Microsoft.WindowsAPICodePack.Shell
 	public class ShellObjectCollection : IEnumerable, IDisposable, IList<ShellObject>
 	{
 		private readonly List<ShellObject> content = new List<ShellObject>();
-		private readonly bool readOnly;
 		private bool isDisposed;
 
 		/// <summary>Constructs an empty ShellObjectCollection</summary>
@@ -27,7 +26,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <param name="readOnly">Indicates whether the collection shouldbe read-only or not</param>
 		internal ShellObjectCollection(IShellItemArray iArray, bool readOnly)
 		{
-			this.readOnly = readOnly;
+			IsReadOnly = readOnly;
 
 			if (iArray != null)
 			{
@@ -55,7 +54,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		}
 
 		/// <summary>If true, the contents of the collection are immutable.</summary>
-		public bool IsReadOnly => readOnly;
+		public bool IsReadOnly { get; private set; }
 
 		/// <summary>Item count</summary>
 		public int Count => content.Count;
@@ -71,7 +70,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			get => content[index];
 			set
 			{
-				if (readOnly)
+				if (IsReadOnly)
 				{
 					throw new InvalidOperationException(LocalizedMessages.ShellObjectCollectionInsertReadOnly);
 				}
@@ -94,7 +93,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <param name="item">The ShellObject to add.</param>
 		public void Add(ShellObject item)
 		{
-			if (readOnly)
+			if (IsReadOnly)
 			{
 				throw new InvalidOperationException(LocalizedMessages.ShellObjectCollectionInsertReadOnly);
 			}
@@ -180,7 +179,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <summary>Clears the collection of ShellObjects.</summary>
 		public void Clear()
 		{
-			if (readOnly)
+			if (IsReadOnly)
 			{
 				throw new InvalidOperationException(LocalizedMessages.ShellObjectCollectionRemoveReadOnly);
 			}
@@ -198,7 +197,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <param name="arrayIndex">The index into the array at which copying will commence.</param>
 		public void CopyTo(ShellObject[] array, int arrayIndex)
 		{
-			if (array == null) { throw new ArgumentNullException("array"); }
+			if (array == null) { throw new ArgumentNullException(nameof(array)); }
 			if (array.Length < arrayIndex + content.Count)
 			{
 				throw new ArgumentException(LocalizedMessages.ShellObjectCollectionArrayTooSmall, "array");
@@ -219,7 +218,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
 		/// <summary>Collection enumeration</summary>
 		/// <returns></returns>
-		public System.Collections.IEnumerator GetEnumerator()
+		public IEnumerator GetEnumerator()
 		{
 			foreach (var obj in content)
 			{
@@ -237,7 +236,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <param name="item">The item to insert.</param>
 		public void Insert(int index, ShellObject item)
 		{
-			if (readOnly)
+			if (IsReadOnly)
 			{
 				throw new InvalidOperationException(LocalizedMessages.ShellObjectCollectionInsertReadOnly);
 			}
@@ -250,7 +249,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <returns>True if the item could be removed, false otherwise.</returns>
 		public bool Remove(ShellObject item)
 		{
-			if (readOnly)
+			if (IsReadOnly)
 			{
 				throw new InvalidOperationException(LocalizedMessages.ShellObjectCollectionRemoveReadOnly);
 			}
@@ -262,7 +261,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <param name="index">The index to remove at.</param>
 		public void RemoveAt(int index)
 		{
-			if (readOnly)
+			if (IsReadOnly)
 			{
 				throw new InvalidOperationException(LocalizedMessages.ShellObjectCollectionRemoveReadOnly);
 			}

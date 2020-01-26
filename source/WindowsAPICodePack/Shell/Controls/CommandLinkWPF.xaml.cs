@@ -48,10 +48,7 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsPresentationFoundation
 			set
 			{
 				icon = value;
-				if (PropertyChanged != null)
-				{
-					PropertyChanged(this, new PropertyChangedEventArgs("Icon"));
-				}
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Icon"));
 			}
 		}
 
@@ -70,10 +67,7 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsPresentationFoundation
 			{
 				link = value;
 
-				if (PropertyChanged != null)
-				{
-					PropertyChanged(this, new PropertyChangedEventArgs("Link"));
-				}
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Link"));
 			}
 		}
 
@@ -84,20 +78,14 @@ namespace Microsoft.WindowsAPICodePack.Controls.WindowsPresentationFoundation
 			set
 			{
 				note = value;
-				if (PropertyChanged != null)
-				{
-					PropertyChanged(this, new PropertyChangedEventArgs("Note"));
-				}
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Note"));
 			}
 		}
 
 		private void button_Click(object sender, RoutedEventArgs e)
 		{
 			e.Source = this;
-			if (Click != null)
-			{
-				Click(sender, e);
-			}
+			Click?.Invoke(sender, e);
 		}
 	}
 }

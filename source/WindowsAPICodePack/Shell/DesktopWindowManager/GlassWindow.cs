@@ -1,49 +1,4 @@
-﻿/* Unmerged change from project 'Shell (net452)'
-Before:
-using System;
-using System.Windows.Interop;
-using System.Windows.Media;
-using MS.WindowsAPICodePack.Internal;
-using Microsoft.WindowsAPICodePack.Shell.Interop;
-After:
-using Microsoft.WindowsAPICodePack.Shell.Interop;
-using MS.WindowsAPICodePack.Internal;
-using System;
-using MS.Windows;
-using System.Windows.Interop;
-*/
-
-/* Unmerged change from project 'Shell (net462)'
-Before:
-using System;
-using System.Windows.Interop;
-using System.Windows.Media;
-using MS.WindowsAPICodePack.Internal;
-using Microsoft.WindowsAPICodePack.Shell.Interop;
-After:
-using Microsoft.WindowsAPICodePack.Shell.Interop;
-using MS.WindowsAPICodePack.Internal;
-using System;
-using MS.Windows;
-using System.Windows.Interop;
-*/
-
-/* Unmerged change from project 'Shell (net472)'
-Before:
-using System;
-using System.Windows.Interop;
-using System.Windows.Media;
-using MS.WindowsAPICodePack.Internal;
-using Microsoft.WindowsAPICodePack.Shell.Interop;
-After:
-using Microsoft.WindowsAPICodePack.Shell.Interop;
-using MS.WindowsAPICodePack.Internal;
-using System;
-using MS.Windows;
-using System.Windows.Interop;
-*/
-
-using MS.WindowsAPICodePack.Internal;
+﻿using MS.WindowsAPICodePack.Internal;
 using System;
 using System.Windows;
 using System.Windows.Interop;
@@ -96,7 +51,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 				{
 					LeftWidth = (int)topLeftFrame.X,
 					RightWidth = (int)(ActualWidth - bottomRightFrame.X),
-					TopHeight = (int)(topLeftFrame.Y),
+					TopHeight = (int)topLeftFrame.Y,
 					BottomHeight = (int)(ActualHeight - bottomRightFrame.Y)
 				};
 

@@ -27,7 +27,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		{
 			if (shellObject == null || shellObject.NativeShellItem == null)
 			{
-				throw new ArgumentNullException("shellObject");
+				throw new ArgumentNullException(nameof(shellObject));
 			}
 
 			shellItemNative = shellObject.NativeShellItem;
@@ -52,7 +52,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// </summary>
 		/// <remarks>
 		/// If the size specified is larger than the maximum size of 1024x1024 for thumbnails and 256x256 for icons, an
-		/// <see cref="System.ArgumentOutOfRangeException"/> is thrown.
+		/// <see cref="ArgumentOutOfRangeException"/> is thrown.
 		/// </remarks>
 		public System.Windows.Size CurrentSize
 		{
@@ -62,7 +62,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 				// Check for 0; negative number check not required as System.Windows.Size only allows positive numbers.
 				if (value.Height == 0 || value.Width == 0)
 				{
-					throw new System.ArgumentOutOfRangeException("value", LocalizedMessages.ShellThumbnailSizeCannotBe0);
+					throw new ArgumentOutOfRangeException("value", LocalizedMessages.ShellThumbnailSizeCannotBe0);
 				}
 
 				var size = (FormatOption == ShellThumbnailFormatOption.IconOnly) ?
@@ -70,7 +70,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
 				if (value.Height > size.Height || value.Width > size.Width)
 				{
-					throw new System.ArgumentOutOfRangeException("value",
+					throw new ArgumentOutOfRangeException("value",
 						string.Format(System.Globalization.CultureInfo.InvariantCulture,
 						LocalizedMessages.ShellThumbnailCurrentSizeRange, size.ToString()));
 				}
@@ -220,7 +220,6 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
 		private IntPtr GetHBitmap(System.Windows.Size size)
 		{
-			var hbitmap = IntPtr.Zero;
 
 			// Create a size structure to pass to the native method
 			var nativeSIZE = new CoreNativeMethods.Size
@@ -230,20 +229,14 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			};
 
 			// Use IShellItemImageFactory to get an icon Options passed in: Resize to fit
-			var hr = ((IShellItemImageFactory)shellItemNative).GetImage(nativeSIZE, CalculateFlags(), out hbitmap);
-
-			if (hr == HResult.Ok) { return hbitmap; }
-			else if ((uint)hr == 0x8004B200 && FormatOption == ShellThumbnailFormatOption.ThumbnailOnly)
+			var hr = ((IShellItemImageFactory)shellItemNative).GetImage(nativeSIZE, CalculateFlags(), out var hbitmap);
+			return ((uint)hr) switch
 			{
-				// Thumbnail was requested, but this ShellItem doesn't have a thumbnail.
-				throw new InvalidOperationException(LocalizedMessages.ShellThumbnailDoesNotHaveThumbnail, Marshal.GetExceptionForHR((int)hr));
-			}
-			else if ((uint)hr == 0x80040154) // REGDB_E_CLASSNOTREG
-			{
-				throw new NotSupportedException(LocalizedMessages.ShellThumbnailNoHandler, Marshal.GetExceptionForHR((int)hr));
-			}
-
-			throw new ShellException(hr);
+				(uint)HResult.Ok => hbitmap,
+				0x8004B200 when FormatOption == ShellThumbnailFormatOption.ThumbnailOnly => throw new InvalidOperationException(LocalizedMessages.ShellThumbnailDoesNotHaveThumbnail, Marshal.GetExceptionForHR((int)hr)),// Thumbnail was requested, but this ShellItem doesn't have a thumbnail.
+				0x80040154 => throw new NotSupportedException(LocalizedMessages.ShellThumbnailNoHandler, Marshal.GetExceptionForHR((int)hr)),
+				_ => throw new ShellException(hr),
+			};
 		}
 	}
 }

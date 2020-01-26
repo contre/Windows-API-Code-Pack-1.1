@@ -1,6 +1,7 @@
 ﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
 
 using System;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
@@ -15,6 +16,20 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		private string internalComments;
 
 		private string internalTargetLocation;
+
+		/// <summary>Initializes a new instance of the <see cref="ShellLink"/> class and directly saves the link on disk.</summary>
+		/// <param name="sourcePath">The full source path.</param>
+		/// <param name="destPath">The destination directory.</param>
+		public ShellLink(string sourcePath, string destPath)
+
+		{
+			var lnk = Activator.CreateInstance(Type.GetTypeFromCLSID(new Guid(ShellIIDGuid.CShellLink), true)) as IShellLinkW;
+			lnk.SetPath(sourcePath);
+			var linkPath = destPath + "\\\\" + System.IO.Path.GetFileNameWithoutExtension(sourcePath) + ".lnk";
+			((IPersistFile)lnk).Save(linkPath, true);
+			Path = linkPath;
+			TargetLocation = sourcePath;
+		}
 
 		internal ShellLink(IShellItem2 shellItem) => nativeShellItem = shellItem;
 
@@ -90,16 +105,12 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <summary>Gets or sets the link's title</summary>
 		public string Title
 		{
-			get
-			{
-				if (NativeShellItem2 != null) { return Properties.System.Title.Value; }
-				return null;
-			}
+			get => NativeShellItem2 != null ? Properties.System.Title.Value : null;
 			set
 			{
 				if (value == null)
 				{
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 				}
 
 				if (NativeShellItem2 != null)

@@ -63,13 +63,8 @@ namespace Microsoft.WindowsAPICodePack.Shell
 					NativeShellItem.GetAttributes(ShellNativeMethods.ShellFileGetAttributesOptions.FileSystem, out var sfgao);
 					return (sfgao & ShellNativeMethods.ShellFileGetAttributesOptions.FileSystem) != 0;
 				}
-				catch (FileNotFoundException)
+				catch (Exception ex) when (ex is FileNotFoundException || ex is NullReferenceException)
 				{
-					return false;
-				}
-				catch (NullReferenceException)
-				{
-					// NativeShellItem is null
 					return false;
 				}
 			}
@@ -85,13 +80,8 @@ namespace Microsoft.WindowsAPICodePack.Shell
 					NativeShellItem.GetAttributes(ShellNativeMethods.ShellFileGetAttributesOptions.Link, out var sfgao);
 					return (sfgao & ShellNativeMethods.ShellFileGetAttributesOptions.Link) != 0;
 				}
-				catch (FileNotFoundException)
+				catch (Exception ex) when (ex is FileNotFoundException || ex is NullReferenceException)
 				{
-					return false;
-				}
-				catch (NullReferenceException)
-				{
-					// NativeShellItem is null
 					return false;
 				}
 			}
@@ -104,9 +94,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			{
 				if (_internalName == null && NativeShellItem != null)
 				{
-					var pszString = IntPtr.Zero;
-					var hr = NativeShellItem.GetDisplayName(ShellNativeMethods.ShellItemDesignNameOptions.Normal, out pszString);
-					if (hr == HResult.Ok && pszString != IntPtr.Zero)
+					if (NativeShellItem.GetDisplayName(ShellNativeMethods.ShellItemDesignNameOptions.Normal, out var pszString) == HResult.Ok && pszString != IntPtr.Zero)
 					{
 						_internalName = Marshal.PtrToStringAuto(pszString);
 
@@ -195,7 +183,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		internal virtual IShellItem NativeShellItem => NativeShellItem2;
 
 		/// <summary>Return the native ShellFolder object as newer IShellItem2</summary>
-		/// <exception cref="System.Runtime.InteropServices.ExternalException">
+		/// <exception cref="ExternalException">
 		/// If the native object cannot be created. The ErrorCode member will contain the external error code.
 		/// </exception>
 		internal virtual IShellItem2 NativeShellItem2
@@ -249,14 +237,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <param name="leftShellObject">First object to compare.</param>
 		/// <param name="rightShellObject">Second object to compare.</param>
 		/// <returns>True if leftShellObject equals rightShellObject; false otherwise.</returns>
-		public static bool operator ==(ShellObject leftShellObject, ShellObject rightShellObject)
-		{
-			if ((object)leftShellObject == null)
-			{
-				return ((object)rightShellObject == null);
-			}
-			return leftShellObject.Equals(rightShellObject);
-		}
+		public static bool operator ==(ShellObject leftShellObject, ShellObject rightShellObject) => (object)leftShellObject == null ? (object)rightShellObject == null : leftShellObject.Equals(rightShellObject);
 
 		/// <summary>Release the native objects.</summary>
 		public void Dispose()
@@ -278,10 +259,8 @@ namespace Microsoft.WindowsAPICodePack.Shell
 				var isecond = other.NativeShellItem;
 				if (ifirst != null && isecond != null)
 				{
-					var hr = ifirst.Compare(
-						isecond, SICHINTF.SICHINT_ALLFIELDS, out var result);
-
-					areEqual = (hr == HResult.Ok) && (result == 0);
+					var hr = ifirst.Compare(isecond, SICHINTF.SICHINT_ALLFIELDS, out var result);
+					areEqual = hr == HResult.Ok && result == 0;
 				}
 			}
 
@@ -295,15 +274,15 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
 		/// <summary>
 		/// Returns the display name of the ShellFolder object. DisplayNameType represents one of the values that indicates how the name
-		/// should look. See <see cref="Microsoft.WindowsAPICodePack.Shell.DisplayNameType"/> for a list of possible values.
+		/// should look. See <see cref="DisplayNameType"/> for a list of possible values.
 		/// </summary>
 		/// <param name="displayNameType">A disaply name type.</param>
 		/// <returns>A string.</returns>
 		public virtual string GetDisplayName(DisplayNameType displayNameType)
 		{
 			string returnValue = null;
-			NativeShellItem2?.GetDisplayName((ShellNativeMethods.ShellItemDesignNameOptions)displayNameType, out returnValue);
-			return returnValue;
+			var hr = NativeShellItem2?.GetDisplayName((ShellNativeMethods.ShellItemDesignNameOptions)displayNameType, out returnValue) ?? HResult.Ok;
+			return hr == HResult.Ok ? returnValue : throw new ShellException(LocalizedMessages.ShellObjectCannotGetDisplayName, hr);
 		}
 
 		/// <summary>Returns the hash code of the object.</summary>

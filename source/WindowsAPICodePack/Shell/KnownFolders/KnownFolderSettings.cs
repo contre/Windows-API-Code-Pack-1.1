@@ -15,7 +15,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		internal KnownFolderSettings(IKnownFolderNative knownFolderNative) => GetFolderProperties(knownFolderNative);
 
 		/// <summary>Gets this known folder's canonical name.</summary>
-		/// <value>A <see cref="System.String"/> object.</value>
+		/// <value>A <see cref="string"/> object.</value>
 		public string CanonicalName => knownFolderProperties.canonicalName;
 
 		/// <summary>Gets the category designation for this known folder.</summary>
@@ -27,39 +27,39 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		public DefinitionOptions DefinitionOptions => knownFolderProperties.definitionOptions;
 
 		/// <summary>Gets this known folder's description.</summary>
-		/// <value>A <see cref="System.String"/> object.</value>
+		/// <value>A <see cref="string"/> object.</value>
 		public string Description => knownFolderProperties.description;
 
 		/// <summary>Gets the unique identifier for this known folder.</summary>
-		/// <value>A <see cref="System.Guid"/> value.</value>
+		/// <value>A <see cref="Guid"/> value.</value>
 		public Guid FolderId => knownFolderProperties.folderId;
 
 		/// <summary>Gets a string representation of this known folder's type.</summary>
-		/// <value>A <see cref="System.String"/> object.</value>
+		/// <value>A <see cref="string"/> object.</value>
 		public string FolderType => knownFolderProperties.folderType;
 
 		/// <summary>Gets the unique identifier for this known folder's type.</summary>
-		/// <value>A <see cref="System.Guid"/> value.</value>
+		/// <value>A <see cref="Guid"/> value.</value>
 		public Guid FolderTypeId => knownFolderProperties.folderTypeId;
 
 		/// <summary>Gets this known folder's localized name.</summary>
-		/// <value>A <see cref="System.String"/> object.</value>
+		/// <value>A <see cref="string"/> object.</value>
 		public string LocalizedName => knownFolderProperties.localizedName;
 
 		/// <summary>Gets the resource identifier for this known folder's localized name.</summary>
-		/// <value>A <see cref="System.String"/> object.</value>
+		/// <value>A <see cref="string"/> object.</value>
 		public string LocalizedNameResourceId => knownFolderProperties.localizedNameResourceId;
 
 		/// <summary>Gets the unique identifier for this known folder's parent folder.</summary>
-		/// <value>A <see cref="System.Guid"/> value.</value>
+		/// <value>A <see cref="Guid"/> value.</value>
 		public Guid ParentId => knownFolderProperties.parentId;
 
 		/// <summary>Gets the path for this known folder.</summary>
-		/// <value>A <see cref="System.String"/> object.</value>
+		/// <value>A <see cref="string"/> object.</value>
 		public string Path => knownFolderProperties.path;
 
 		/// <summary>Gets a value that indicates whether this known folder's path exists on the computer.</summary>
-		/// <value>A bool <see cref="System.Boolean"/> value.</value>
+		/// <value>A bool <see cref="bool"/> value.</value>
 		/// <remarks>
 		/// If this property value is <b>false</b>, the folder might be a virtual folder ( <see cref="Category"/> property will be
 		/// <see cref="FolderCategory.Virtual"/> for virtual folders)
@@ -73,19 +73,19 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		public RedirectionCapability Redirection => knownFolderProperties.redirection;
 
 		/// <summary>Gets this known folder's relative path.</summary>
-		/// <value>A <see cref="System.String"/> object.</value>
+		/// <value>A <see cref="string"/> object.</value>
 		public string RelativePath => knownFolderProperties.relativePath;
 
 		/// <summary>Gets this known folder's security attributes.</summary>
-		/// <value>A <see cref="System.String"/> object.</value>
+		/// <value>A <see cref="string"/> object.</value>
 		public string Security => knownFolderProperties.security;
 
 		/// <summary>Gets this known folder's tool tip text.</summary>
-		/// <value>A <see cref="System.String"/> object.</value>
+		/// <value>A <see cref="string"/> object.</value>
 		public string Tooltip => knownFolderProperties.tooltip;
 
 		/// <summary>Gets the resource identifier for this known folder's tool tip text.</summary>
-		/// <value>A <see cref="System.String"/> object.</value>
+		/// <value>A <see cref="string"/> object.</value>
 		public string TooltipResourceId => knownFolderProperties.tooltipResourceId;
 
 		/// <summary>Gets this known folder's file attributes, such as "read-only".</summary>
@@ -146,7 +146,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// Returns false if the folder is virtual, or a boolean value that indicates whether this known folder exists.
 		/// </param>
 		/// <param name="knownFolderNative">Native IKnownFolder reference</param>
-		/// <returns>A <see cref="System.String"/> containing the path, or <see cref="string.Empty"/> if this known folder does not exist.</returns>
+		/// <returns>A <see cref="string"/> containing the path, or <see cref="string.Empty"/> if this known folder does not exist.</returns>
 		private string GetPath(out bool fileExists, IKnownFolderNative knownFolderNative)
 		{
 			Debug.Assert(knownFolderNative != null);

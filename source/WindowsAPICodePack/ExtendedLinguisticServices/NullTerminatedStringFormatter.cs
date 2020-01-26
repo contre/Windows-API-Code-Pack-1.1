@@ -16,7 +16,7 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 		/// <returns>The resulting string</returns>
 		public string Format(MappingDataRange dataRange)
 		{
-			if (dataRange == null) { throw new ArgumentNullException("dataRange"); }
+			if (dataRange == null) { throw new ArgumentNullException(nameof(dataRange)); }
 
 			var data = dataRange.GetData();
 			if ((data.Length & 1) != 0)
@@ -43,7 +43,7 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 		/// <returns>An array of strings, one per <see cref="MappingDataRange">MappingDataRange</see>.</returns>
 		public string[] FormatAll(MappingPropertyBag bag)
 		{
-			if (bag == null) { throw new ArgumentNullException("bag"); }
+			if (bag == null) { throw new ArgumentNullException(nameof(bag)); }
 
 			var dataRanges = bag.GetResultRanges();
 			var results = new string[dataRanges.Length];

@@ -13,8 +13,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 		// Reference to our writable PropertyStore
 		internal IPropertyStore writablePropStore;
 
-		private ShellObject parentShellObject;
-
 		internal ShellPropertyWriter(ShellObject parent)
 		{
 			ParentShellObject = parent;
@@ -61,11 +59,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 		}
 
 		/// <summary>Reference to parent ShellObject (associated with this writer)</summary>
-		protected ShellObject ParentShellObject
-		{
-			get => parentShellObject;
-			private set => parentShellObject = value;
-		}
+		protected ShellObject ParentShellObject { get; private set; }
 
 		/// <summary>Call this method to commit the writes (calls to WriteProperty method) and dispose off the writer.</summary>
 		public void Close()
@@ -98,8 +92,8 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 		/// <param name="key">The property key.</param>
 		/// <param name="value">The value associated with the key.</param>
 		/// <param name="allowTruncatedValue">True to allow truncation (default); otherwise False.</param>
-		/// <exception cref="System.InvalidOperationException">If the writable property store is already closed.</exception>
-		/// <exception cref="System.ArgumentOutOfRangeException">
+		/// <exception cref="InvalidOperationException">If the writable property store is already closed.</exception>
+		/// <exception cref="ArgumentOutOfRangeException">
 		/// If AllowTruncatedValue is set to false and while setting the value on the property it had to be truncated in a string or rounded
 		/// in a numeric value.
 		/// </exception>
@@ -112,7 +106,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 			{
 				var result = writablePropStore.SetValue(ref key, propVar);
 
-				if (!allowTruncatedValue && ((int)result == ShellNativeMethods.InPlaceStringTruncated))
+				if (!allowTruncatedValue && (int)result == ShellNativeMethods.InPlaceStringTruncated)
 				{
 					// At this point we can't revert back the commit so don't commit, close the property store and throw an exception to let
 					// the user know.
@@ -141,7 +135,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 		/// <param name="canonicalName">The canonical name.</param>
 		/// <param name="value">The property value.</param>
 		/// <param name="allowTruncatedValue">True to allow truncation (default); otherwise False.</param>
-		/// <exception cref="System.ArgumentException">If the given canonical name is not valid.</exception>
+		/// <exception cref="ArgumentException">If the given canonical name is not valid.</exception>
 		public void WriteProperty(string canonicalName, object value, bool allowTruncatedValue)
 		{
 			// Get the PropertyKey using the canonicalName passed in
@@ -172,7 +166,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 		/// <param name="allowTruncatedValue">True to allow truncation (default); otherwise False.</param>
 		public void WriteProperty(IShellProperty shellProperty, object value, bool allowTruncatedValue)
 		{
-			if (shellProperty == null) { throw new ArgumentNullException("shellProperty"); }
+			if (shellProperty == null) { throw new ArgumentNullException(nameof(shellProperty)); }
 			WriteProperty(shellProperty.PropertyKey, value, allowTruncatedValue);
 		}
 
@@ -180,7 +174,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 		/// <typeparam name="T">The type of the property name.</typeparam>
 		/// <param name="shellProperty">The property name.</param>
 		/// <param name="value">The property value.</param>
-		public void WriteProperty<T>(ShellProperty<T> shellProperty, T value) => WriteProperty<T>(shellProperty, value, true);
+		public void WriteProperty<T>(ShellProperty<T> shellProperty, T value) => WriteProperty(shellProperty, value, true);
 
 		/// <summary>
 		/// Writes the specified property given a strongly-typed ShellProperty and a value. To allow truncation of the given value, set
@@ -192,7 +186,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 		/// <param name="allowTruncatedValue">True to allow truncation (default); otherwise False.</param>
 		public void WriteProperty<T>(ShellProperty<T> shellProperty, T value, bool allowTruncatedValue)
 		{
-			if (shellProperty == null) { throw new ArgumentNullException("shellProperty"); }
+			if (shellProperty == null) { throw new ArgumentNullException(nameof(shellProperty)); }
 			WriteProperty(shellProperty.PropertyKey, value, allowTruncatedValue);
 		}
 

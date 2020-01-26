@@ -1,50 +1,5 @@
 ﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
 
-/* Unmerged change from project 'Shell (net452)'
-Before:
-using System;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-using MS.WindowsAPICodePack.Internal;
-After:
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-using MS.Runtime.Internal;
-using System;
-using System.Runtime.InteropServices;
-using MS.WindowsAPICodePack.InteropServices.ComTypes;
-*/
-
-/* Unmerged change from project 'Shell (net462)'
-Before:
-using System;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-using MS.WindowsAPICodePack.Internal;
-After:
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-using MS.Runtime.Internal;
-using System;
-using System.Runtime.InteropServices;
-using MS.WindowsAPICodePack.InteropServices.ComTypes;
-*/
-
-/* Unmerged change from project 'Shell (net472)'
-Before:
-using System;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-using MS.WindowsAPICodePack.Internal;
-After:
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-using MS.Runtime.Internal;
-using System;
-using System.Runtime.InteropServices;
-using MS.WindowsAPICodePack.InteropServices.ComTypes;
-*/
-
 using Microsoft.WindowsAPICodePack.Shell.Resources;
 using MS.WindowsAPICodePack.Internal;
 using System;

@@ -25,19 +25,16 @@ namespace Microsoft.WindowsAPICodePack.Sensors
 	/// <summary>Data associated with a sensor type GUID.</summary>
 	internal struct SensorTypeData
 	{
-		private readonly SensorDescriptionAttribute sda;
-		private readonly Type sensorType;
-
 		public SensorTypeData(Type sensorClassType, SensorDescriptionAttribute sda)
 		{
-			sensorType = sensorClassType;
-			this.sda = sda;
+			SensorType = sensorClassType;
+			Attr = sda;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-		public SensorDescriptionAttribute Attr => sda;
+		public SensorDescriptionAttribute Attr { get; private set; }
 
-		public Type SensorType => sensorType;
+		public Type SensorType { get; private set; }
 	}
 
 	/// <summary>Manages the sensors conected to the system.</summary>
@@ -79,18 +76,12 @@ namespace Microsoft.WindowsAPICodePack.Sensors
 		/// <returns>A particular sensor.</returns>
 		public static T GetSensorBySensorId<T>(Guid sensorId) where T : Sensor
 		{
-			var hr = sensorManager.GetSensorByID(sensorId, out var nativeSensor);
-			if (hr == HResult.ElementNotFound)
+			if (sensorManager.GetSensorByID(sensorId, out var nativeSensor) == HResult.ElementNotFound)
 			{
 				throw new SensorPlatformException(LocalizedMessages.SensorsNotFound);
 			}
 
-			if (nativeSensor != null)
-			{
-				return GetSensorWrapperInstance<T>(nativeSensor);
-			}
-
-			return null;
+			return nativeSensor != null ? GetSensorWrapperInstance<T>(nativeSensor) : null;
 		}
 
 		/// <summary>Retrieves a collection of sensors filtered by category ID.</summary>
@@ -98,8 +89,7 @@ namespace Microsoft.WindowsAPICodePack.Sensors
 		/// <returns>A list of sensors of the specified category ID.</returns>
 		public static SensorList<Sensor> GetSensorsByCategoryId(Guid category)
 		{
-			var hr = sensorManager.GetSensorsByCategory(category, out var sensorCollection);
-			if (hr == HResult.ElementNotFound)
+			if (sensorManager.GetSensorsByCategory(category, out var sensorCollection) == HResult.ElementNotFound)
 				throw new SensorPlatformException(LocalizedMessages.SensorsNotFound);
 
 			return nativeSensorCollectionToSensorCollection<Sensor>(sensorCollection);
@@ -110,8 +100,7 @@ namespace Microsoft.WindowsAPICodePack.Sensors
 		/// <returns>A list of sensors of the spefified type ID.</returns>
 		public static SensorList<Sensor> GetSensorsByTypeId(Guid typeId)
 		{
-			var hr = sensorManager.GetSensorsByType(typeId, out var sensorCollection);
-			if (hr == HResult.ElementNotFound)
+			if (sensorManager.GetSensorsByType(typeId, out var sensorCollection) == HResult.ElementNotFound)
 			{
 				throw new SensorPlatformException(LocalizedMessages.SensorsNotFound);
 			}
@@ -128,8 +117,7 @@ namespace Microsoft.WindowsAPICodePack.Sensors
 			{
 				var sda = attrs[0] as SensorDescriptionAttribute;
 
-				var hr = sensorManager.GetSensorsByType(sda.SensorTypeGuid, out var nativeSensorCollection);
-				if (hr == HResult.ElementNotFound)
+				if (sensorManager.GetSensorsByType(sda.SensorTypeGuid, out var nativeSensorCollection) == HResult.ElementNotFound)
 				{
 					throw new SensorPlatformException(LocalizedMessages.SensorsNotFound);
 				}
@@ -221,7 +209,7 @@ namespace Microsoft.WindowsAPICodePack.Sensors
 						}
 					}
 				}
-				catch (System.NotSupportedException)
+				catch (NotSupportedException)
 				{
 					// GetExportedTypes can throw this if dynamic assemblies are loaded via Reflection.Emit.
 				}
@@ -268,18 +256,10 @@ namespace Microsoft.WindowsAPICodePack.Sensors
 		}
 
 		/// <summary>The type of change.</summary>
-		public SensorAvailabilityChange Change
-		{
-			get;
-			set;
-		}
+		public SensorAvailabilityChange Change { get; set; }
 
 		/// <summary>The ID of the sensor that changed.</summary>
-		public Guid SensorId
-		{
-			get;
-			set;
-		}
+		public Guid SensorId { get; set; }
 	}
 
 	internal class nativeSensorManagerEventSink : ISensorManagerEvents
@@ -288,8 +268,7 @@ namespace Microsoft.WindowsAPICodePack.Sensors
 		{
 			if (state == NativeSensorState.Ready)
 			{
-				var hr = nativeSensor.GetID(out var sensorId);
-				if (hr == HResult.Ok)
+				if (nativeSensor.GetID(out var sensorId) == HResult.Ok)
 				{
 					SensorManager.OnSensorsChanged(sensorId, SensorAvailabilityChange.Addition);
 				}

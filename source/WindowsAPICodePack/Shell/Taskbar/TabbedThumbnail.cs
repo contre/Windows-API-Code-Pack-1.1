@@ -107,7 +107,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 			}
 			if (control == null)
 			{
-				throw new ArgumentNullException("control");
+				throw new ArgumentNullException(nameof(control));
 			}
 
 			WindowHandle = control.Handle;
@@ -128,18 +128,18 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 		{
 			if (windowsControl == null)
 			{
-				throw new ArgumentNullException("windowsControl");
+				throw new ArgumentNullException(nameof(windowsControl));
 			}
 			if (parentWindow == null)
 			{
-				throw new ArgumentNullException("parentWindow");
+				throw new ArgumentNullException(nameof(parentWindow));
 			}
 
 			WindowHandle = IntPtr.Zero;
 
 			WindowsControl = windowsControl;
 			WindowsControlParentWindow = parentWindow;
-			ParentWindowHandle = (new WindowInteropHelper(parentWindow)).Handle;
+			ParentWindowHandle = new WindowInteropHelper(parentWindow).Handle;
 			PeekOffset = peekOffset;
 		}
 
@@ -159,7 +159,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 				if (_title != value)
 				{
 					_title = value;
-					if (TitleChanged != null) { TitleChanged(this, EventArgs.Empty); }
+					TitleChanged?.Invoke(this, EventArgs.Empty);
 				}
 			}
 		}
@@ -177,7 +177,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 				if (_tooltip != value)
 				{
 					_tooltip = value;
-					if (TooltipChanged != null) { TooltipChanged(this, EventArgs.Empty); }
+					TooltipChanged?.Invoke(this, EventArgs.Empty);
 				}
 			}
 		}

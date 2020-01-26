@@ -3,6 +3,7 @@
 using Microsoft.WindowsAPICodePack.Resources;
 using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace Microsoft.WindowsAPICodePack.Dialogs
 {
@@ -32,11 +33,11 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 		public IDialogControlHost HostingDialog { get; set; }
 
 		/// <summary>Gets the identifier for this control.</summary>
-		/// <value>An <see cref="System.Int32"/> value.</value>
+		/// <value>An <see cref="int"/> value.</value>
 		public int Id { get; private set; }
 
 		/// <summary>Gets the name for this control.</summary>
-		/// <value>A <see cref="System.String"/> value.</value>
+		/// <value>A <see cref="string"/> value.</value>
 		public string Name
 		{
 			get => name;
@@ -62,28 +63,12 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 
 		/// <summary>Compares two objects to determine whether they are equal</summary>
 		/// <param name="obj">The object to compare against.</param>
-		/// <returns>A <see cref="System.Boolean"/> value.</returns>
-		public override bool Equals(object obj)
-		{
-			var control = obj as DialogControl;
-
-			if (control != null)
-				return (Id == control.Id);
-
-			return false;
-		}
+		/// <returns>A <see cref="bool"/> value.</returns>
+		public override bool Equals(object obj) => obj is DialogControl control ? Id == control.Id : false;
 
 		/// <summary>Serves as a hash function for a particular type.</summary>
-		/// <returns>An <see cref="System.Int32"/> hash code for this control.</returns>
-		public override int GetHashCode()
-		{
-			if (Name == null)
-			{
-				return ToString().GetHashCode();
-			}
-
-			return Name.GetHashCode();
-		}
+		/// <returns>An <see cref="int"/> hash code for this control.</returns>
+		public override int GetHashCode() => Name == null ? ToString().GetHashCode() : Name.GetHashCode();
 
 		///<summary>
 		/// Calls the hosting dialog, if it exists, to
@@ -94,7 +79,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 		/// there are no restrictions on setting the property.
 		/// </summary>
 		/// <param name="propName">The name of the property that is changing.</param>
-		protected void ApplyPropertyChange(string propName)
+		protected void ApplyPropertyChange([CallerMemberName] string propName = "")
 		{
 			Debug.Assert(!string.IsNullOrEmpty(propName), "Property changed was not specified");
 
@@ -112,7 +97,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 		/// there are no restrictions on setting the property.
 		/// </summary>
 		/// <param name="propName">The name of the property that is changing</param>
-		protected void CheckPropertyChangeAllowed(string propName)
+		protected void CheckPropertyChangeAllowed([CallerMemberName] string propName = "")
 		{
 			Debug.Assert(!string.IsNullOrEmpty(propName), "Property to change was not specified");
 

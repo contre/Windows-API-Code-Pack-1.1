@@ -28,7 +28,6 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 
 			IntPtr servicePointer;
 			uint serviceCount = 0;
-			uint hresult = 0;
 
 			// First, check to see if we already have the service in the cache:
 			servicePointer = ServiceCache.Instance.GetCachedService(ref serviceIdentifier);
@@ -50,7 +49,7 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 					};
 					Marshal.StructureToPtr(serviceIdentifier, guidPtr, false);
 					enumOptions._pGuid = guidPtr;
-					hresult = Win32NativeMethods.MappingGetServices(ref enumOptions, ref servicePointer, ref serviceCount);
+					var hresult = Win32NativeMethods.MappingGetServices(ref enumOptions, ref servicePointer, ref serviceCount);
 					if (hresult != 0)
 					{
 						throw new LinguisticException(hresult);
@@ -173,8 +172,8 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 					== ServiceTypes.IsOneToOneLanguageMapping;
 
 		/// <summary>Determines if the application is running on Windows 7</summary>
-		internal static bool RunningOnWin7 => (Environment.OSVersion.Version.Major > 6) ||
-					(Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1);
+		internal static bool RunningOnWin7 => Environment.OSVersion.Version.Major > 6 ||
+					Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1;
 
 		/// <summary>
 		/// Causes an ELS service to perform an action after text recognition has occurred. For example, a phone dialer service first must
@@ -190,7 +189,7 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 		/// <param name="actionId">The identifier of the action to perform. This parameter cannot be set to null.</param>
 		public static void DoAction(MappingPropertyBag bag, int rangeIndex, string actionId)
 		{
-			if (bag == null) { throw new ArgumentNullException("bag"); }
+			if (bag == null) { throw new ArgumentNullException(nameof(bag)); }
 
 			if (rangeIndex < 0)
 			{
@@ -242,10 +241,10 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 
 			var servicePointer = IntPtr.Zero;
 			uint serviceCount = 0;
-			uint hresult = 0;
 			var guidPointer = IntPtr.Zero;
 			try
 			{
+				uint hresult;
 				if (options != null)
 				{
 					var enumOptions = options._win32EnumOption;
@@ -268,7 +267,7 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 				{
 					throw new LinguisticException(hresult);
 				}
-				if ((servicePointer == IntPtr.Zero) != (serviceCount == 0))
+				if (servicePointer == IntPtr.Zero != (serviceCount == 0))
 				{
 					throw new InvalidOperationException();
 				}
@@ -359,7 +358,7 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 		{
 			if (text == null)
 			{
-				throw new ArgumentNullException("text");
+				throw new ArgumentNullException(nameof(text));
 			}
 			return BeginRecognizeText(text, text.Length, 0, options, asyncCallback, callerData);
 		}
@@ -397,7 +396,7 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 		{
 			if (asyncCallback == null)
 			{
-				throw new ArgumentNullException("asyncCallback");
+				throw new ArgumentNullException(nameof(asyncCallback));
 			}
 			var result = new MappingRecognizeAsyncResult(callerData, asyncCallback, text, length, index, options);
 			try
@@ -433,7 +432,7 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 		{
 			if (text == null)
 			{
-				throw new ArgumentNullException("text");
+				throw new ArgumentNullException(nameof(text));
 			}
 			return RecognizeText(text, text.Length, 0, options);
 		}
@@ -464,7 +463,7 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 		{
 			if (text == null)
 			{
-				throw new ArgumentNullException("text");
+				throw new ArgumentNullException(nameof(text));
 			}
 			if (length > text.Length || length < 0)
 			{
@@ -475,13 +474,12 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 				throw new ArgumentOutOfRangeException("index");
 			}
 
-			var hResult = LinguisticException.Fail;
 			var bag = new MappingPropertyBag(options, text);
 			try
 			{
-				hResult = Win32NativeMethods.MappingRecognizeText(
-					_service, bag._text.AddrOfPinnedObject(), (uint)length, (uint)index,
-					bag._options, ref bag._win32PropertyBag);
+				var hResult = Win32NativeMethods.MappingRecognizeText(
+		_service, bag._text.AddrOfPinnedObject(), (uint)length, (uint)index,
+		bag._options, ref bag._win32PropertyBag);
 				if (hResult != 0)
 				{
 					throw new LinguisticException(hResult);

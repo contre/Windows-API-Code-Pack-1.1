@@ -142,7 +142,6 @@ namespace Microsoft.WindowsAPICodePack.Controls
 					finally
 					{
 						Marshal.ReleaseComObject(iFV2);
-						iFV2 = null;
 					}
 				}
 
@@ -169,7 +168,6 @@ namespace Microsoft.WindowsAPICodePack.Controls
 					finally
 					{
 						Marshal.ReleaseComObject(iFV2);
-						iFV2 = null;
 					}
 				}
 			}

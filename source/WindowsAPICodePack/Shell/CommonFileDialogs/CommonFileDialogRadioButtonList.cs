@@ -12,7 +12,6 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 	[ContentProperty("Items")]
 	public class CommonFileDialogRadioButtonList : CommonFileDialogControl, ICommonFileDialogIndexedControls
 	{
-		private readonly Collection<CommonFileDialogRadioButtonListItem> items = new Collection<CommonFileDialogRadioButtonListItem>();
 		private int selectedIndex = -1;
 
 		/// <summary>Creates a new instance of this class.</summary>
@@ -30,7 +29,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 		public event EventHandler SelectedIndexChanged = delegate { };
 
 		/// <summary>Gets the collection of CommonFileDialogRadioButtonListItem objects</summary>
-		public Collection<CommonFileDialogRadioButtonListItem> Items => items;
+		public Collection<CommonFileDialogRadioButtonListItem> Items { get; } = new Collection<CommonFileDialogRadioButtonListItem>();
 
 		/// <summary>Gets or sets the current index of the selected item.</summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
@@ -47,7 +46,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 				{
 					selectedIndex = value;
 				}
-				else if (value >= 0 && value < items.Count)
+				else if (value >= 0 && value < Items.Count)
 				{
 					selectedIndex = value;
 					ApplyPropertyChange("SelectedIndex");
@@ -80,13 +79,13 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 			dialog.AddRadioButtonList(Id);
 
 			// Add the radio button list items
-			for (var index = 0; index < items.Count; index++)
+			for (var index = 0; index < Items.Count; index++)
 			{
-				dialog.AddControlItem(Id, index, items[index].Text);
+				dialog.AddControlItem(Id, index, Items[index].Text);
 			}
 
 			// Set the currently selected item
-			if (selectedIndex >= 0 && selectedIndex < items.Count)
+			if (selectedIndex >= 0 && selectedIndex < Items.Count)
 			{
 				dialog.SetSelectedControlItem(Id, selectedIndex);
 			}

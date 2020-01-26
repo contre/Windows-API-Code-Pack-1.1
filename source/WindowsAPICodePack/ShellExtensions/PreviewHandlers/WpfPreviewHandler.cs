@@ -109,9 +109,9 @@ namespace Microsoft.WindowsAPICodePack.ShellExtensions
 		protected override void SetFocus() => Control.Focus();
 
 		/// <inheritdoc/>
-		protected override void SetFont(Interop.LogFont font)
+		protected override void SetFont(LogFont font)
 		{
-			if (font == null) { throw new ArgumentNullException("font"); }
+			if (font == null) { throw new ArgumentNullException(nameof(font)); }
 
 			Control.FontFamily = new FontFamily(font.FaceName);
 			Control.FontSize = font.Height;

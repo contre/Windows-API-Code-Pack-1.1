@@ -7,21 +7,11 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 	/// <summary>Data associated with <see cref="TaskDialog.Closing"/> event.</summary>
 	public class TaskDialogClosingEventArgs : CancelEventArgs
 	{
-		private string customButton;
-		private TaskDialogResult taskDialogResult;
 
 		/// <summary>Gets or sets the text of the custom button that was clicked.</summary>
-		public string CustomButton
-		{
-			get => customButton;
-			set => customButton = value;
-		}
+		public string CustomButton { get; set; }
 
 		/// <summary>Gets or sets the standard button that was clicked.</summary>
-		public TaskDialogResult TaskDialogResult
-		{
-			get => taskDialogResult;
-			set => taskDialogResult = value;
-		}
+		public TaskDialogResult TaskDialogResult { get; set; }
 	}
 }

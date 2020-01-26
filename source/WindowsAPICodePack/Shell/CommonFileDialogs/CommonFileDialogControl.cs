@@ -7,8 +7,6 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 	{
 		private bool enabled = true;
 
-		private bool isAdded;
-
 		/// <summary>Holds the text that is displayed for this control.</summary>
 		private string textValue;
 
@@ -72,11 +70,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 		}
 
 		/// <summary>Has this control been added to the dialog</summary>
-		internal bool IsAdded
-		{
-			get => isAdded;
-			set => isAdded = value;
-		}
+		internal bool IsAdded { get; set; }
 
 		/// <summary>Attach the custom control itself to the specified dialog</summary>
 		/// <param name="dialog">the target dialog</param>

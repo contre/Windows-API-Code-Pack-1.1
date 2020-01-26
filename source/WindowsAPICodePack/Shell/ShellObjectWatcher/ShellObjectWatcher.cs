@@ -35,7 +35,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		{
 			if (shellObject == null)
 			{
-				throw new ArgumentNullException("shellObject");
+				throw new ArgumentNullException(nameof(shellObject));
 			}
 
 			if (_context == null)
@@ -135,11 +135,11 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		protected virtual void ProcessChangeNotificationEvent(WindowMessageEventArgs e)
 		{
 			if (!Running) { return; }
-			if (e == null) { throw new ArgumentNullException("e"); }
+			if (e == null) { throw new ArgumentNullException(nameof(e)); }
 
 			var notifyLock = new ChangeNotifyLock(e.Message);
 
-			ShellObjectNotificationEventArgs args = null;
+			ShellObjectNotificationEventArgs args;
 			switch (notifyLock.ChangeType)
 			{
 				case ShellObjectChangeTypes.DirectoryRename:

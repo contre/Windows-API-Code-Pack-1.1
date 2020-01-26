@@ -38,7 +38,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 		{
 			if (category == null)
 			{
-				throw new ArgumentNullException("category");
+				throw new ArgumentNullException(nameof(category));
 			}
 			categories.Add(category);
 

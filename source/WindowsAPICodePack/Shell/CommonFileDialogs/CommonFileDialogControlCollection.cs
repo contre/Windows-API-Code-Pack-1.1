@@ -23,7 +23,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 		/// <para>Control names are case sensitive.</para>
 		/// <para>This indexer is useful when the dialog is created in XAML
 		/// rather than constructed in code.</para></remarks>
-		///<exception cref="System.ArgumentException">
+		///<exception cref="ArgumentException">
 		/// The name cannot be null or a zero-length string.</exception>
 		/// <remarks>If there is more than one control with the same name, only the <B>first control</B> will be returned.</remarks>
 		public T this[string name]
@@ -37,13 +37,12 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 
 				foreach (var control in base.Items)
 				{
-					CommonFileDialogGroupBox groupBox;
 					// NOTE: we don't ToLower() the strings - casing effects hash codes, so we are case-sensitive.
 					if (control.Name == name)
 					{
 						return control;
 					}
-					else if ((groupBox = control as CommonFileDialogGroupBox) != null)
+					else if (control is CommonFileDialogGroupBox groupBox)
 					{
 						foreach (T subControl in groupBox.Items)
 						{
@@ -76,8 +75,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 				if (control.Id == id) { return control; }
 
 				// Search GroupBox child items
-				var groupBox = control as CommonFileDialogGroupBox;
-				if (groupBox != null)
+				if (control is CommonFileDialogGroupBox groupBox)
 				{
 					var temp = GetSubControlbyId(groupBox.Items, id);
 					if (temp != null) { return temp; }
@@ -90,7 +88,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 		/// <summary>Inserts an dialog control at the specified index.</summary>
 		/// <param name="index">The location to insert the control.</param>
 		/// <param name="control">The item to insert.</param>
-		/// <permission cref="System.InvalidOperationException">
+		/// <permission cref="InvalidOperationException">
 		/// A control with the same name already exists in this collection -or- the control is being hosted by another dialog -or- the
 		/// associated dialog is showing and cannot be modified.
 		/// </permission>
@@ -128,7 +126,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 
 		/// <summary>Removes the control at the specified index.</summary>
 		/// <param name="index">The location of the control to remove.</param>
-		/// <permission cref="System.InvalidOperationException">The associated dialog is showing and cannot be modified.</permission>
+		/// <permission cref="InvalidOperationException">The associated dialog is showing and cannot be modified.</permission>
 		protected override void RemoveItem(int index) => throw new NotSupportedException(LocalizedMessages.DialogControlCollectionCannotRemoveControls);
 	}
 }

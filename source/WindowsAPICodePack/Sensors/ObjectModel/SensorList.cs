@@ -44,7 +44,7 @@ namespace Microsoft.WindowsAPICodePack.Sensors
 
 		/// <summary>Returns an enumerator for the list.</summary>
 		/// <returns>An enumerator.</returns>
-		public IEnumerator<TSensor> GetEnumerator() => (sensorList.GetEnumerator());
+		public IEnumerator<TSensor> GetEnumerator() => sensorList.GetEnumerator();
 
 		/// <summary>Returns a sensor at a particular index.</summary>
 		/// <param name="item">The sensor item.</param>
@@ -59,10 +59,7 @@ namespace Microsoft.WindowsAPICodePack.Sensors
 		/// <summary>Removes a specific sensor from the list.</summary>
 		/// <param name="item">The sensor to remove.</param>
 		/// <returns><b>true</b> if the sensor was removed from the list; otherwise <b>false</b>.</returns>
-		public bool Remove(TSensor item)
-		{
-			return sensorList.Remove(item); ;
-		}
+		public bool Remove(TSensor item) => sensorList.Remove(item);
 
 		/// <summary>Removes a sensor at a specific location in the list.</summary>
 		/// <param name="index">The index of the sensor to remove.</param>

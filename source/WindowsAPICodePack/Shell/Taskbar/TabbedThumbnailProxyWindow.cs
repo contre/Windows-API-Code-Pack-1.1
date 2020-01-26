@@ -42,9 +42,9 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 			}
 
 			// If it's a WM_Destroy message, then also forward it to the base class (our native window)
-			if ((m.Msg == (int)WindowMessage.Destroy) ||
-			   (m.Msg == (int)WindowMessage.NCDestroy) ||
-			   ((m.Msg == (int)WindowMessage.SystemCommand) && (((int)m.WParam) == TabbedThumbnailNativeMethods.ScClose)))
+			if (m.Msg == (int)WindowMessage.Destroy ||
+			   m.Msg == (int)WindowMessage.NCDestroy ||
+			   m.Msg == (int)WindowMessage.SystemCommand && (int)m.WParam == TabbedThumbnailNativeMethods.ScClose)
 			{
 				base.WndProc(ref m);
 			}

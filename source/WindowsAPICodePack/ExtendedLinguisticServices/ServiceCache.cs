@@ -11,7 +11,6 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 	// This singleton object is correctly finalized on appdomain unload.
 	internal class ServiceCache : CriticalFinalizerObject
 	{
-		private static readonly ServiceCache staticInstance = new ServiceCache();
 
 		// The lock
 		private readonly ReaderWriterLockSlim _cacheLock = new ReaderWriterLockSlim();
@@ -36,7 +35,7 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 			ReleaseHandle();
 		}
 
-		internal static ServiceCache Instance => staticInstance;
+		internal static ServiceCache Instance { get; } = new ServiceCache();
 
 		private bool IsInvalid => Interlocked.CompareExchange(ref _finalized, 1, 1) != 0;
 

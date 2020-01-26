@@ -116,7 +116,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 
 					if (value)
 					{
-						Flags &= ~(ThumbButtonOptions.Hidden);
+						Flags &= ~ThumbButtonOptions.Hidden;
 					}
 					else
 					{
@@ -145,7 +145,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 
 					if (value)
 					{
-						Flags &= ~(ThumbButtonOptions.Disabled);
+						Flags &= ~ThumbButtonOptions.Disabled;
 					}
 					else
 					{
@@ -177,7 +177,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 					}
 					else
 					{
-						Flags &= ~(ThumbButtonOptions.DismissOnClick);
+						Flags &= ~ThumbButtonOptions.DismissOnClick;
 					}
 
 					UpdateThumbnailButton();
@@ -205,7 +205,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 
 					if (value)
 					{
-						Flags &= ~(ThumbButtonOptions.NonInteractive);
+						Flags &= ~ThumbButtonOptions.NonInteractive;
 					}
 					else
 					{

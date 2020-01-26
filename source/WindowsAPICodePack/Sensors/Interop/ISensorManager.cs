@@ -54,7 +54,7 @@ namespace Microsoft.WindowsAPICodePack.Sensors
 
 	/// <summary>A COM interop wrapper for the SensorsManager class</summary>
 	/// <remarks>See Sensor API documentation in Windows 7 SDK</remarks>
-	[ComImport, GuidAttribute("77A1C827-FCD2-4689-8915-9D613CC5FA3E"), ClassInterfaceAttribute(ClassInterfaceType.None)]
+	[ComImport, Guid("77A1C827-FCD2-4689-8915-9D613CC5FA3E"), ClassInterface(ClassInterfaceType.None)]
 	internal class NativeSensorManager : NativeISensorManager
 	{
 		[PreserveSig]

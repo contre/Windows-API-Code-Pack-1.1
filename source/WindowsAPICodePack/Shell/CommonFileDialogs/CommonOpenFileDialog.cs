@@ -1,29 +1,5 @@
 //Copyright (c) Microsoft Corporation.  All rights reserved.
 
-/* Unmerged change from project 'Shell (net452)'
-Before:
-using System.Collections;
-After:
-using Microsoft.WindowsAPICodePack.Shell;
-using System.Collections;
-*/
-
-/* Unmerged change from project 'Shell (net462)'
-Before:
-using System.Collections;
-After:
-using Microsoft.WindowsAPICodePack.Shell;
-using System.Collections;
-*/
-
-/* Unmerged change from project 'Shell (net472)'
-Before:
-using System.Collections;
-After:
-using Microsoft.WindowsAPICodePack.Shell;
-using System.Collections;
-*/
-
 using Microsoft.WindowsAPICodePack.Shell;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -35,67 +11,40 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 	/// <summary>Creates a Vista or Windows 7 Common File Dialog, allowing the user to select one or more files.</summary>
 	public sealed class CommonOpenFileDialog : CommonFileDialog
 	{
-		private bool allowNonFileSystem;
-		private bool isFolderPicker;
-		private bool multiselect;
 		private NativeFileOpenDialog openDialogCoClass;
 
 		/// <summary>Creates a new instance of this class.</summary>
 		public CommonOpenFileDialog()
 			: base() =>
 			// For Open file dialog, allow read only files.
-			base.EnsureReadOnly = true;
+			EnsureReadOnly = true;
 
 		/// <summary>Creates a new instance of this class with the specified name.</summary>
 		/// <param name="name">The name of this dialog.</param>
 		public CommonOpenFileDialog(string name)
 			: base(name) =>
 			// For Open file dialog, allow read only files.
-			base.EnsureReadOnly = true;
+			EnsureReadOnly = true;
 
 		/// <summary>
 		/// Gets or sets a value that determines whether the user can select non-filesystem items, such as <b>Library</b>, <b>Search
 		/// Connectors</b>, or <b>Known Folders</b>.
 		/// </summary>
-		public bool AllowNonFileSystemItems
-		{
-			/* Unmerged change from project 'Shell (net452)'
-			Before:
-						get { return allowNonFileSystem; }
-			After:
-						get => allowNonFileSystem; }
-			*/
-
-			/* Unmerged change from project 'Shell (net462)'
-			Before:
-						get { return allowNonFileSystem; }
-			After:
-						get => allowNonFileSystem; }
-			*/
-
-			/* Unmerged change from project 'Shell (net472)'
-			Before:
-						get { return allowNonFileSystem; }
-			After:
-						get => allowNonFileSystem; }
-			*/
-			get => allowNonFileSystem;
-			set => allowNonFileSystem = value;
-		}
+		public bool AllowNonFileSystemItems { get; set; }
 
 		/// <summary>Gets a collection of the selected file names.</summary>
-		/// <remarks>This property should only be used when the <see cref="CommonOpenFileDialog.Multiselect"/> property is <b>true</b>.</remarks>
+		/// <remarks>This property should only be used when the <see cref="Multiselect"/> property is <b>true</b>.</remarks>
 		public IEnumerable<string> FileNames
 		{
 			get
 			{
 				CheckFileNamesAvailable();
-				return base.FileNameCollection;
+				return FileNameCollection;
 			}
 		}
 
 		/// <summary>Gets a collection of the selected items as ShellObject objects.</summary>
-		/// <remarks>This property should only be used when the <see cref="CommonOpenFileDialog.Multiselect"/> property is <b>true</b>.</remarks>
+		/// <remarks>This property should only be used when the <see cref="Multiselect"/> property is <b>true</b>.</remarks>
 		public ICollection<ShellObject> FilesAsShellObject
 		{
 			get
@@ -118,58 +67,10 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 		}
 
 		/// <summary>Gets or sets a value that determines whether the user can select folders or files. Default value is false.</summary>
-		public bool IsFolderPicker
-		{
-			/* Unmerged change from project 'Shell (net452)'
-			Before:
-						get { return isFolderPicker; }
-			After:
-						get => isFolderPicker; }
-			*/
-
-			/* Unmerged change from project 'Shell (net462)'
-			Before:
-						get { return isFolderPicker; }
-			After:
-						get => isFolderPicker; }
-			*/
-
-			/* Unmerged change from project 'Shell (net472)'
-			Before:
-						get { return isFolderPicker; }
-			After:
-						get => isFolderPicker; }
-			*/
-			get => isFolderPicker;
-			set => isFolderPicker = value;
-		}
+		public bool IsFolderPicker { get; set; }
 
 		/// <summary>Gets or sets a value that determines whether the user can select more than one file.</summary>
-		public bool Multiselect
-		{
-			/* Unmerged change from project 'Shell (net452)'
-			Before:
-						get { return multiselect; }
-			After:
-						get => multiselect; }
-			*/
-
-			/* Unmerged change from project 'Shell (net462)'
-			Before:
-						get { return multiselect; }
-			After:
-						get => multiselect; }
-			*/
-
-			/* Unmerged change from project 'Shell (net472)'
-			Before:
-						get { return multiselect; }
-			After:
-						get => multiselect; }
-			*/
-			get => multiselect;
-			set => multiselect = value;
-		}
+		public bool Multiselect { get; set; }
 
 		internal override void CleanUpNativeFileDialog()
 		{
@@ -181,20 +82,20 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 
 		internal override ShellNativeMethods.FileOpenOptions GetDerivedOptionFlags(ShellNativeMethods.FileOpenOptions flags)
 		{
-			if (multiselect)
+			if (Multiselect)
 			{
 				flags |= ShellNativeMethods.FileOpenOptions.AllowMultiSelect;
 			}
-			if (isFolderPicker)
+			if (IsFolderPicker)
 			{
 				flags |= ShellNativeMethods.FileOpenOptions.PickFolders;
 			}
 
-			if (!allowNonFileSystem)
+			if (!AllowNonFileSystemItems)
 			{
 				flags |= ShellNativeMethods.FileOpenOptions.ForceFilesystem;
 			}
-			else if (allowNonFileSystem)
+			else if (AllowNonFileSystemItems)
 			{
 				flags |= ShellNativeMethods.FileOpenOptions.AllNonStorageItems;
 			}

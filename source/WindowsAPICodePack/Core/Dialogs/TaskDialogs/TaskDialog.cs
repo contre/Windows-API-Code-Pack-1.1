@@ -17,9 +17,6 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 		// Global instance of TaskDialog, to be used by static Show() method. As most parameters of a dialog created via static Show() will
 		// have identical parameters, we'll create one TaskDialog and treat it as a NativeTaskDialog generator for all static Show() calls.
 		private static TaskDialog staticDialog;
-
-		private readonly DialogControlCollection<TaskDialogControl> controls;
-
 		private List<TaskDialogButtonBase> buttons = new List<TaskDialogButtonBase>();
 
 		private bool cancelable;
@@ -121,7 +118,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 		}
 
 		/// <summary>Gets a value that contains the TaskDialog controls.</summary>
-		public DialogControlCollection<TaskDialogControl> Controls => controls;
+		public DialogControlCollection<TaskDialogControl> Controls { get; private set; }
 
 		/// <summary>Gets or sets a value that contains the default button.</summary>
 		public TaskDialogDefaultButton DefaultButton
@@ -345,10 +342,10 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 			CoreHelpers.ThrowIfNotVista();
 
 			// Initialize various data structs.
-			controls = new DialogControlCollection<TaskDialogControl>(this);
+			Controls = new DialogControlCollection<TaskDialogControl>(this);
 		}
 
-		private bool NativeDialogShowing => (nativeDialog != null)
+		private bool NativeDialogShowing => nativeDialog != null
 							&& (nativeDialog.ShowState == DialogShowState.Showing
 							|| nativeDialog.ShowState == DialogShowState.Closing);
 
@@ -466,8 +463,6 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 			// We only need to apply changes to the native dialog when it actually exists.
 			if (NativeDialogShowing)
 			{
-				TaskDialogButton button;
-				TaskDialogRadioButton radioButton;
 				if (control is TaskDialogProgressBar)
 				{
 					if (!progressBar.HasValidValues)
@@ -495,7 +490,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 							break;
 					}
 				}
-				else if ((button = control as TaskDialogButton) != null)
+				else if (control is TaskDialogButton button)
 				{
 					switch (propertyName)
 					{
@@ -512,7 +507,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 							break;
 					}
 				}
-				else if ((radioButton = control as TaskDialogRadioButton) != null)
+				else if (control is TaskDialogRadioButton radioButton)
 				{
 					switch (propertyName)
 					{
@@ -555,16 +550,11 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 			if (!NativeDialogShowing)
 			{
 				// Certain properties can't be changed if the dialog is not showing we need a handle created before we can set these...
-				switch (propertyName)
+				canChange = propertyName switch
 				{
-					case "Enabled":
-						canChange = false;
-						break;
-
-					default:
-						canChange = true;
-						break;
-				}
+					"Enabled" => false,
+					_ => true,
+				};
 			}
 			else
 			{
@@ -643,29 +633,13 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 			return (int)HResult.Ok;
 		}
 
-		internal void RaiseHelpInvokedEvent()
-		{
-			if (HelpInvoked != null) { HelpInvoked(this, EventArgs.Empty); }
-		}
+		internal void RaiseHelpInvokedEvent() => HelpInvoked?.Invoke(this, EventArgs.Empty);
 
-		internal void RaiseHyperlinkClickEvent(string link)
-		{
-			var handler = HyperlinkClick;
-			if (handler != null)
-			{
-				handler(this, new TaskDialogHyperlinkClickedEventArgs(link));
-			}
-		}
+		internal void RaiseHyperlinkClickEvent(string link) => HyperlinkClick?.Invoke(this, new TaskDialogHyperlinkClickedEventArgs(link));
 
-		internal void RaiseOpenedEvent()
-		{
-			if (Opened != null) { Opened(this, EventArgs.Empty); }
-		}
+		internal void RaiseOpenedEvent() => Opened?.Invoke(this, EventArgs.Empty);
 
-		internal void RaiseTickEvent(int ticks)
-		{
-			if (Tick != null) { Tick(this, new TaskDialogTickEventArgs(ticks)); }
-		}
+		internal void RaiseTickEvent(int ticks) => Tick?.Invoke(this, new TaskDialogTickEventArgs(ticks));
 
 		private static void ApplyElevatedIcons(NativeTaskDialogSettings settings, List<TaskDialogButtonBase> controls)
 		{
@@ -700,18 +674,10 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 		{
 			Debug.Assert(native.ShowState == DialogShowState.Closed, "dialog result being constructed for unshown dialog.");
 
-			var result = TaskDialogResult.Cancel;
-
-			var standardButton = MapButtonIdToStandardButton(native.SelectedButtonId);
-
 			// If returned ID isn't a standard button, let's fetch
-			if (standardButton == TaskDialogStandardButtons.None)
-			{
-				result = TaskDialogResult.CustomButtonClicked;
-			}
-			else { result = (TaskDialogResult)standardButton; }
-
-			return result;
+			return MapButtonIdToStandardButton(native.SelectedButtonId) == TaskDialogStandardButtons.None
+				? TaskDialogResult.CustomButtonClicked
+				: (TaskDialogResult)MapButtonIdToStandardButton(native.SelectedButtonId);
 		}
 
 		// Searches list of controls and returns the ID of the default control, or 0 if no default was specified.
@@ -728,40 +694,20 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 			return TaskDialogNativeMethods.NoDefaultButtonSpecified;
 		}
 
-		private static TaskDialogStandardButtons MapButtonIdToStandardButton(int id)
+		private static TaskDialogStandardButtons MapButtonIdToStandardButton(int id) => id switch
 		{
-			switch ((TaskDialogNativeMethods.TaskDialogCommonButtonReturnIds)id)
-			{
-				case TaskDialogNativeMethods.TaskDialogCommonButtonReturnIds.Ok:
-					return TaskDialogStandardButtons.Ok;
-
-				case TaskDialogNativeMethods.TaskDialogCommonButtonReturnIds.Cancel:
-					return TaskDialogStandardButtons.Cancel;
-
-				case TaskDialogNativeMethods.TaskDialogCommonButtonReturnIds.Abort:
-					// Included for completeness in API - we can't pass in an Abort standard button.
-					return TaskDialogStandardButtons.None;
-
-				case TaskDialogNativeMethods.TaskDialogCommonButtonReturnIds.Retry:
-					return TaskDialogStandardButtons.Retry;
-
-				case TaskDialogNativeMethods.TaskDialogCommonButtonReturnIds.Ignore:
-					// Included for completeness in API - we can't pass in an Ignore standard button.
-					return TaskDialogStandardButtons.None;
-
-				case TaskDialogNativeMethods.TaskDialogCommonButtonReturnIds.Yes:
-					return TaskDialogStandardButtons.Yes;
-
-				case TaskDialogNativeMethods.TaskDialogCommonButtonReturnIds.No:
-					return TaskDialogStandardButtons.No;
-
-				case TaskDialogNativeMethods.TaskDialogCommonButtonReturnIds.Close:
-					return TaskDialogStandardButtons.Close;
-
-				default:
-					return TaskDialogStandardButtons.None;
-			}
-		}
+			(int)TaskDialogNativeMethods.TaskDialogCommonButtonReturnIds.Ok => TaskDialogStandardButtons.Ok,
+			(int)TaskDialogNativeMethods.TaskDialogCommonButtonReturnIds.Cancel => TaskDialogStandardButtons.Cancel,
+			// Included for completeness in API - we can't pass in an Abort standard button.
+			(int)TaskDialogNativeMethods.TaskDialogCommonButtonReturnIds.Abort => TaskDialogStandardButtons.None,
+			(int)TaskDialogNativeMethods.TaskDialogCommonButtonReturnIds.Retry => TaskDialogStandardButtons.Retry,
+			// Included for completeness in API - we can't pass in an Ignore standard button.
+			(int)TaskDialogNativeMethods.TaskDialogCommonButtonReturnIds.Ignore => TaskDialogStandardButtons.None,
+			(int)TaskDialogNativeMethods.TaskDialogCommonButtonReturnIds.Yes => TaskDialogStandardButtons.Yes,
+			(int)TaskDialogNativeMethods.TaskDialogCommonButtonReturnIds.No => TaskDialogStandardButtons.No,
+			(int)TaskDialogNativeMethods.TaskDialogCommonButtonReturnIds.Close => TaskDialogStandardButtons.Close,
+			_ => TaskDialogStandardButtons.None,
+		};
 
 		private static TaskDialogResult ShowCoreStatic(
 																																	string text,
@@ -805,7 +751,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 			if (buttons.Count > 0 || commandLinks.Count > 0)
 			{
 				// These are the actual arrays/lists of the structs that we'll copy to the unmanaged heap.
-				var sourceList = (buttons.Count > 0 ? buttons : commandLinks);
+				var sourceList = buttons.Count > 0 ? buttons : commandLinks;
 				settings.Buttons = BuildButtonStructArray(sourceList);
 
 				// Apply option flag that forces all custom buttons to render as command links.
@@ -955,7 +901,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 		}
 
 		// NOTE: we are going to require names be unique across both buttons and radio buttons, even though the Win32 API allows them to be separate.
-		private TaskDialogButtonBase GetButtonForId(int id) => (TaskDialogButtonBase)controls.GetControlbyId(id);
+		private TaskDialogButtonBase GetButtonForId(int id) => (TaskDialogButtonBase)Controls.GetControlbyId(id);
 
 		private TaskDialogResult ShowCore()
 		{
@@ -996,7 +942,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 		// Here we walk our controls collection and sort the various controls by type.
 		private void SortDialogControls()
 		{
-			foreach (var control in controls)
+			foreach (var control in Controls)
 			{
 				var buttonBase = control as TaskDialogButtonBase;
 				var commandLink = control as TaskDialogCommandLink;
@@ -1007,15 +953,12 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 					throw new InvalidOperationException(LocalizedMessages.TaskDialogButtonTextEmpty);
 				}
 
-				TaskDialogRadioButton radButton;
-				TaskDialogProgressBar progBar;
-
 				// Loop through child controls and sort the controls based on type.
 				if (commandLink != null)
 				{
 					commandLinks.Add(commandLink);
 				}
-				else if ((radButton = control as TaskDialogRadioButton) != null)
+				else if (control is TaskDialogRadioButton radButton)
 				{
 					if (radioButtons == null) { radioButtons = new List<TaskDialogButtonBase>(); }
 					radioButtons.Add(radButton);
@@ -1025,7 +968,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 					if (buttons == null) { buttons = new List<TaskDialogButtonBase>(); }
 					buttons.Add(buttonBase);
 				}
-				else if ((progBar = control as TaskDialogProgressBar) != null)
+				else if (control is TaskDialogProgressBar progBar)
 				{
 					progressBar = progBar;
 				}

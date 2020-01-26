@@ -12,9 +12,9 @@ namespace Microsoft.WindowsAPICodePack.ShellExtensions
 		/// <param name="appId">A unique guid used for process isolation.</param>
 		public PreviewHandlerAttribute(string name, string extensions, string appId)
 		{
-			if (name == null) throw new ArgumentNullException("name");
-			if (extensions == null) throw new ArgumentNullException("extensions");
-			if (appId == null) throw new ArgumentNullException("appId");
+			if (name == null) throw new ArgumentNullException(nameof(name));
+			if (extensions == null) throw new ArgumentNullException(nameof(extensions));
+			if (appId == null) throw new ArgumentNullException(nameof(appId));
 
 			Name = name;
 			Extensions = extensions;

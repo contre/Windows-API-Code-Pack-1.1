@@ -42,8 +42,6 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			// Is this item a Folder?
 			var isFolder = (sfgao & ShellNativeMethods.ShellFileGetAttributesOptions.Folder) != 0;
 
-			// Shell Library
-			ShellLibrary shellLibrary = null;
 
 			// Create the right type of ShellObject based on the above information
 
@@ -55,6 +53,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			// 2. Check if this is a container or a single item (entity)
 			else if (isFolder)
 			{
+
+				// Shell Library
+				ShellLibrary shellLibrary;
 				// 3. If this is a folder, check for types: Shell Library, Shell Folder or Search Container
 				if (itemType == ".library-ms" && (shellLibrary = ShellLibrary.FromShellItem(nativeShellItem2, true)) != null)
 				{
@@ -93,9 +94,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			}
 
 			// 6. If this is an entity (single item), check if its filesystem or not
-			if (isFileSystem) { return new ShellFile(nativeShellItem2); }
-
-			return new ShellNonFileSystemItem(nativeShellItem2);
+			return isFileSystem ? new ShellFile(nativeShellItem2) : (ShellObject)new ShellNonFileSystemItem(nativeShellItem2);
 		}
 
 		/// <summary>Creates a ShellObject given a parsing name</summary>
@@ -105,7 +104,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		{
 			if (string.IsNullOrEmpty(parsingName))
 			{
-				throw new ArgumentNullException("parsingName");
+				throw new ArgumentNullException(nameof(parsingName));
 			}
 
 			// Create a native shellitem from our path
@@ -133,8 +132,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
 			var retCode = ShellNativeMethods.SHCreateItemFromIDList(idListPtr, ref guid, out var nativeShellItem);
 
-			if (!CoreErrorHelper.Succeeded(retCode)) { return null; }
-			return ShellObjectFactory.Create(nativeShellItem);
+			return !CoreErrorHelper.Succeeded(retCode) ? null : ShellObjectFactory.Create(nativeShellItem);
 		}
 
 		/// <summary>Constructs a new Shell object from IDList pointer</summary>
@@ -148,9 +146,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 				parent.NativeShellFolder,
 				idListPtr, out var nativeShellItem);
 
-			if (!CoreErrorHelper.Succeeded(retCode)) { return null; }
-
-			return ShellObjectFactory.Create(nativeShellItem);
+			return !CoreErrorHelper.Succeeded(retCode) ? null : ShellObjectFactory.Create(nativeShellItem);
 		}
 
 		// This is a work around for the STA thread bug. This will execute the call on a non-sta thread, then return the result

@@ -220,14 +220,12 @@ namespace MS.WindowsAPICodePack.Internal
 		[StructLayout(LayoutKind.Sequential)]
 		public struct Size
 		{
-			private int width;
-			private int height;
 
 			/// <summary>Width</summary>
-			public int Width { get => width; set => width = value; }
+			public int Width { get; set; }
 
 			/// <summary>Height</summary>
-			public int Height { get => height; set => height = value; }
+			public int Height { get; set; }
 		};
 	}
 }

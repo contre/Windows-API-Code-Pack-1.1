@@ -5,43 +5,6 @@ using Microsoft.WindowsAPICodePack.ShellExtensions.Resources;
 using MS.WindowsAPICodePack.Internal;
 using System;
 using System.Diagnostics;
-
-/* Unmerged change from project 'ShellExtensions (net452)'
-Before:
-using MS.WindowsAPICodePack.Internal;
-After:
-using MS.WindowsAPICodePack.Internal;
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-*/
-
-/* Unmerged change from project 'ShellExtensions (net462)'
-Before:
-using MS.WindowsAPICodePack.Internal;
-After:
-using MS.WindowsAPICodePack.Internal;
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-*/
-
-/* Unmerged change from project 'ShellExtensions (net472)'
-Before:
-using MS.WindowsAPICodePack.Internal;
-After:
-using MS.WindowsAPICodePack.Internal;
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-*/
-
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -57,11 +20,10 @@ namespace Microsoft.WindowsAPICodePack.ShellExtensions
 		IOleWindow, IObjectWithSite, IInitializeWithStream, IInitializeWithItem, IInitializeWithFile
 	{
 		private IPreviewHandlerFrame _frame;
-		private bool _isPreviewShowing;
 		private IntPtr _parentHwnd;
 
 		/// <summary>Gets whether the preview is currently showing</summary>
-		public bool IsPreviewShowing => _isPreviewShowing;
+		public bool IsPreviewShowing { get; private set; }
 
 		/// <summary>This should return the window handle to be displayed in the Preview.</summary>
 		protected abstract IntPtr Handle { get; }
@@ -72,7 +34,7 @@ namespace Microsoft.WindowsAPICodePack.ShellExtensions
 
 		void IPreviewHandler.DoPreview()
 		{
-			_isPreviewShowing = true;
+			IsPreviewShowing = true;
 			try
 			{
 				Initialize();
@@ -92,24 +54,20 @@ namespace Microsoft.WindowsAPICodePack.ShellExtensions
 				return CustomQueryInterfaceResult.Failed;
 			}
 
-			if ((iid == Interop.HandlerNativeMethods.IInitializeWithStreamGuid && !(this is IPreviewFromStream))
-				|| (iid == Interop.HandlerNativeMethods.IInitializeWithItemGuid && !(this is IPreviewFromShellObject))
-				|| (iid == Interop.HandlerNativeMethods.IInitializeWithFileGuid && !(this is IPreviewFromFile)))
-			{
-				return CustomQueryInterfaceResult.Failed;
-			}
-
-			return CustomQueryInterfaceResult.NotHandled;
+			return iid == Interop.HandlerNativeMethods.IInitializeWithStreamGuid && !(this is IPreviewFromStream)
+				|| iid == Interop.HandlerNativeMethods.IInitializeWithItemGuid && !(this is IPreviewFromShellObject)
+				|| iid == Interop.HandlerNativeMethods.IInitializeWithFileGuid && !(this is IPreviewFromFile)
+				? CustomQueryInterfaceResult.Failed
+				: CustomQueryInterfaceResult.NotHandled;
 		}
 
 		void IObjectWithSite.GetSite(ref Guid riid, out object ppvSite) => ppvSite = _frame;
 
 		void IOleWindow.GetWindow(out IntPtr phwnd) => phwnd = Handle;
 
-		void IInitializeWithStream.Initialize(System.Runtime.InteropServices.ComTypes.IStream stream, Shell.AccessModes fileMode)
+		void IInitializeWithStream.Initialize(System.Runtime.InteropServices.ComTypes.IStream stream, AccessModes fileMode)
 		{
-			var preview = this as IPreviewFromStream;
-			if (preview == null)
+			if (!(this is IPreviewFromStream preview))
 			{
 				throw new InvalidOperationException(
 					string.Format(System.Globalization.CultureInfo.InvariantCulture,
@@ -122,10 +80,9 @@ namespace Microsoft.WindowsAPICodePack.ShellExtensions
 			}
 		}
 
-		void IInitializeWithItem.Initialize(object shellItem, Shell.AccessModes accessMode)
+		void IInitializeWithItem.Initialize(object shellItem, AccessModes accessMode)
 		{
-			var preview = this as IPreviewFromShellObject;
-			if (preview == null)
+			if (!(this is IPreviewFromShellObject preview))
 			{
 				throw new InvalidOperationException(
 					string.Format(System.Globalization.CultureInfo.InvariantCulture,
@@ -138,10 +95,9 @@ namespace Microsoft.WindowsAPICodePack.ShellExtensions
 			}
 		}
 
-		void IInitializeWithFile.Initialize(string filePath, Shell.AccessModes fileMode)
+		void IInitializeWithFile.Initialize(string filePath, AccessModes fileMode)
 		{
-			var preview = this as IPreviewFromFile;
-			if (preview == null)
+			if (!(this is IPreviewFromFile preview))
 			{
 				throw new InvalidOperationException(
 					string.Format(System.Globalization.CultureInfo.InvariantCulture,
@@ -155,7 +111,7 @@ namespace Microsoft.WindowsAPICodePack.ShellExtensions
 
 		void IPreviewHandlerVisuals.SetBackgroundColor(COLORREF color) => SetBackground((int)color.Dword);
 
-		void IPreviewHandlerVisuals.SetFont(ref Shell.Interop.LogFont plf) => SetFont(new Interop.LogFont(plf));
+		void IPreviewHandlerVisuals.SetFont(ref LogFont plf) => SetFont(new Interop.LogFont(plf));
 
 		void IPreviewHandler.SetRect(ref RECT rect) => UpdateBounds(NativeRect.FromRECT(rect));
 
@@ -175,7 +131,7 @@ namespace Microsoft.WindowsAPICodePack.ShellExtensions
 		void IPreviewHandler.Unload()
 		{
 			Uninitialize();
-			_isPreviewShowing = false;
+			IsPreviewShowing = false;
 		}
 
 		/// <summary>Called when an exception occurs during the initialization of the control</summary>

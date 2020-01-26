@@ -550,7 +550,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 					for (var i = 0; i < count; i++)
 					{
 						// Read the current pointer
-						var current = new IntPtr(folders.ToInt64() + (Marshal.SizeOf(typeof(Guid)) * i));
+						var current = new IntPtr(folders.ToInt64() + Marshal.SizeOf(typeof(Guid)) * i);
 
 						// Convert to Guid
 						var knownFolderID = (Guid)Marshal.PtrToStructure(current, typeof(Guid));

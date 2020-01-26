@@ -133,8 +133,8 @@ namespace Microsoft.WindowsAPICodePack.Shell
 	}
 
 	/// <summary>
-	/// Provides a set of flags to be used with <see cref="Microsoft.WindowsAPICodePack.Shell.SearchCondition"/> to indicate the operation in
-	/// <see cref="Microsoft.WindowsAPICodePack.Shell.SearchConditionFactory"/> methods.
+	/// Provides a set of flags to be used with <see cref="SearchCondition"/> to indicate the operation in
+	/// <see cref="SearchConditionFactory"/> methods.
 	/// </summary>
 	public enum SearchConditionOperation
 	{
@@ -187,7 +187,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		ApplicationSpecific = 14
 	}
 
-	/// <summary>Set of flags to be used with <see cref="Microsoft.WindowsAPICodePack.Shell.SearchConditionFactory"/>.</summary>
+	/// <summary>Set of flags to be used with <see cref="SearchConditionFactory"/>.</summary>
 	public enum SearchConditionType
 	{
 		/// <summary>Indicates that the values of the subterms are combined by "AND".</summary>
@@ -199,7 +199,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <summary>Indicates a "NOT" comparison of subterms.</summary>
 		Not = 2,
 
-		/// <summary>Indicates that the node is a comparison between a property and a constant value using a <see cref="Microsoft.WindowsAPICodePack.Shell.SearchConditionOperation"/>.</summary>
+		/// <summary>Indicates that the node is a comparison between a property and a constant value using a <see cref="SearchConditionOperation"/>.</summary>
 		Leaf = 3,
 	}
 

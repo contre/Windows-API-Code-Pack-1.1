@@ -5,43 +5,6 @@ using Microsoft.WindowsAPICodePack.ShellExtensions.Resources;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using System;
 using System.Drawing;
-
-/* Unmerged change from project 'ShellExtensions (net452)'
-Before:
-using Microsoft.WindowsAPICodePack.Taskbar;
-After:
-using Microsoft.WindowsAPICodePack.Taskbar;
-using System;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-*/
-
-/* Unmerged change from project 'ShellExtensions (net462)'
-Before:
-using Microsoft.WindowsAPICodePack.Taskbar;
-After:
-using Microsoft.WindowsAPICodePack.Taskbar;
-using System;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-*/
-
-/* Unmerged change from project 'ShellExtensions (net472)'
-Before:
-using Microsoft.WindowsAPICodePack.Taskbar;
-After:
-using Microsoft.WindowsAPICodePack.Taskbar;
-using System;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-*/
-
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -93,14 +56,11 @@ namespace Microsoft.WindowsAPICodePack.ShellExtensions
 				return CustomQueryInterfaceResult.Failed;
 			}
 
-			if ((iid == Interop.HandlerNativeMethods.IInitializeWithStreamGuid && !(this is IThumbnailFromStream))
-				|| (iid == Interop.HandlerNativeMethods.IInitializeWithItemGuid && !(this is IThumbnailFromShellObject))
-				|| (iid == Interop.HandlerNativeMethods.IInitializeWithFileGuid && !(this is IThumbnailFromFile)))
-			{
-				return CustomQueryInterfaceResult.Failed;
-			}
-
-			return CustomQueryInterfaceResult.NotHandled;
+			return iid == Interop.HandlerNativeMethods.IInitializeWithStreamGuid && !(this is IThumbnailFromStream)
+				|| iid == Interop.HandlerNativeMethods.IInitializeWithItemGuid && !(this is IThumbnailFromShellObject)
+				|| iid == Interop.HandlerNativeMethods.IInitializeWithFileGuid && !(this is IThumbnailFromFile)
+				? CustomQueryInterfaceResult.Failed
+				: CustomQueryInterfaceResult.NotHandled;
 		}
 
 		void IThumbnailProvider.GetThumbnail(uint sideLength, out IntPtr hBitmap, out uint alphaType)
@@ -112,11 +72,11 @@ namespace Microsoft.WindowsAPICodePack.ShellExtensions
 			alphaType = (uint)GetThumbnailAlphaType();
 		}
 
-		void IInitializeWithStream.Initialize(System.Runtime.InteropServices.ComTypes.IStream stream, Shell.AccessModes fileMode) => _stream = new StorageStream(stream, fileMode != Shell.AccessModes.ReadWrite);
+		void IInitializeWithStream.Initialize(System.Runtime.InteropServices.ComTypes.IStream stream, AccessModes fileMode) => _stream = new StorageStream(stream, fileMode != Shell.AccessModes.ReadWrite);
 
-		void IInitializeWithItem.Initialize(object shellItem, Shell.AccessModes accessMode) => _shellObject = ShellObjectFactory.Create((IShellItem)shellItem);
+		void IInitializeWithItem.Initialize(object shellItem, AccessModes accessMode) => _shellObject = ShellObjectFactory.Create((IShellItem)shellItem);
 
-		void IInitializeWithFile.Initialize(string filePath, Shell.AccessModes fileMode) => _info = new FileInfo(filePath);
+		void IInitializeWithFile.Initialize(string filePath, AccessModes fileMode) => _info = new FileInfo(filePath);
 
 		/// <summary>Disploses the thumbnail provider.</summary>
 		/// <param name="disposing"></param>
@@ -273,19 +233,15 @@ namespace Microsoft.WindowsAPICodePack.ShellExtensions
 		// Determines which interface should be called to return a bitmap
 		private Bitmap GetBitmap(int sideLength)
 		{
-			IThumbnailFromStream stream;
-			IThumbnailFromShellObject shellObject;
-			IThumbnailFromFile file;
-
-			if (_stream != null && (stream = this as IThumbnailFromStream) != null)
+			if (_stream != null && this is IThumbnailFromStream stream)
 			{
 				return stream.ConstructBitmap(_stream, sideLength);
 			}
-			if (_shellObject != null && (shellObject = this as IThumbnailFromShellObject) != null)
+			if (_shellObject != null && this is IThumbnailFromShellObject shellObject)
 			{
 				return shellObject.ConstructBitmap(_shellObject, sideLength);
 			}
-			if (_info != null && (file = this as IThumbnailFromFile) != null)
+			if (_info != null && this is IThumbnailFromFile file)
 			{
 				return file.ConstructBitmap(_info, sideLength);
 			}

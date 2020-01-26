@@ -279,7 +279,7 @@ namespace MS.WindowsAPICodePack.Internal
 		/// <summary>Set a string vector</summary>
 		public PropVariant(string[] value)
 		{
-			if (value == null) { throw new ArgumentNullException("value"); }
+			if (value == null) { throw new ArgumentNullException(nameof(value)); }
 
 			PropVariantNativeMethods.InitPropVariantFromStringVector(value, (uint)value.Length, this);
 		}
@@ -287,7 +287,7 @@ namespace MS.WindowsAPICodePack.Internal
 		/// <summary>Set a bool vector</summary>
 		public PropVariant(bool[] value)
 		{
-			if (value == null) { throw new ArgumentNullException("value"); }
+			if (value == null) { throw new ArgumentNullException(nameof(value)); }
 
 			PropVariantNativeMethods.InitPropVariantFromBooleanVector(value, (uint)value.Length, this);
 		}
@@ -295,7 +295,7 @@ namespace MS.WindowsAPICodePack.Internal
 		/// <summary>Set a short vector</summary>
 		public PropVariant(short[] value)
 		{
-			if (value == null) { throw new ArgumentNullException("value"); }
+			if (value == null) { throw new ArgumentNullException(nameof(value)); }
 
 			PropVariantNativeMethods.InitPropVariantFromInt16Vector(value, (uint)value.Length, this);
 		}
@@ -303,7 +303,7 @@ namespace MS.WindowsAPICodePack.Internal
 		/// <summary>Set a short vector</summary>
 		public PropVariant(ushort[] value)
 		{
-			if (value == null) { throw new ArgumentNullException("value"); }
+			if (value == null) { throw new ArgumentNullException(nameof(value)); }
 
 			PropVariantNativeMethods.InitPropVariantFromUInt16Vector(value, (uint)value.Length, this);
 		}
@@ -311,7 +311,7 @@ namespace MS.WindowsAPICodePack.Internal
 		/// <summary>Set an int vector</summary>
 		public PropVariant(int[] value)
 		{
-			if (value == null) { throw new ArgumentNullException("value"); }
+			if (value == null) { throw new ArgumentNullException(nameof(value)); }
 
 			PropVariantNativeMethods.InitPropVariantFromInt32Vector(value, (uint)value.Length, this);
 		}
@@ -319,7 +319,7 @@ namespace MS.WindowsAPICodePack.Internal
 		/// <summary>Set an uint vector</summary>
 		public PropVariant(uint[] value)
 		{
-			if (value == null) { throw new ArgumentNullException("value"); }
+			if (value == null) { throw new ArgumentNullException(nameof(value)); }
 
 			PropVariantNativeMethods.InitPropVariantFromUInt32Vector(value, (uint)value.Length, this);
 		}
@@ -327,7 +327,7 @@ namespace MS.WindowsAPICodePack.Internal
 		/// <summary>Set a long vector</summary>
 		public PropVariant(long[] value)
 		{
-			if (value == null) { throw new ArgumentNullException("value"); }
+			if (value == null) { throw new ArgumentNullException(nameof(value)); }
 
 			PropVariantNativeMethods.InitPropVariantFromInt64Vector(value, (uint)value.Length, this);
 		}
@@ -335,7 +335,7 @@ namespace MS.WindowsAPICodePack.Internal
 		/// <summary>Set a ulong vector</summary>
 		public PropVariant(ulong[] value)
 		{
-			if (value == null) { throw new ArgumentNullException("value"); }
+			if (value == null) { throw new ArgumentNullException(nameof(value)); }
 
 			PropVariantNativeMethods.InitPropVariantFromUInt64Vector(value, (uint)value.Length, this);
 		}
@@ -343,7 +343,7 @@ namespace MS.WindowsAPICodePack.Internal
 		/// <summary>&gt; Set a double vector</summary>
 		public PropVariant(double[] value)
 		{
-			if (value == null) { throw new ArgumentNullException("value"); }
+			if (value == null) { throw new ArgumentNullException(nameof(value)); }
 
 			PropVariantNativeMethods.InitPropVariantFromDoubleVector(value, (uint)value.Length, this);
 		}
@@ -351,7 +351,7 @@ namespace MS.WindowsAPICodePack.Internal
 		/// <summary>Set a DateTime vector</summary>
 		public PropVariant(DateTime[] value)
 		{
-			if (value == null) { throw new ArgumentNullException("value"); }
+			if (value == null) { throw new ArgumentNullException(nameof(value)); }
 			var fileTimeArr =
 				new System.Runtime.InteropServices.ComTypes.FILETIME[value.Length];
 
@@ -435,7 +435,7 @@ namespace MS.WindowsAPICodePack.Internal
 		/// <param name="value">Decimal array to wrap.</param>
 		public PropVariant(decimal[] value)
 		{
-			if (value == null) { throw new ArgumentNullException("value"); }
+			if (value == null) { throw new ArgumentNullException(nameof(value)); }
 
 			_valueType = (ushort)(VarEnum.VT_DECIMAL | VarEnum.VT_VECTOR);
 			_int32 = value.Length;
@@ -460,7 +460,7 @@ namespace MS.WindowsAPICodePack.Internal
 		/// <summary>Creates a PropVariant containing a float[] array.</summary>
 		public PropVariant(float[] value)
 		{
-			if (value == null) { throw new ArgumentNullException("value"); }
+			if (value == null) { throw new ArgumentNullException(nameof(value)); }
 
 			_valueType = (ushort)(VarEnum.VT_R4 | VarEnum.VT_VECTOR);
 			_int32 = value.Length;
@@ -503,7 +503,7 @@ namespace MS.WindowsAPICodePack.Internal
 		/// <param name="array">The new value to set.</param>
 		internal void SetSafeArray(Array array)
 		{
-			if (array == null) { throw new ArgumentNullException("array"); }
+			if (array == null) { throw new ArgumentNullException(nameof(array)); }
 			const ushort vtUnknown = 13;
 			var psa = PropVariantNativeMethods.SafeArrayCreateVector(vtUnknown, 0, (uint)array.Length);
 
@@ -535,7 +535,7 @@ namespace MS.WindowsAPICodePack.Internal
 
 		/// <summary>Checks if this has an empty or null value</summary>
 		/// <returns></returns>
-		public bool IsNullOrEmpty => (_valueType == (ushort)VarEnum.VT_EMPTY || _valueType == (ushort)VarEnum.VT_NULL);
+		public bool IsNullOrEmpty => _valueType == (ushort)VarEnum.VT_EMPTY || _valueType == (ushort)VarEnum.VT_NULL;
 
 		/// <summary>Gets the variant value.</summary>
 		public object Value
@@ -615,40 +615,40 @@ namespace MS.WindowsAPICodePack.Internal
 					case VarEnum.VT_ARRAY | VarEnum.VT_UNKNOWN:
 						return CrackSingleDimSafeArray(_ptr);
 
-					case (VarEnum.VT_VECTOR | VarEnum.VT_LPWSTR):
+					case VarEnum.VT_VECTOR | VarEnum.VT_LPWSTR:
 						return GetVector<string>();
 
-					case (VarEnum.VT_VECTOR | VarEnum.VT_I2):
+					case VarEnum.VT_VECTOR | VarEnum.VT_I2:
 						return GetVector<short>();
 
-					case (VarEnum.VT_VECTOR | VarEnum.VT_UI2):
+					case VarEnum.VT_VECTOR | VarEnum.VT_UI2:
 						return GetVector<ushort>();
 
-					case (VarEnum.VT_VECTOR | VarEnum.VT_I4):
+					case VarEnum.VT_VECTOR | VarEnum.VT_I4:
 						return GetVector<int>();
 
-					case (VarEnum.VT_VECTOR | VarEnum.VT_UI4):
+					case VarEnum.VT_VECTOR | VarEnum.VT_UI4:
 						return GetVector<uint>();
 
-					case (VarEnum.VT_VECTOR | VarEnum.VT_I8):
+					case VarEnum.VT_VECTOR | VarEnum.VT_I8:
 						return GetVector<long>();
 
-					case (VarEnum.VT_VECTOR | VarEnum.VT_UI8):
+					case VarEnum.VT_VECTOR | VarEnum.VT_UI8:
 						return GetVector<ulong>();
 
-					case (VarEnum.VT_VECTOR | VarEnum.VT_R4):
+					case VarEnum.VT_VECTOR | VarEnum.VT_R4:
 						return GetVector<float>();
 
-					case (VarEnum.VT_VECTOR | VarEnum.VT_R8):
+					case VarEnum.VT_VECTOR | VarEnum.VT_R8:
 						return GetVector<double>();
 
-					case (VarEnum.VT_VECTOR | VarEnum.VT_BOOL):
+					case VarEnum.VT_VECTOR | VarEnum.VT_BOOL:
 						return GetVector<bool>();
 
-					case (VarEnum.VT_VECTOR | VarEnum.VT_FILETIME):
+					case VarEnum.VT_VECTOR | VarEnum.VT_FILETIME:
 						return GetVector<DateTime>();
 
-					case (VarEnum.VT_VECTOR | VarEnum.VT_DECIMAL):
+					case VarEnum.VT_VECTOR | VarEnum.VT_DECIMAL:
 						return GetVector<decimal>();
 
 					default:

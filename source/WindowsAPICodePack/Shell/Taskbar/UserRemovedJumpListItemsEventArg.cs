@@ -11,13 +11,11 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 	/// </summary>
 	public class UserRemovedJumpListItemsEventArgs : EventArgs
 	{
-		private readonly IEnumerable _removedItems;
-
-		internal UserRemovedJumpListItemsEventArgs(IEnumerable RemovedItems) => _removedItems = RemovedItems;
+		internal UserRemovedJumpListItemsEventArgs(IEnumerable RemovedItems) => this.RemovedItems = RemovedItems;
 
 		/// <summary>
 		/// The collection of removed items based on path.
 		/// </summary>
-		public IEnumerable RemovedItems => _removedItems;
+		public IEnumerable RemovedItems { get; private set; }
 	}
 }

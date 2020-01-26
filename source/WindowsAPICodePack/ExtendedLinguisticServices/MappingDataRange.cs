@@ -23,30 +23,14 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 		///
 		/// <note>In Windows 7, the ELS services do not expose any actions.</note>
 		/// </summary>
-		public IEnumerable<string> ActionDisplayNames
-		{
-			get
-			{
-				var actionDisplayNames = InteropTools.UnpackStringArray(
-					_win32DataRange._actionDisplayNames, _win32DataRange._actionsCount);
-				return actionDisplayNames;
-			}
-		}
+		public IEnumerable<string> ActionDisplayNames => InteropTools.UnpackStringArray(_win32DataRange._actionDisplayNames, _win32DataRange._actionsCount);
 
 		/// <summary>
 		/// Available action IDs for this data range. Usable for calling <see cref="MappingService.DoAction">MappingService.DoAction</see> or <see cref="MappingService.BeginDoAction">MappingService.BeginDoAction</see>.
 		///
 		/// <note>In Windows 7, the ELS services do not expose any actions.</note>
 		/// </summary>
-		public IEnumerable<string> ActionIds
-		{
-			get
-			{
-				var actionIDs = InteropTools.UnpackStringArray(
-					_win32DataRange._actionIDs, _win32DataRange._actionsCount);
-				return actionIDs;
-			}
-		}
+		public IEnumerable<string> ActionIds => InteropTools.UnpackStringArray(_win32DataRange._actionIDs, _win32DataRange._actionsCount);
 
 		/// <summary>
 		/// A string specifying the MIME content type of the data returned by <see cref="GetData()">GetData()</see>. Examples of content
@@ -78,11 +62,7 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 		/// <typeparam name="T">The type with which <see cref="IMappingFormatter{T}">IMappingFormatter</see> is parameterized.</typeparam>
 		/// <param name="formatter">The formatter to be used in the formatting.</param>
 		/// <returns>A formatted version of this <see cref="MappingDataRange">MappingDataRange</see>.</returns>
-		public T FormatData<T>(IMappingFormatter<T> formatter)
-		{
-			if (formatter == null) { throw new ArgumentNullException("formatter"); }
-			return formatter.Format(this);
-		}
+		public T FormatData<T>(IMappingFormatter<T> formatter) => formatter != null ? formatter.Format(this) : throw new ArgumentNullException(nameof(formatter));
 
 		/// <summary>
 		/// The data retrieved as service output associated with the subrange. This data must be of the format indicated by the content type

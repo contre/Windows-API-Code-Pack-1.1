@@ -24,13 +24,11 @@ namespace Microsoft.WindowsAPICodePack.Sensors
 		/// <returns></returns>
 		public LuminousIntensity(SensorReport report)
 		{
-			if (report == null) { throw new ArgumentNullException("report"); }
+			if (report == null) { throw new ArgumentNullException(nameof(report)); }
 
-			if (report.Values != null &&
-				report.Values.ContainsKey(SensorPropertyKeys.SensorDataTypeLightLux.FormatId))
+			if (report.Values != null && report.Values.ContainsKey(SensorPropertyKeys.SensorDataTypeLightLux.FormatId))
 			{
-				Intensity =
-					(float)report.Values[SensorPropertyKeys.SensorDataTypeLightLux.FormatId][0];
+				Intensity = (float)report.Values[SensorPropertyKeys.SensorDataTypeLightLux.FormatId][0];
 			}
 		}
 

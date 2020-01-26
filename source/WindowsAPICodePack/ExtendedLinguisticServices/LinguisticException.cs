@@ -54,10 +54,10 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 		/// the serialization information.
 		/// </summary>
 		/// <param name="info">
-		/// The <see cref="System.Runtime.Serialization.SerializationInfo">SerializationInfo</see> associated with this exception.
+		/// The <see cref="SerializationInfo">SerializationInfo</see> associated with this exception.
 		/// </param>
 		/// <param name="context">
-		/// A <see cref="System.Runtime.Serialization.StreamingContext">StreamingContext</see> that represents the context of this exception.
+		/// A <see cref="StreamingContext">StreamingContext</see> that represents the context of this exception.
 		/// </param>
 		protected LinguisticException(SerializationInfo info, StreamingContext context)
 			: base(info, context)

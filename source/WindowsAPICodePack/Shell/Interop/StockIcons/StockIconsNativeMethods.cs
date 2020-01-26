@@ -47,7 +47,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			StockIconOptions flags,
 			ref StockIconInfo info);
 
-		[StructLayoutAttribute(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
 		internal struct StockIconInfo
 		{
 			internal uint StuctureSize;

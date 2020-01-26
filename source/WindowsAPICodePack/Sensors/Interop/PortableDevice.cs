@@ -59,7 +59,7 @@ namespace Microsoft.WindowsAPICodePack.Sensors
 	[ComImport, Guid("6848F6F2-3155-4F86-B6F5-263EEEAB3143"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 	internal interface IPortableDeviceValues
 	{
-		void GetCount([In] ref uint pcelt);
+		void GetCount(out uint pcelt);
 
 		void GetAt([In] uint index, [In, Out] ref PropertyKey pKey, [In, Out] PropVariant pValue);
 
@@ -213,7 +213,7 @@ namespace Microsoft.WindowsAPICodePack.Sensors
 	internal class PortableDeviceValues : IPortableDeviceValues
 	{
 		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-		public extern virtual void GetCount([In] ref uint pcelt);
+		public extern virtual void GetCount(out uint pcelt);
 
 		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
 		public extern virtual void GetAt([In] uint index, [In, Out] ref PropertyKey pKey, [In, Out] PropVariant pValue);

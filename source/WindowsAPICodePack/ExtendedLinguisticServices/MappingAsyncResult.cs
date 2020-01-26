@@ -5,21 +5,18 @@ using System.Threading;
 
 namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 {
-	/// <summary><see cref="System.IAsyncResult">IAsyncResult</see> implementation for use with asynchronous calls to ELS.</summary>
+	/// <summary><see cref="IAsyncResult">IAsyncResult</see> implementation for use with asynchronous calls to ELS.</summary>
 	public class MappingAsyncResult : IAsyncResult, IDisposable
 	{
-		private readonly AsyncCallback _asyncCallback;
-		private readonly object _callerData;
 		private readonly ManualResetEvent _waitHandle;
-		private MappingPropertyBag _bag;
 		private MappingResultState _resultState;
 
 		internal MappingAsyncResult(
 			object callerData,
 			AsyncCallback asyncCallback)
 		{
-			_callerData = callerData;
-			_asyncCallback = asyncCallback;
+			CallerData = callerData;
+			AsyncCallback = asyncCallback;
 			_waitHandle = new ManualResetEvent(false);
 		}
 
@@ -31,7 +28,7 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 		public WaitHandle AsyncWaitHandle => _waitHandle;
 
 		/// <summary>Returns the caller data associated with this operation.</summary>
-		public object CallerData => _callerData;
+		public object CallerData { get; private set; }
 
 		/// <summary>From MSDN: Most implementers of the IAsyncResult interface will not use this property and should return false.</summary>
 		public bool CompletedSynchronously => false;
@@ -47,15 +44,15 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 		}
 
 		/// <summary>Gets the resulting <see cref="MappingPropertyBag">MappingPropertyBag</see> (if it exists).</summary>
-		public MappingPropertyBag PropertyBag => _bag;
+		public MappingPropertyBag PropertyBag { get; private set; }
 
 		/// <summary>Returns the current result state associated with this operation.</summary>
 		public MappingResultState ResultState => _resultState;
 
 		/// <summary>Queries whether the operation completed successfully.</summary>
-		public bool Succeeded => _bag != null && _resultState.HResult == 0;
+		public bool Succeeded => PropertyBag != null && _resultState.HResult == 0;
 
-		internal AsyncCallback AsyncCallback => _asyncCallback;
+		internal AsyncCallback AsyncCallback { get; private set; }
 
 		/// <summary>Dispose the MappingAsyncresult</summary>
 		public void Dispose()
@@ -67,7 +64,7 @@ namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 		internal void SetResult(MappingPropertyBag bag, MappingResultState resultState)
 		{
 			_resultState = resultState;
-			_bag = bag;
+			PropertyBag = bag;
 		}
 
 		/// <summary>Dispose the MappingAsyncresult</summary>

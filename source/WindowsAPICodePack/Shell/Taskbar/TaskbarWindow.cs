@@ -119,11 +119,11 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 			WindowsControl = null;
 		}
 
-		internal TaskbarWindow(System.Windows.UIElement windowsControl, params ThumbnailToolBarButton[] buttons)
+		internal TaskbarWindow(UIElement windowsControl, params ThumbnailToolBarButton[] buttons)
 		{
 			if (windowsControl == null)
 			{
-				throw new ArgumentNullException("windowsControl");
+				throw new ArgumentNullException(nameof(windowsControl));
 			}
 
 			if (buttons == null || buttons.Length == 0)
@@ -148,7 +148,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 
 		internal TaskbarWindow(TabbedThumbnail preview)
 		{
-			if (preview == null) { throw new ArgumentNullException("preview"); }
+			if (preview == null) { throw new ArgumentNullException(nameof(preview)); }
 
 			// Create our proxy window
 			// Bug: This is only called in this constructor.  Which will cause the property 

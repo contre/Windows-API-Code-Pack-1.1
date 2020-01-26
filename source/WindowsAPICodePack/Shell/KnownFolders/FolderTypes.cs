@@ -129,9 +129,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		private static readonly Dictionary<Guid, string> types;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
-		static FolderTypes()
-		{
-			types = new Dictionary<Guid, string>
+		static FolderTypes() => types = new Dictionary<Guid, string>
 			{
 				// Review: These Localized messages could probably be a reflected value of the field's name.
 				{ NotSpecified, LocalizedMessages.FolderTypeNotSpecified },
@@ -163,11 +161,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 				{ UserFiles, LocalizedMessages.FolderTypeUserFiles },
 				{ Videos, LocalizedMessages.FolderTypeVideos }
 			};
-		}
 
-		internal static string GetFolderType(Guid typeId)
-		{
-			return types.TryGetValue(typeId, out var type) ? type : string.Empty;
-		}
+		internal static string GetFolderType(Guid typeId) => types.TryGetValue(typeId, out var type) ? type : string.Empty;
 	}
 }

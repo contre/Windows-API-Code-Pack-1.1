@@ -14,25 +14,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
 	{
 		internal static PropertyKey ItemTypePropertyKey = new PropertyKey(new Guid("28636AA6-953D-11D2-B5D6-00C04FD918D0"), 11);
 
-		internal static string GetAbsolutePath(string path)
-		{
-			if (Uri.IsWellFormedUriString(path, UriKind.Absolute))
-			{
-				return path;
-			}
-			return Path.GetFullPath((path));
-		}
+		internal static string GetAbsolutePath(string path) => Uri.IsWellFormedUriString(path, UriKind.Absolute) ? path : Path.GetFullPath(path);
 
-		internal static string GetItemType(IShellItem2 shellItem)
-		{
-			if (shellItem != null)
-			{
-				var hr = shellItem.GetString(ref ItemTypePropertyKey, out var itemType);
-				if (hr == HResult.Ok) { return itemType; }
-			}
-
-			return null;
-		}
+		internal static string GetItemType(IShellItem2 shellItem) => shellItem != null && shellItem.GetString(ref ItemTypePropertyKey, out var itemType) == HResult.Ok ? itemType : null;
 
 		internal static string GetParsingName(IShellItem shellItem)
 		{
@@ -40,8 +24,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
 			string path = null;
 
-			var pszPath = IntPtr.Zero;
-			var hr = shellItem.GetDisplayName(ShellNativeMethods.ShellItemDesignNameOptions.DesktopAbsoluteParsing, out pszPath);
+			var hr = shellItem.GetDisplayName(ShellNativeMethods.ShellItemDesignNameOptions.DesktopAbsoluteParsing, out var pszPath);
 
 			if (hr != HResult.Ok && hr != HResult.InvalidArguments)
 			{
@@ -52,31 +35,16 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			{
 				path = Marshal.PtrToStringAuto(pszPath);
 				Marshal.FreeCoTaskMem(pszPath);
-				pszPath = IntPtr.Zero;
 			}
 
 			return path;
 		}
 
-		internal static IntPtr PidlFromParsingName(string name)
-		{
-			var retCode = ShellNativeMethods.SHParseDisplayName(
-				name, IntPtr.Zero, out var pidl, 0,
-				out var sfgao);
+		internal static IntPtr PidlFromParsingName(string name) => 
+			CoreErrorHelper.Succeeded(ShellNativeMethods.SHParseDisplayName(name, IntPtr.Zero, out var pidl, 0, out _)) ? pidl : IntPtr.Zero;
 
-			return (CoreErrorHelper.Succeeded(retCode) ? pidl : IntPtr.Zero);
-		}
+		internal static IntPtr PidlFromShellItem(IShellItem nativeShellItem) => PidlFromUnknown(Marshal.GetIUnknownForObject(nativeShellItem));
 
-		internal static IntPtr PidlFromShellItem(IShellItem nativeShellItem)
-		{
-			var unknown = Marshal.GetIUnknownForObject(nativeShellItem);
-			return PidlFromUnknown(unknown);
-		}
-
-		internal static IntPtr PidlFromUnknown(IntPtr unknown)
-		{
-			var retCode = ShellNativeMethods.SHGetIDListFromObject(unknown, out var pidl);
-			return (CoreErrorHelper.Succeeded(retCode) ? pidl : IntPtr.Zero);
-		}
+		internal static IntPtr PidlFromUnknown(IntPtr unknown) => CoreErrorHelper.Succeeded(ShellNativeMethods.SHGetIDListFromObject(unknown, out var pidl)) ? pidl : IntPtr.Zero;
 	}
 }

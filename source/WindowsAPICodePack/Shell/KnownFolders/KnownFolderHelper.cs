@@ -13,7 +13,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <summary>Returns the known folder given its canonical name.</summary>
 		/// <param name="canonicalName">A non-localized canonical name for the known folder, such as MyComputer.</param>
 		/// <returns>A known folder representing the specified name.</returns>
-		/// <exception cref="System.ArgumentException">
+		/// <exception cref="ArgumentException">
 		/// Thrown if the given canonical name is invalid or if the KnownFolder could not be created.
 		/// </exception>
 		public static IKnownFolder FromCanonicalName(string canonicalName)
@@ -33,7 +33,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <summary>Returns a known folder given a globally unique identifier.</summary>
 		/// <param name="knownFolderId">A GUID for the requested known folder.</param>
 		/// <returns>A known folder representing the specified name.</returns>
-		/// <exception cref="System.ArgumentException">Thrown if the given Known Folder ID is invalid.</exception>
+		/// <exception cref="ArgumentException">Thrown if the given Known Folder ID is invalid.</exception>
 		public static IKnownFolder FromKnownFolderId(Guid knownFolderId)
 		{
 			var knownFolderManager = new KnownFolderManagerClass();
@@ -55,12 +55,12 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// </summary>
 		/// <param name="parsingName">The parsing name (or path) for the requested known folder.</param>
 		/// <returns>A known folder representing the specified name.</returns>
-		/// <exception cref="System.ArgumentException">Thrown if the given parsing name is invalid.</exception>
+		/// <exception cref="ArgumentException">Thrown if the given parsing name is invalid.</exception>
 		public static IKnownFolder FromParsingName(string parsingName)
 		{
 			if (parsingName == null)
 			{
-				throw new ArgumentNullException("parsingName");
+				throw new ArgumentNullException(nameof(parsingName));
 			}
 
 			var pidl = IntPtr.Zero;

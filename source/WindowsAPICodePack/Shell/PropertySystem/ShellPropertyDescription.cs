@@ -1,29 +1,5 @@
 ﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
 
-/* Unmerged change from project 'Shell (net452)'
-Before:
-using System;
-After:
-using MS.WindowsAPICodePack.Internal;
-using System;
-*/
-
-/* Unmerged change from project 'Shell (net462)'
-Before:
-using System;
-After:
-using MS.WindowsAPICodePack.Internal;
-using System;
-*/
-
-/* Unmerged change from project 'Shell (net472)'
-Before:
-using System;
-After:
-using MS.WindowsAPICodePack.Internal;
-using System;
-*/
-
 using MS.WindowsAPICodePack.Internal;
 using System;
 using System.Collections.Generic;
@@ -200,9 +176,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 			{
 				if (NativePropertyDescription != null && displayName == null)
 				{
-					var dispNameptr = IntPtr.Zero;
-
-					var hr = NativePropertyDescription.GetDisplayName(out dispNameptr);
+					var hr = NativePropertyDescription.GetDisplayName(out var dispNameptr);
 
 					if (CoreErrorHelper.Succeeded(hr) && dispNameptr != IntPtr.Zero)
 					{
@@ -244,9 +218,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 				if (NativePropertyDescription != null && editInvitation == null)
 				{
 					// EditInvitation can be empty, so ignore the HR value, but don't throw an exception
-					var ptr = IntPtr.Zero;
-
-					var hr = NativePropertyDescription.GetEditInvitation(out ptr);
+					var hr = NativePropertyDescription.GetEditInvitation(out var ptr);
 
 					if (CoreErrorHelper.Succeeded(hr) && ptr != IntPtr.Zero)
 					{
@@ -443,12 +415,11 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 		/// </remarks>
 		public string GetSortDescriptionLabel(bool descending)
 		{
-			var ptr = IntPtr.Zero;
 			var label = string.Empty;
 
 			if (NativePropertyDescription != null)
 			{
-				var hr = NativePropertyDescription.GetSortDescriptionLabel(descending, out ptr);
+				var hr = NativePropertyDescription.GetSortDescriptionLabel(descending, out var ptr);
 
 				if (CoreErrorHelper.Succeeded(hr) && ptr != IntPtr.Zero)
 				{

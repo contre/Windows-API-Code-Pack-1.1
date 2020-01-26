@@ -11,7 +11,6 @@ namespace Microsoft.WindowsAPICodePack.Shell
 	internal class ShellFolderItems : IEnumerator<ShellObject>
 	{
 		private readonly ShellContainer nativeShellFolder;
-		private ShellObject currentItem;
 		private IEnumIDList nativeEnumIdList;
 
 		internal ShellFolderItems(ShellContainer nativeShellFolder)
@@ -36,9 +35,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			}
 		}
 
-		public ShellObject Current => currentItem;
+		public ShellObject Current { get; private set; }
 
-		object IEnumerator.Current => currentItem;
+		object IEnumerator.Current => Current;
 
 		public void Dispose()
 		{
@@ -60,7 +59,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
 			if (numItemsReturned < itemsRequested || hr != HResult.Ok) { return false; }
 
-			currentItem = ShellObjectFactory.Create(item, nativeShellFolder);
+			Current = ShellObjectFactory.Create(item, nativeShellFolder);
 
 			return true;
 		}

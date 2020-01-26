@@ -189,7 +189,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 			AssertCurrentlyShowing();
 			SendMessageHelper(
 				TaskDialogNativeMethods.TaskDialogMessages.ClickVerification,
-				(cbc ? 1 : 0),
+				cbc ? 1 : 0,
 				1);
 		}
 
@@ -395,12 +395,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 
 			// Once that returns, we raise a Closing event for the dialog The Win32 API handles button clicking-and-closing as an atomic
 			// action, but it is more .NET friendly to split them up. Unfortunately, we do NOT have the return values at this stage.
-			if (id < DialogsDefaults.MinimumDialogControlId)
-			{
-				return outerDialog.RaiseClosingEvent(id);
-			}
-
-			return (int)HResult.False;
+			return id < DialogsDefaults.MinimumDialogControlId ? outerDialog.RaiseClosingEvent(id) : (int)HResult.False;
 		}
 
 		private int HandleHelpInvocation()
@@ -441,7 +436,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 			return CoreErrorHelper.Ignored;
 		}
 
-		private bool IsOptionSet(TaskDialogNativeMethods.TaskDialogOptions flag) => ((nativeDialogConfig.taskDialogFlags & flag) == flag);
+		private bool IsOptionSet(TaskDialogNativeMethods.TaskDialogOptions flag) => (nativeDialogConfig.taskDialogFlags & flag) == flag;
 
 		private IntPtr MakeNewString(string text, TaskDialogNativeMethods.TaskDialogElements element)
 		{

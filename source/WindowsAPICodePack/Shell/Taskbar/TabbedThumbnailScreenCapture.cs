@@ -66,9 +66,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 
 						targetGr.ReleaseHdc(targetDC);
 
-						if (!success) { return null; }
-
-						return targetBitmap;
+						return !success ? null : targetBitmap;
 					}
 				}
 				catch
@@ -98,8 +96,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 		public static Bitmap GrabWindowBitmap(UIElement element, int dpiX, int dpiY, int width, int height)
 		{
 			// Special case for HwndHost controls
-			var host = element as HwndHost;
-			if (host != null)
+			if (element is HwndHost host)
 			{
 				var handle = host.Handle;
 				return GrabWindowBitmap(handle, new System.Drawing.Size(width, height));
@@ -173,7 +170,6 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 			finally
 			{
 				originalBitmap.Dispose();
-				originalBitmap = null;
 			}
 		}
 	}

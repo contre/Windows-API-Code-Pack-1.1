@@ -1,64 +1,9 @@
 ﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
 
-/* Unmerged change from project 'Shell (net452)'
-Before:
-using System;
-After:
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-using MS.WindowsAPICodePack.Internal;
-using System;
-*/
-
-/* Unmerged change from project 'Shell (net462)'
-Before:
-using System;
-After:
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-using MS.WindowsAPICodePack.Internal;
-using System;
-*/
-
-/* Unmerged change from project 'Shell (net472)'
-Before:
-using System;
-After:
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-using MS.WindowsAPICodePack.Internal;
-using System;
-*/
-
 using Microsoft.WindowsAPICodePack.Shell.Resources;
 using MS.WindowsAPICodePack.Internal;
 using System;
 using System.Collections.Generic;
-
-/* Unmerged change from project 'Shell (net452)'
-Before:
-using System.Runtime.InteropServices.ComTypes;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-using MS.WindowsAPICodePack.Internal;
-After:
-using System.Runtime.InteropServices.ComTypes;
-*/
-
-/* Unmerged change from project 'Shell (net462)'
-Before:
-using System.Runtime.InteropServices.ComTypes;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-using MS.WindowsAPICodePack.Internal;
-After:
-using System.Runtime.InteropServices.ComTypes;
-*/
-
-/* Unmerged change from project 'Shell (net472)'
-Before:
-using System.Runtime.InteropServices.ComTypes;
-using Microsoft.WindowsAPICodePack.Shell.Resources;
-using MS.WindowsAPICodePack.Internal;
-After:
-using System.Runtime.InteropServices.ComTypes;
-*/
-
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -93,7 +38,6 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 				if (nativePropertyStore != null)
 				{
 					Marshal.ReleaseComObject(nativePropertyStore);
-					nativePropertyStore = null;
 				}
 			}
 		}
@@ -170,6 +114,9 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 			return Items.Any(p => p.CanonicalName == canonicalName);
 		}
 
+		/// <summary>Checks if a property with the given property key is available.</summary>
+		/// <param name="key">The property key.</param>
+		/// <returns><B>True</B> if available, <B>false</B> otherwise.</returns>
 		public bool Contains(PropertyKey key) => Items.Any(p => p.PropertyKey == key);
 
 		/// <summary>Release the native objects.</summary>
@@ -229,36 +176,5 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 				}
 			}
 		}
-
-		/// <summary>Checks if a property with the given property key is available.</summary>
-		/// <param name="key">The property key.</param>
-		/// <returns><B>True</B> if available, <B>false</B> otherwise.</returns>
-
-		/* Unmerged change from project 'Shell (net452)'
-		Before:
-				public bool Contains(PropertyKey key)
-				{
-					return Items.Any(p => p.PropertyKey == key);
-		After:
-				public bool Contains(PropertyKey key) => Items.Any(p => p.PropertyKey == key);
-		*/
-
-		/* Unmerged change from project 'Shell (net462)'
-		Before:
-				public bool Contains(PropertyKey key)
-				{
-					return Items.Any(p => p.PropertyKey == key);
-		After:
-				public bool Contains(PropertyKey key) => Items.Any(p => p.PropertyKey == key);
-		*/
-
-		/* Unmerged change from project 'Shell (net472)'
-		Before:
-				public bool Contains(PropertyKey key)
-				{
-					return Items.Any(p => p.PropertyKey == key);
-		After:
-				public bool Contains(PropertyKey key) => Items.Any(p => p.PropertyKey == key);
-		*/
 	}
 }

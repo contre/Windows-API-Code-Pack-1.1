@@ -36,95 +36,95 @@ namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem
 		{
 			switch (VarEnumType)
 			{
-				case (VarEnum.VT_EMPTY):
-				case (VarEnum.VT_NULL):
+				case VarEnum.VT_EMPTY:
+				case VarEnum.VT_NULL:
 					return typeof(object);
 
-				case (VarEnum.VT_UI1):
+				case VarEnum.VT_UI1:
 					return typeof(byte?);
 
-				case (VarEnum.VT_I2):
+				case VarEnum.VT_I2:
 					return typeof(short?);
 
-				case (VarEnum.VT_UI2):
+				case VarEnum.VT_UI2:
 					return typeof(ushort?);
 
-				case (VarEnum.VT_I4):
+				case VarEnum.VT_I4:
 					return typeof(int?);
 
-				case (VarEnum.VT_UI4):
+				case VarEnum.VT_UI4:
 					return typeof(uint?);
 
-				case (VarEnum.VT_I8):
+				case VarEnum.VT_I8:
 					return typeof(long?);
 
-				case (VarEnum.VT_UI8):
+				case VarEnum.VT_UI8:
 					return typeof(ulong?);
 
-				case (VarEnum.VT_R8):
+				case VarEnum.VT_R8:
 					return typeof(double?);
 
-				case (VarEnum.VT_BOOL):
+				case VarEnum.VT_BOOL:
 					return typeof(bool?);
 
-				case (VarEnum.VT_FILETIME):
+				case VarEnum.VT_FILETIME:
 					return typeof(DateTime?);
 
-				case (VarEnum.VT_CLSID):
+				case VarEnum.VT_CLSID:
 					return typeof(IntPtr?);
 
-				case (VarEnum.VT_CF):
+				case VarEnum.VT_CF:
 					return typeof(IntPtr?);
 
-				case (VarEnum.VT_BLOB):
+				case VarEnum.VT_BLOB:
 					return typeof(byte[]);
 
-				case (VarEnum.VT_LPWSTR):
+				case VarEnum.VT_LPWSTR:
 					return typeof(string);
 
-				case (VarEnum.VT_UNKNOWN):
+				case VarEnum.VT_UNKNOWN:
 					return typeof(IntPtr?);
 
-				case (VarEnum.VT_STREAM):
+				case VarEnum.VT_STREAM:
 					return typeof(IStream);
 
-				case (VarEnum.VT_VECTOR | VarEnum.VT_UI1):
+				case VarEnum.VT_VECTOR | VarEnum.VT_UI1:
 					return typeof(byte[]);
 
-				case (VarEnum.VT_VECTOR | VarEnum.VT_I2):
+				case VarEnum.VT_VECTOR | VarEnum.VT_I2:
 					return typeof(short[]);
 
-				case (VarEnum.VT_VECTOR | VarEnum.VT_UI2):
+				case VarEnum.VT_VECTOR | VarEnum.VT_UI2:
 					return typeof(ushort[]);
 
-				case (VarEnum.VT_VECTOR | VarEnum.VT_I4):
+				case VarEnum.VT_VECTOR | VarEnum.VT_I4:
 					return typeof(int[]);
 
-				case (VarEnum.VT_VECTOR | VarEnum.VT_UI4):
+				case VarEnum.VT_VECTOR | VarEnum.VT_UI4:
 					return typeof(uint[]);
 
-				case (VarEnum.VT_VECTOR | VarEnum.VT_I8):
+				case VarEnum.VT_VECTOR | VarEnum.VT_I8:
 					return typeof(long[]);
 
-				case (VarEnum.VT_VECTOR | VarEnum.VT_UI8):
+				case VarEnum.VT_VECTOR | VarEnum.VT_UI8:
 					return typeof(ulong[]);
 
-				case (VarEnum.VT_VECTOR | VarEnum.VT_R8):
+				case VarEnum.VT_VECTOR | VarEnum.VT_R8:
 					return typeof(double[]);
 
-				case (VarEnum.VT_VECTOR | VarEnum.VT_BOOL):
+				case VarEnum.VT_VECTOR | VarEnum.VT_BOOL:
 					return typeof(bool[]);
 
-				case (VarEnum.VT_VECTOR | VarEnum.VT_FILETIME):
+				case VarEnum.VT_VECTOR | VarEnum.VT_FILETIME:
 					return typeof(DateTime[]);
 
-				case (VarEnum.VT_VECTOR | VarEnum.VT_CLSID):
+				case VarEnum.VT_VECTOR | VarEnum.VT_CLSID:
 					return typeof(IntPtr[]);
 
-				case (VarEnum.VT_VECTOR | VarEnum.VT_CF):
+				case VarEnum.VT_VECTOR | VarEnum.VT_CF:
 					return typeof(IntPtr[]);
 
-				case (VarEnum.VT_VECTOR | VarEnum.VT_LPWSTR):
+				case VarEnum.VT_VECTOR | VarEnum.VT_LPWSTR:
 					return typeof(string[]);
 
 				default:

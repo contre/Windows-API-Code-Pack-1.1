@@ -1,32 +1,5 @@
 ﻿//Copyright (c) Microsoft Corporation.  All rights reserved.
 
-/* Unmerged change from project 'Shell (net452)'
-Before:
-using System;
-using Microsoft.WindowsAPICodePack.Shell;
-After:
-using Microsoft.WindowsAPICodePack.Shell;
-using System;
-*/
-
-/* Unmerged change from project 'Shell (net462)'
-Before:
-using System;
-using Microsoft.WindowsAPICodePack.Shell;
-After:
-using Microsoft.WindowsAPICodePack.Shell;
-using System;
-*/
-
-/* Unmerged change from project 'Shell (net472)'
-Before:
-using System;
-using Microsoft.WindowsAPICodePack.Shell;
-After:
-using Microsoft.WindowsAPICodePack.Shell;
-using System;
-*/
-
 using System;
 
 namespace Microsoft.WindowsAPICodePack.Shell.PropertySystem

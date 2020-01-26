@@ -140,7 +140,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 				var hr = customDestinationList.BeginList(
 					out var maxSlotsInList,
 					ref TaskbarNativeMethods.TaskbarGuids.IObjectArray,
-					out var removedItems);
+					out _);
 
 				if (CoreErrorHelper.Succeeded(hr))
 				{
@@ -200,7 +200,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 		/// <param name="appID">Application Id to use for this instace.</param>
 		/// <param name="window">WPF Window that is associated with this JumpList</param>
 		internal JumpList(string appID, System.Windows.Window window)
-			: this(appID, (new System.Windows.Interop.WindowInteropHelper(window)).Handle)
+			: this(appID, new System.Windows.Interop.WindowInteropHelper(window).Handle)
 		{
 		}
 
@@ -245,9 +245,9 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 		/// <summary>
 		/// Commits the pending JumpList changes and refreshes the Taskbar.
 		/// </summary>
-		/// <exception cref="System.InvalidOperationException">Will throw if the type of the file being added to the JumpList is not registered with the application.</exception>
-		/// <exception cref="System.UnauthorizedAccessException">Will throw if recent documents tracking is turned off by the user or via group policy.</exception>
-		/// <exception cref="System.Runtime.InteropServices.COMException">Will throw if updating the JumpList fails for any other reason.</exception>
+		/// <exception cref="InvalidOperationException">Will throw if the type of the file being added to the JumpList is not registered with the application.</exception>
+		/// <exception cref="UnauthorizedAccessException">Will throw if recent documents tracking is turned off by the user or via group policy.</exception>
+		/// <exception cref="COMException">Will throw if updating the JumpList fails for any other reason.</exception>
 		public void Refresh()
 		{
 			// Let the taskbar know which specific jumplist we are updating
@@ -360,15 +360,12 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 				removedItems.GetAt(i,
 					ref TaskbarNativeMethods.TaskbarGuids.IUnknown,
 					out var item);
-
-				var shellItem = item as IShellItem;
-				IShellLinkW shellLink;
 				// Process item
-				if (shellItem != null)
+				if (item is IShellItem shellItem)
 				{
 					removedItemsArray.Add(RemoveCustomCategoryItem(shellItem));
 				}
-				else if ((shellLink = item as IShellLinkW) != null)
+				else if (item is IShellLinkW shellLink)
 				{
 					removedItemsArray.Add(RemoveCustomCategoryLink(shellLink));
 				}
@@ -382,8 +379,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 
 			if (customCategoriesCollection != null)
 			{
-				var pszString = IntPtr.Zero;
-				var hr = item.GetDisplayName(ShellNativeMethods.ShellItemDesignNameOptions.FileSystemPath, out pszString);
+				var hr = item.GetDisplayName(ShellNativeMethods.ShellItemDesignNameOptions.FileSystemPath, out var pszString);
 				if (hr == HResult.Ok && pszString != IntPtr.Zero)
 				{
 					path = Marshal.PtrToStringAuto(pszString);
@@ -455,12 +451,11 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 					foreach (var link in category.JumpListItems)
 					{
 						var listItem = link as JumpListItem;
-						var listLink = link as JumpListLink;
 						if (listItem != null)
 						{
 							categoryContent.AddObject(listItem.NativeShellItem);
 						}
-						else if (listLink != null)
+						else if (link is JumpListLink listLink)
 						{
 							categoryContent.AddObject(listLink.NativeShellLink);
 						}
@@ -515,13 +510,11 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 			// Add each task's shell representation to the object array
 			foreach (var task in userTasks)
 			{
-				JumpListSeparator seperator;
-				var link = task as JumpListLink;
-				if (link != null)
+				if (task is JumpListLink link)
 				{
 					taskContent.AddObject(link.NativeShellLink);
 				}
-				else if ((seperator = task as JumpListSeparator) != null)
+				else if (task is JumpListSeparator seperator)
 				{
 					taskContent.AddObject(seperator.NativeShellLink);
 				}

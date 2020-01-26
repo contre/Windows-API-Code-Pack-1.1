@@ -81,7 +81,7 @@ namespace MS.WindowsAPICodePack.Internal
 		/// <param name="result">The COM error code.</param>
 		/// <param name="win32ErrorCode">The Win32 error code.</param>
 		/// <returns>Inticates that the Win32 error code corresponds to the COM error code.</returns>
-		public static bool Matches(int result, int win32ErrorCode) => (result == HResultFromWin32(win32ErrorCode));
+		public static bool Matches(int result, int win32ErrorCode) => result == HResultFromWin32(win32ErrorCode);
 
 		/// <summary>This is intended for Library Internal use only.</summary>
 		/// <param name="result">The error code.</param>

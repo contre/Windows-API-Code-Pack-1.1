@@ -8,7 +8,6 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 	[ContentProperty("Items")]
 	public abstract class CommonFileDialogProminentControl : CommonFileDialogControl
 	{
-		private bool isProminent;
 
 		/// <summary>Creates a new instance of this class.</summary>
 		protected CommonFileDialogProminentControl() { }
@@ -28,10 +27,6 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 		/// will be thrown when these controls are added to the dialog. A group box control can only be specified as prominent if it contains
 		/// one control and that control is of type 'CommonFileDialogProminentControl'.
 		/// </remarks>
-		public bool IsProminent
-		{
-			get => isProminent;
-			set => isProminent = value;
-		}
+		public bool IsProminent { get; set; }
 	}
 }

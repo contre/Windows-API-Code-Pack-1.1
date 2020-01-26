@@ -8,11 +8,9 @@ namespace Microsoft.WindowsAPICodePack.ApplicationServices
 {
 	internal static class AppRestartRecoveryNativeMethods
 	{
-		private static readonly InternalRecoveryCallback internalCallback = new InternalRecoveryCallback(InternalRecoveryHandler);
-
 		internal delegate uint InternalRecoveryCallback(IntPtr state);
 
-		internal static InternalRecoveryCallback InternalCallback => internalCallback;
+		internal static InternalRecoveryCallback InternalCallback { get; } = new InternalRecoveryCallback(InternalRecoveryHandler);
 
 		[DllImport("kernel32.dll")]
 		internal static extern void ApplicationRecoveryFinished(
@@ -47,14 +45,14 @@ namespace Microsoft.WindowsAPICodePack.ApplicationServices
 
 		private static uint InternalRecoveryHandler(IntPtr parameter)
 		{
-			ApplicationRecoveryInProgress(out var cancelled);
+			ApplicationRecoveryInProgress(out _);
 
 			var handle = GCHandle.FromIntPtr(parameter);
 			var data = handle.Target as RecoveryData;
 			data.Invoke();
 			handle.Free();
 
-			return (0);
+			return 0;
 		}
 	}
 }

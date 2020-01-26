@@ -23,12 +23,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
 		internal SearchCondition(ICondition nativeSearchCondition)
 		{
-			if (nativeSearchCondition == null)
-			{
-				throw new ArgumentNullException("nativeSearchCondition");
-			}
-
-			NativeSearchCondition = nativeSearchCondition;
+			NativeSearchCondition = nativeSearchCondition ?? throw new ArgumentNullException(nameof(nativeSearchCondition));
 
 			var hr = NativeSearchCondition.GetConditionType(out conditionType);
 
@@ -61,7 +56,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 
 		/// <summary>
 		/// Search condition operation to be performed on the property/value combination. See
-		/// <see cref="Microsoft.WindowsAPICodePack.Shell.SearchConditionOperation"/> for more details.
+		/// <see cref="SearchConditionOperation"/> for more details.
 		/// </summary>
 		public SearchConditionOperation ConditionOperation => conditionOperation;
 
@@ -89,7 +84,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			}
 		}
 
-		/// <summary>A value (in <see cref="System.String"/> format) to which the property is compared.</summary>
+		/// <summary>A value (in <see cref="string"/> format) to which the property is compared.</summary>
 		public string PropertyValue { get; internal set; }
 
 		internal ICondition NativeSearchCondition { get; set; }

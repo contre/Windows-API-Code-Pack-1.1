@@ -31,8 +31,8 @@ namespace Microsoft.WindowsAPICodePack.ApplicationServices
 		/// <summary>
 		/// Called by an application's <see cref="RecoveryCallback"/> method to indicate that it is still performing recovery work.
 		/// </summary>
-		/// <returns>A <see cref="System.Boolean"/> value indicating whether the user canceled the recovery.</returns>
-		/// <exception cref="Microsoft.WindowsAPICodePack.ApplicationServices.ApplicationRecoveryException">
+		/// <returns>A <see cref="bool"/> value indicating whether the user canceled the recovery.</returns>
+		/// <exception cref="ApplicationRecoveryException">
 		/// This method must be called from a registered callback method.
 		/// </exception>
 		public static bool ApplicationRecoveryInProgress()
@@ -53,7 +53,7 @@ namespace Microsoft.WindowsAPICodePack.ApplicationServices
 		/// <param name="settings">
 		/// An object that specifies the callback method, an optional parameter to pass to the callback method and a time interval.
 		/// </param>
-		/// <exception cref="System.ArgumentException">The registration failed due to an invalid parameter.</exception>
+		/// <exception cref="ArgumentException">The registration failed due to an invalid parameter.</exception>
 		/// <exception cref="System.ComponentModel.Win32Exception">The registration failed.</exception>
 		/// <remarks>
 		/// The time interval is the period of time within which the recovery callback method calls the
@@ -63,7 +63,7 @@ namespace Microsoft.WindowsAPICodePack.ApplicationServices
 		{
 			CoreHelpers.ThrowIfNotVista();
 
-			if (settings == null) { throw new ArgumentNullException("settings"); }
+			if (settings == null) throw new ArgumentNullException(nameof(settings));
 
 			var handle = GCHandle.Alloc(settings.RecoveryData);
 
@@ -86,14 +86,14 @@ namespace Microsoft.WindowsAPICodePack.ApplicationServices
 		/// An object that specifies the command line arguments used to restart the application, and the conditions under which the
 		/// application should not be restarted.
 		/// </param>
-		/// <exception cref="System.ArgumentException">Registration failed due to an invalid parameter.</exception>
-		/// <exception cref="System.InvalidOperationException">The attempt to register failed.</exception>
+		/// <exception cref="ArgumentException">Registration failed due to an invalid parameter.</exception>
+		/// <exception cref="InvalidOperationException">The attempt to register failed.</exception>
 		/// <remarks>A registered application will not be restarted if it executed for less than 60 seconds before terminating.</remarks>
 		public static void RegisterForApplicationRestart(RestartSettings settings)
 		{
 			// Throw PlatformNotSupportedException if the user is not running Vista or beyond
 			CoreHelpers.ThrowIfNotVista();
-			if (settings == null) { throw new ArgumentNullException("settings"); }
+			if (settings == null) throw new ArgumentNullException(nameof(settings));
 
 			var hr = AppRestartRecoveryNativeMethods.RegisterApplicationRestart(settings.Command, settings.Restrictions);
 
@@ -108,7 +108,7 @@ namespace Microsoft.WindowsAPICodePack.ApplicationServices
 		}
 
 		/// <summary>Removes an application's recovery registration.</summary>
-		/// <exception cref="Microsoft.WindowsAPICodePack.ApplicationServices.ApplicationRecoveryException">
+		/// <exception cref="ApplicationRecoveryException">
 		/// The attempt to unregister for recovery failed.
 		/// </exception>
 		public static void UnregisterApplicationRecovery()
@@ -124,16 +124,14 @@ namespace Microsoft.WindowsAPICodePack.ApplicationServices
 		}
 
 		/// <summary>Removes an application's restart registration.</summary>
-		/// <exception cref="Microsoft.WindowsAPICodePack.ApplicationServices.ApplicationRecoveryException">
+		/// <exception cref="ApplicationRecoveryException">
 		/// The attempt to unregister for restart failed.
 		/// </exception>
 		public static void UnregisterApplicationRestart()
 		{
 			CoreHelpers.ThrowIfNotVista();
 
-			var hr = AppRestartRecoveryNativeMethods.UnregisterApplicationRestart();
-
-			if (!CoreErrorHelper.Succeeded(hr))
+			if (!CoreErrorHelper.Succeeded(AppRestartRecoveryNativeMethods.UnregisterApplicationRestart()))
 			{
 				throw new ApplicationRecoveryException(LocalizedMessages.ApplicationRecoveryFailedToUnregisterForRestart);
 			}

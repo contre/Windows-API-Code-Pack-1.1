@@ -63,7 +63,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <summary>
 		/// Gets or sets a value indicating whether the icon appears selected.
 		/// </summary>
-		/// <value>A <see cref="System.Boolean"/> value.</value>
+		/// <value>A <see cref="bool"/> value.</value>
 		public bool Selected
 		{
 			get => selected;
@@ -77,7 +77,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <summary>
 		/// Gets or sets a value that cotrols whether to put a link overlay on the icon.
 		/// </summary>
-		/// <value>A <see cref="System.Boolean"/> value.</value>
+		/// <value>A <see cref="bool"/> value.</value>
 		public bool LinkOverlay
 		{
 			get => linkOverlay;
@@ -91,7 +91,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <summary>
 		/// Gets or sets a value that controls the size of the Stock Icon.
 		/// </summary>
-		/// <value>A <see cref="Microsoft.WindowsAPICodePack.Shell.StockIconSize"/> value.</value>
+		/// <value>A <see cref="StockIconSize"/> value.</value>
 		public StockIconSize CurrentSize
 		{
 			get => currentSize;

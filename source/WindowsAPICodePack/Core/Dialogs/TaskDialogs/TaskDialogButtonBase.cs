@@ -37,9 +37,9 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 			get => defaultControl;
 			set
 			{
-				CheckPropertyChangeAllowed("Default");
+				CheckPropertyChangeAllowed();
 				defaultControl = value;
-				ApplyPropertyChange("Default");
+				ApplyPropertyChange();
 			}
 		}
 
@@ -51,9 +51,9 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 			get => enabled;
 			set
 			{
-				CheckPropertyChangeAllowed("Enabled");
+				CheckPropertyChangeAllowed();
 				enabled = value;
-				ApplyPropertyChange("Enabled");
+				ApplyPropertyChange();
 			}
 		}
 
@@ -63,14 +63,14 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 			get => text;
 			set
 			{
-				CheckPropertyChangeAllowed("Text");
+				CheckPropertyChangeAllowed();
 				text = value;
-				ApplyPropertyChange("Text");
+				ApplyPropertyChange();
 			}
 		}
 
 		/// <summary>Returns the Text property value for this button.</summary>
-		/// <returns>A <see cref="System.String"/>.</returns>
+		/// <returns>A <see cref="string"/>.</returns>
 		public override string ToString() => text ?? string.Empty;
 
 		internal void RaiseClickEvent()
@@ -78,7 +78,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 			// Only perform click if the button is enabled.
 			if (!enabled) { return; }
 
-			if (Click != null) { Click(this, EventArgs.Empty); }
+			Click?.Invoke(this, EventArgs.Empty);
 		}
 	}
 }

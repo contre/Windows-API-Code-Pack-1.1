@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
+using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
@@ -587,7 +588,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		void GetCLSID([In] ref PropertyKey key, out Guid pclsid);
 
 		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-		void GetFileTime([In] ref PropertyKey key, out System.Runtime.InteropServices.ComTypes.FILETIME pft);
+		void GetFileTime([In] ref PropertyKey key, out FILETIME pft);
 
 		[MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
 		void GetInt32([In] ref PropertyKey key, out int pi);
@@ -657,9 +658,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		HResult EnumItems([MarshalAs(UnmanagedType.Interface)] out IntPtr ppenumShellItems);
 	}
 
-	[ComImportAttribute()]
-	[GuidAttribute("bcc18b79-ba16-442f-80c4-8a59c30c463b")]
-	[InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
+	[ComImport()]
+	[Guid("bcc18b79-ba16-442f-80c4-8a59c30c463b")]
+	[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 	internal interface IShellItemImageFactory
 	{
 		[PreserveSig]
@@ -827,15 +828,15 @@ namespace Microsoft.WindowsAPICodePack.Shell
 	{
 		void GetThumbnail([In] IShellItem pShellItem,
 		[In] uint cxyRequestedThumbSize,
-		[In] Microsoft.WindowsAPICodePack.Shell.ShellNativeMethods.ThumbnailOptions flags,
+		[In] ShellNativeMethods.ThumbnailOptions flags,
 		[Out] out ISharedBitmap ppvThumb,
-		[Out] out Microsoft.WindowsAPICodePack.Shell.ShellNativeMethods.ThumbnailCacheOptions pOutFlags,
-		[Out] Microsoft.WindowsAPICodePack.Shell.ShellNativeMethods.ThumbnailId pThumbnailID);
+		[Out] out ShellNativeMethods.ThumbnailCacheOptions pOutFlags,
+		[Out] ShellNativeMethods.ThumbnailId pThumbnailID);
 
-		void GetThumbnailByID([In] Microsoft.WindowsAPICodePack.Shell.ShellNativeMethods.ThumbnailId thumbnailID,
+		void GetThumbnailByID([In] ShellNativeMethods.ThumbnailId thumbnailID,
 		[In] uint cxyRequestedThumbSize,
 		[Out] out ISharedBitmap ppvThumb,
-		[Out] out Microsoft.WindowsAPICodePack.Shell.ShellNativeMethods.ThumbnailCacheOptions pOutFlags);
+		[Out] out ShellNativeMethods.ThumbnailCacheOptions pOutFlags);
 	}
 
 	[ComImport,

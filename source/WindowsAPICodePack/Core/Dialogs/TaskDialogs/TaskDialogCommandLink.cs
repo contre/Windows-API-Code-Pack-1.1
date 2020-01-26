@@ -1,5 +1,6 @@
 //Copyright (c) Microsoft Corporation.  All rights reserved.
 
+using System;
 using System.Globalization;
 
 namespace Microsoft.WindowsAPICodePack.Dialogs
@@ -7,7 +8,6 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 	/// <summary>Represents a command-link.</summary>
 	public class TaskDialogCommandLink : TaskDialogButton
 	{
-		private string instruction;
 
 		/// <summary>Creates a new instance of this class.</summary>
 		public TaskDialogCommandLink() { }
@@ -22,20 +22,16 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 		/// <param name="text">The label for this button.</param>
 		/// <param name="instruction">The instruction for this command link.</param>
 		public TaskDialogCommandLink(string name, string text, string instruction)
-			: base(name, text) => this.instruction = instruction;
+			: base(name, text) => Instruction = instruction;
 
 		/// <summary>Gets or sets the instruction associated with this command link button.</summary>
-		public string Instruction
-		{
-			get => instruction;
-			set => instruction = value;
-		}
+		public string Instruction { get; set; }
 
 		/// <summary>Returns a string representation of this object.</summary>
-		/// <returns>A <see cref="System.String"/></returns>
+		/// <returns>A <see cref="string"/></returns>
 		public override string ToString() => string.Format(CultureInfo.CurrentCulture, "{0}{1}{2}",
 				Text ?? string.Empty,
-				(!string.IsNullOrEmpty(Text) && !string.IsNullOrEmpty(instruction)) ? "\n" : string.Empty,
-				instruction ?? string.Empty);
+				(!string.IsNullOrEmpty(Text) && !string.IsNullOrEmpty(Instruction)) ? Environment.NewLine : string.Empty,
+				Instruction ?? string.Empty);
 	}
 }

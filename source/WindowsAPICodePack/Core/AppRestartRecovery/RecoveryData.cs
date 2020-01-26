@@ -34,9 +34,6 @@ namespace Microsoft.WindowsAPICodePack.ApplicationServices
 		public object State { get; set; }
 
 		/// <summary>Invokes the recovery callback function.</summary>
-		public void Invoke()
-		{
-			if (Callback != null) { Callback(State); }
-		}
+		public void Invoke() => Callback?.Invoke(State);
 	}
 }

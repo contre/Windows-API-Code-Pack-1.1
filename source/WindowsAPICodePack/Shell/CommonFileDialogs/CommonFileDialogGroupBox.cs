@@ -11,7 +11,6 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 	[ContentProperty("Items")]
 	public class CommonFileDialogGroupBox : CommonFileDialogProminentControl
 	{
-		private Collection<DialogControl> items;
 
 		/// <summary>Creates a new instance of this class.</summary>
 		public CommonFileDialogGroupBox()
@@ -29,7 +28,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 			: base(name, text) => Initialize();
 
 		/// <summary>Gets the collection of controls for this group box.</summary>
-		public Collection<DialogControl> Items => items;
+		public Collection<DialogControl> Items { get; private set; }
 
 		/// <summary>Attach the GroupBox control to the dialog object</summary>
 		/// <param name="dialog">Target dialog</param>
@@ -41,7 +40,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 			dialog.StartVisualGroup(Id, Text);
 
 			// Add child controls
-			foreach (CommonFileDialogControl item in items)
+			foreach (CommonFileDialogControl item in Items)
 			{
 				item.HostingDialog = HostingDialog;
 				item.Attach(dialog);
@@ -59,6 +58,6 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 		}
 
 		/// <summary>Initializes the item collection for this class.</summary>
-		private void Initialize() => items = new Collection<DialogControl>();
+		private void Initialize() => Items = new Collection<DialogControl>();
 	}
 }

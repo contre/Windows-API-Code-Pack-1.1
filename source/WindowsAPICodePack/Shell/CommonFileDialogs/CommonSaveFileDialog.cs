@@ -32,7 +32,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 		/// Gets or sets a value that controls whether the returned file name has a file extension that matches the currently selected file
 		/// type. If necessary, the dialog appends the correct file extension.
 		/// </summary>
-		/// <permission cref="System.InvalidOperationException">This property cannot be changed when the dialog is showing.</permission>
+		/// <permission cref="InvalidOperationException">This property cannot be changed when the dialog is showing.</permission>
 		public bool AlwaysAppendDefaultExtension
 		{
 			get => alwaysAppendDefaultExtension;
@@ -55,9 +55,8 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 			get
 			{
 				InitializeNativeFileDialog();
-				var nativeDialog = GetNativeFileDialog() as IFileSaveDialog;
 
-				if (nativeDialog != null)
+				if (GetNativeFileDialog() is IFileSaveDialog nativeDialog)
 				{
 					var hr = nativeDialog.GetProperties(out var propertyStore);
 
@@ -75,7 +74,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 		/// Gets or sets a value that controls whether to prompt for creation if the item returned in the save dialog does not exist.
 		/// </summary>
 		/// <remarks>Note that this does not actually create the item.</remarks>
-		/// <permission cref="System.InvalidOperationException">This property cannot be changed when the dialog is showing.</permission>
+		/// <permission cref="InvalidOperationException">This property cannot be changed when the dialog is showing.</permission>
 		public bool CreatePrompt
 		{
 			get => createPrompt;
@@ -88,7 +87,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 
 		/// <summary>Gets or sets a value that controls whether to the save dialog displays in expanded mode.</summary>
 		/// <remarks>Expanded mode controls whether the dialog shows folders for browsing or hides them.</remarks>
-		/// <permission cref="System.InvalidOperationException">This property cannot be changed when the dialog is showing.</permission>
+		/// <permission cref="InvalidOperationException">This property cannot be changed when the dialog is showing.</permission>
 		public bool IsExpandedMode
 		{
 			get => isExpandedMode;
@@ -102,7 +101,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 		/// <summary>
 		/// Gets or sets a value that controls whether to prompt before overwriting an existing file of the same name. Default value is true.
 		/// </summary>
-		/// <permission cref="System.InvalidOperationException">This property cannot be changed when the dialog is showing.</permission>
+		/// <permission cref="InvalidOperationException">This property cannot be changed when the dialog is showing.</permission>
 		public bool OverwritePrompt
 		{
 			get => overwritePrompt;
@@ -152,9 +151,8 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 					if (CoreErrorHelper.Succeeded(hr))
 					{
 						InitializeNativeFileDialog();
-						var nativeDialog = GetNativeFileDialog() as IFileSaveDialog;
 
-						if (nativeDialog != null)
+						if (GetNativeFileDialog() is IFileSaveDialog nativeDialog)
 						{
 							hr = nativeDialog.SetCollectedProperties(propertyDescriptionList, appendDefault);
 
@@ -185,14 +183,13 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 		{
 			if (item == null)
 			{
-				throw new ArgumentNullException("item");
+				throw new ArgumentNullException(nameof(item));
 			}
 
 			InitializeNativeFileDialog();
-			var nativeDialog = GetNativeFileDialog() as IFileSaveDialog;
 
 			// Get the native IShellItem from ShellObject
-			if (nativeDialog != null)
+			if (GetNativeFileDialog() is IFileSaveDialog nativeDialog)
 			{
 				nativeDialog.SetSaveAsItem(item.NativeShellItem);
 			}

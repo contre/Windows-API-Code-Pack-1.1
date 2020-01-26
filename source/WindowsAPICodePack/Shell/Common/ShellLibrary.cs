@@ -37,7 +37,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		{
 			if (string.IsNullOrEmpty(libraryName))
 			{
-				throw new ArgumentException(LocalizedMessages.ShellLibraryEmptyName, "libraryName");
+				throw new ArgumentException(LocalizedMessages.ShellLibraryEmptyName, nameof(libraryName));
 			}
 
 			Name = libraryName;
@@ -132,7 +132,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 					AccessModes.ReadWrite;
 
 			// Get the IShellItem2
-			base.nativeShellItem = ((ShellObject)sourceKnownFolder).NativeShellItem2;
+			nativeShellItem = ((ShellObject)sourceKnownFolder).NativeShellItem2;
 
 			var guid = sourceKnownFolder.FolderId;
 
@@ -141,13 +141,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			{
 				nativeShellLibrary.LoadLibraryFromKnownFolder(ref guid, flags);
 			}
-			catch (InvalidCastException)
+			catch (Exception ex) when (ex is InvalidCastException || ex is NotImplementedException)
 			{
-				throw new ArgumentException(LocalizedMessages.ShellLibraryInvalidLibrary, "sourceKnownFolder");
-			}
-			catch (NotImplementedException)
-			{
-				throw new ArgumentException(LocalizedMessages.ShellLibraryInvalidLibrary, "sourceKnownFolder");
+				throw new ArgumentException(LocalizedMessages.ShellLibraryInvalidLibrary, nameof(sourceKnownFolder));
 			}
 		}
 
@@ -193,7 +189,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			{
 				if (string.IsNullOrEmpty(value))
 				{
-					throw new ArgumentNullException("value");
+					throw new ArgumentNullException(nameof(value));
 				}
 
 				if (!Directory.Exists(value))
@@ -236,13 +232,11 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		{
 			get
 			{
-				var flags = ShellNativeMethods.LibraryOptions.PinnedToNavigationPane;
+				nativeShellLibrary.GetOptions(out var flags);
 
-				nativeShellLibrary.GetOptions(out flags);
-
-				return (
+				return 
 					(flags & ShellNativeMethods.LibraryOptions.PinnedToNavigationPane) ==
-					ShellNativeMethods.LibraryOptions.PinnedToNavigationPane);
+					ShellNativeMethods.LibraryOptions.PinnedToNavigationPane;
 			}
 			set
 			{
@@ -304,7 +298,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			{
 				if (base.Name == null && NativeShellItem != null)
 				{
-					base.Name = System.IO.Path.GetFileNameWithoutExtension(ShellHelper.GetParsingName(NativeShellItem));
+					base.Name = Path.GetFileNameWithoutExtension(ShellHelper.GetParsingName(NativeShellItem));
 				}
 
 				return base.Name;
@@ -339,11 +333,11 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		{
 			CoreHelpers.ThrowIfNotWin7();
 
-			var kf = KnownFolders.Libraries;
+			using var kf = KnownFolders.Libraries;
 			var librariesFolderPath = (kf != null) ? kf.Path : string.Empty;
 
 			var guid = new Guid(ShellIIDGuid.IShellItem);
-			var shellItemPath = System.IO.Path.Combine(librariesFolderPath, libraryName + FileExtension);
+			var shellItemPath = Path.Combine(librariesFolderPath, libraryName + FileExtension);
 			var hr = ShellNativeMethods.SHCreateItemFromParsingName(shellItemPath, IntPtr.Zero, ref guid, out IShellItem nativeShellItem);
 
 			if (!CoreErrorHelper.Succeeded(hr))
@@ -380,7 +374,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			CoreHelpers.ThrowIfNotWin7();
 
 			// Create the shell item path
-			var shellItemPath = System.IO.Path.Combine(folderPath, libraryName + FileExtension);
+			var shellItemPath = Path.Combine(folderPath, libraryName + FileExtension);
 			var item = ShellFile.FromFilePath(shellItemPath);
 
 			var nativeShellItem = item.NativeShellItem;
@@ -427,7 +421,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		{
 			// this method is not safe for MTA consumption and will blow Access Violations if called from an MTA thread so we wrap this call
 			// up into a Worker thread that performs all operations in a single threaded apartment
-			using (var shellLibrary = ShellLibrary.Load(libraryName, folderPath, true))
+			using (var shellLibrary = Load(libraryName, folderPath, true))
 			{
 				ShowManageLibraryUI(shellLibrary, windowHandle, title, instruction, allowAllLocations);
 			}
@@ -444,7 +438,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		{
 			// this method is not safe for MTA consumption and will blow Access Violations if called from an MTA thread so we wrap this call
 			// up into a Worker thread that performs all operations in a single threaded apartment
-			using (var shellLibrary = ShellLibrary.Load(libraryName, true))
+			using (var shellLibrary = Load(libraryName, true))
 			{
 				ShowManageLibraryUI(shellLibrary, windowHandle, title, instruction, allowAllLocations);
 			}
@@ -461,7 +455,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		{
 			// this method is not safe for MTA consumption and will blow Access Violations if called from an MTA thread so we wrap this call
 			// up into a Worker thread that performs all operations in a single threaded apartment
-			using (var shellLibrary = ShellLibrary.Load(sourceKnownFolder, true))
+			using (var shellLibrary = Load(sourceKnownFolder, true))
 			{
 				ShowManageLibraryUI(shellLibrary, windowHandle, title, instruction, allowAllLocations);
 			}
@@ -471,7 +465,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <param name="item">The folder to add to the library.</param>
 		public void Add(ShellFileSystemFolder item)
 		{
-			if (item == null) { throw new ArgumentNullException("item"); }
+			if (item == null) { throw new ArgumentNullException(nameof(item)); }
 
 			nativeShellLibrary.AddFolder(item.NativeShellItem);
 			nativeShellLibrary.Commit();
@@ -511,7 +505,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		{
 			if (string.IsNullOrEmpty(fullPath))
 			{
-				throw new ArgumentNullException("fullPath");
+				throw new ArgumentNullException(nameof(fullPath));
 			}
 
 			return ItemsList.Any(folder => string.Equals(fullPath, folder.Path, StringComparison.OrdinalIgnoreCase));
@@ -524,7 +518,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		{
 			if (item == null)
 			{
-				throw new ArgumentNullException("item");
+				throw new ArgumentNullException(nameof(item));
 			}
 
 			return ItemsList.Any(folder => string.Equals(item.Path, folder.Path, StringComparison.OrdinalIgnoreCase));
@@ -546,7 +540,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <returns><B>true</B> if the item was removed.</returns>
 		public bool Remove(ShellFileSystemFolder item)
 		{
-			if (item == null) { throw new ArgumentNullException("item"); }
+			if (item == null) { throw new ArgumentNullException(nameof(item)); }
 
 			try
 			{
@@ -685,7 +679,6 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			if (itemArray != null)
 			{
 				Marshal.ReleaseComObject(itemArray);
-				itemArray = null;
 			}
 
 			return list;

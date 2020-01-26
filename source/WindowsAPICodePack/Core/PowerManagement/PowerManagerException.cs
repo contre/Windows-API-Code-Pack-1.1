@@ -1,32 +1,5 @@
 ﻿using System;
 
-/* Unmerged change from project 'Core (netcoreapp3.0)'
-Before:
-using System.Text;
-using System.Runtime.InteropServices;
-After:
-using System.Runtime.InteropServices;
-using System.Text;
-*/
-
-/* Unmerged change from project 'Core (net462)'
-Before:
-using System.Text;
-using System.Runtime.InteropServices;
-After:
-using System.Runtime.InteropServices;
-using System.Text;
-*/
-
-/* Unmerged change from project 'Core (net472)'
-Before:
-using System.Text;
-using System.Runtime.InteropServices;
-After:
-using System.Runtime.InteropServices;
-using System.Text;
-*/
-
 namespace Microsoft.WindowsAPICodePack.ApplicationServices
 {
 	/// <summary>This exception is thrown when there are problems with getting piece of data within PowerManager.</summary>

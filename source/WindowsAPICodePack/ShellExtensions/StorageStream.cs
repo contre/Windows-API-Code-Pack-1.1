@@ -36,7 +36,7 @@ namespace Microsoft.WindowsAPICodePack.ShellExtensions
 		{
 			if (stream == null)
 			{
-				throw new ArgumentNullException("stream");
+				throw new ArgumentNullException(nameof(stream));
 			}
 			_isReadOnly = readOnly;
 			_stream = stream;
@@ -90,7 +90,7 @@ namespace Microsoft.WindowsAPICodePack.ShellExtensions
 		{
 			ThrowIfDisposed();
 
-			if (buffer == null) { throw new ArgumentNullException("buffer"); }
+			if (buffer == null) { throw new ArgumentNullException(nameof(buffer)); }
 			if (offset < 0) { throw new ArgumentOutOfRangeException("offset", LocalizedMessages.StorageStreamOffsetLessThanZero); }
 			if (count < 0) { throw new ArgumentOutOfRangeException("count", LocalizedMessages.StorageStreamCountLessThanZero); }
 			if (offset + count > buffer.Length) { throw new ArgumentException(LocalizedMessages.StorageStreamBufferOverflow, "count"); }
@@ -133,8 +133,7 @@ namespace Microsoft.WindowsAPICodePack.ShellExtensions
 			ThrowIfDisposed();
 
 			var buffer = new byte[1];
-			if (Read(buffer, 0, 1) > 0) { return buffer[0]; }
-			return -1;
+			return Read(buffer, 0, 1) > 0 ? buffer[0] : -1;
 		}
 
 		/// <summary>Seeks within the underlying IStream.</summary>
@@ -173,7 +172,7 @@ namespace Microsoft.WindowsAPICodePack.ShellExtensions
 			ThrowIfDisposed();
 
 			if (_isReadOnly) { throw new InvalidOperationException(LocalizedMessages.StorageStreamIsReadonly); }
-			if (buffer == null) { throw new ArgumentNullException("buffer"); }
+			if (buffer == null) { throw new ArgumentNullException(nameof(buffer)); }
 			if (offset < 0) { throw new ArgumentOutOfRangeException("offset", LocalizedMessages.StorageStreamOffsetLessThanZero); }
 			if (count < 0) { throw new ArgumentOutOfRangeException("count", LocalizedMessages.StorageStreamCountLessThanZero); }
 			if (offset + count > buffer.Length) { throw new ArgumentException(LocalizedMessages.StorageStreamBufferOverflow, "count"); }

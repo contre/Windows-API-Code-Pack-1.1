@@ -20,9 +20,9 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 			get => state;
 			set
 			{
-				CheckPropertyChangeAllowed("State");
+				CheckPropertyChangeAllowed(nameof(State));
 				state = value;
-				ApplyPropertyChange("State");
+				ApplyPropertyChange(nameof(State));
 			}
 		}
 

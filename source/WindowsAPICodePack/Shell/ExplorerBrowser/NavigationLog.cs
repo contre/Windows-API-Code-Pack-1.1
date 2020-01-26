@@ -15,9 +15,6 @@ namespace Microsoft.WindowsAPICodePack.Controls
 
 		private readonly ExplorerBrowser parent = null;
 
-		/// <summary>The index into the Locations collection. -1 if the Locations colleciton is empty.</summary>
-		private int currentLocationIndex = -1;
-
 		/// <summary>The pending navigation log action. null if the user is not navigating via the navigation log.</summary>
 		private PendingNavigation pendingNavigation;
 
@@ -38,26 +35,18 @@ namespace Microsoft.WindowsAPICodePack.Controls
 		public event EventHandler<NavigationLogEventArgs> NavigationLogChanged;
 
 		/// <summary>Indicates the presence of locations in the log that can be reached by calling Navigate(Backward)</summary>
-		public bool CanNavigateBackward => (CurrentLocationIndex > 0);
+		public bool CanNavigateBackward => CurrentLocationIndex > 0;
 
 		/// <summary>Indicates the presence of locations in the log that can be reached by calling Navigate(Forward)</summary>
-		public bool CanNavigateForward => (CurrentLocationIndex < (_locations.Count - 1));
+		public bool CanNavigateForward => CurrentLocationIndex < _locations.Count - 1;
 
 		/// <summary>Gets the shell object in the Locations collection pointed to by CurrentLocationIndex.</summary>
-		public ShellObject CurrentLocation
-		{
-			get
-			{
-				if (currentLocationIndex < 0) { return null; }
-
-				return _locations[currentLocationIndex];
-			}
-		}
+		public ShellObject CurrentLocation => CurrentLocationIndex < 0 ? null : _locations[CurrentLocationIndex];
 
 		/// <summary>
 		/// An index into the Locations collection. The ShellObject pointed to by this index is the current location of the ExplorerBrowser.
 		/// </summary>
-		public int CurrentLocationIndex => currentLocationIndex;
+		public int CurrentLocationIndex { get; private set; } = -1;
 
 		/// <summary>The navigation log</summary>
 		public IEnumerable<ShellObject> Locations
@@ -75,31 +64,28 @@ namespace Microsoft.WindowsAPICodePack.Controls
 			var oldCanNavigateForward = CanNavigateForward;
 
 			_locations.Clear();
-			currentLocationIndex = -1;
+			CurrentLocationIndex = -1;
 
 			var args = new NavigationLogEventArgs
 			{
 				LocationsChanged = true,
-				CanNavigateBackwardChanged = (oldCanNavigateBackward != CanNavigateBackward),
-				CanNavigateForwardChanged = (oldCanNavigateForward != CanNavigateForward)
+				CanNavigateBackwardChanged = oldCanNavigateBackward != CanNavigateBackward,
+				CanNavigateForwardChanged = oldCanNavigateForward != CanNavigateForward
 			};
-			if (NavigationLogChanged != null)
-			{
-				NavigationLogChanged(this, args);
-			}
+			NavigationLogChanged?.Invoke(this, args);
 		}
 
 		internal bool NavigateLog(NavigationLogDirection direction)
 		{
 			// determine proper index to navigate to
-			var locationIndex = 0;
+			int locationIndex;
 			if (direction == NavigationLogDirection.Backward && CanNavigateBackward)
 			{
-				locationIndex = (currentLocationIndex - 1);
+				locationIndex = CurrentLocationIndex - 1;
 			}
 			else if (direction == NavigationLogDirection.Forward && CanNavigateForward)
 			{
-				locationIndex = (currentLocationIndex + 1);
+				locationIndex = CurrentLocationIndex + 1;
 			}
 			else
 			{
@@ -119,7 +105,7 @@ namespace Microsoft.WindowsAPICodePack.Controls
 			if (index >= _locations.Count || index < 0) { return false; }
 
 			// no need to re navigate to the same location
-			if (index == currentLocationIndex) { return false; }
+			if (index == CurrentLocationIndex) { return false; }
 
 			// initiate traversal request
 			var location = _locations[index];
@@ -134,30 +120,30 @@ namespace Microsoft.WindowsAPICodePack.Controls
 			var oldCanNavigateBackward = CanNavigateBackward;
 			var oldCanNavigateForward = CanNavigateForward;
 
-			if ((pendingNavigation != null))
+			if (pendingNavigation != null)
 			{
 				// navigation log traversal in progress
 
 				// determine if new location is the same as the traversal request
 				pendingNavigation.Location.NativeShellItem.Compare(
 					args.NewLocation.NativeShellItem, SICHINTF.SICHINT_ALLFIELDS, out var result);
-				var shellItemsEqual = (result == 0);
+				var shellItemsEqual = result == 0;
 				if (shellItemsEqual == false)
 				{
 					// new location is different than traversal request, behave is if it never happened! remove history following
 					// currentLocationIndex, append new item
-					if (currentLocationIndex < (_locations.Count - 1))
+					if (CurrentLocationIndex < _locations.Count - 1)
 					{
-						_locations.RemoveRange(currentLocationIndex + 1, _locations.Count - (currentLocationIndex + 1));
+						_locations.RemoveRange(CurrentLocationIndex + 1, _locations.Count - (CurrentLocationIndex + 1));
 					}
 					_locations.Add(args.NewLocation);
-					currentLocationIndex = (_locations.Count - 1);
+					CurrentLocationIndex = _locations.Count - 1;
 					eventArgs.LocationsChanged = true;
 				}
 				else
 				{
 					// log traversal successful, update index
-					currentLocationIndex = pendingNavigation.Index;
+					CurrentLocationIndex = pendingNavigation.Index;
 					eventArgs.LocationsChanged = false;
 				}
 				pendingNavigation = null;
@@ -165,23 +151,20 @@ namespace Microsoft.WindowsAPICodePack.Controls
 			else
 			{
 				// remove history following currentLocationIndex, append new item
-				if (currentLocationIndex < (_locations.Count - 1))
+				if (CurrentLocationIndex < _locations.Count - 1)
 				{
-					_locations.RemoveRange(currentLocationIndex + 1, _locations.Count - (currentLocationIndex + 1));
+					_locations.RemoveRange(CurrentLocationIndex + 1, _locations.Count - (CurrentLocationIndex + 1));
 				}
 				_locations.Add(args.NewLocation);
-				currentLocationIndex = (_locations.Count - 1);
+				CurrentLocationIndex = _locations.Count - 1;
 				eventArgs.LocationsChanged = true;
 			}
 
 			// update event args
-			eventArgs.CanNavigateBackwardChanged = (oldCanNavigateBackward != CanNavigateBackward);
-			eventArgs.CanNavigateForwardChanged = (oldCanNavigateForward != CanNavigateForward);
+			eventArgs.CanNavigateBackwardChanged = oldCanNavigateBackward != CanNavigateBackward;
+			eventArgs.CanNavigateForwardChanged = oldCanNavigateForward != CanNavigateForward;
 
-			if (NavigationLogChanged != null)
-			{
-				NavigationLogChanged(this, eventArgs);
-			}
+			NavigationLogChanged?.Invoke(this, eventArgs);
 		}
 
 		private void OnNavigationFailed(object sender, NavigationFailedEventArgs args) => pendingNavigation = null;

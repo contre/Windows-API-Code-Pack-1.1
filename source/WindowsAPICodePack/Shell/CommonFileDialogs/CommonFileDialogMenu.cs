@@ -11,7 +11,6 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 	[ContentProperty("Items")]
 	public class CommonFileDialogMenu : CommonFileDialogProminentControl
 	{
-		private readonly Collection<CommonFileDialogMenuItem> items = new Collection<CommonFileDialogMenuItem>();
 
 		/// <summary>Creates a new instance of this class.</summary>
 		public CommonFileDialogMenu() : base() { }
@@ -26,7 +25,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 		public CommonFileDialogMenu(string name, string text) : base(name, text) { }
 
 		/// <summary>Gets the collection of CommonFileDialogMenuItem objects.</summary>
-		public Collection<CommonFileDialogMenuItem> Items => items;
+		public Collection<CommonFileDialogMenuItem> Items { get; } = new Collection<CommonFileDialogMenuItem>();
 
 		/// <summary>Attach the Menu control to the dialog object.</summary>
 		/// <param name="dialog">the target dialog</param>
@@ -38,7 +37,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs.Controls
 			dialog.AddMenu(Id, Text);
 
 			// Add the menu items
-			foreach (var item in items)
+			foreach (var item in Items)
 				dialog.AddControlItem(Id, item.Id, item.Text);
 
 			// Make prominent as needed

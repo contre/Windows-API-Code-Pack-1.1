@@ -42,7 +42,7 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 
 		internal ThumbnailToolbarProxyWindow(System.Windows.UIElement windowsControl, ThumbnailToolBarButton[] buttons)
 		{
-			if (windowsControl == null) { throw new ArgumentNullException("windowsControl"); }
+			if (windowsControl == null) { throw new ArgumentNullException(nameof(windowsControl)); }
 			if (buttons != null && buttons.Length == 0)
 			{
 				throw new ArgumentException(LocalizedMessages.ThumbnailToolbarManagerNullEmptyArray, "buttons");
@@ -64,14 +64,12 @@ namespace Microsoft.WindowsAPICodePack.Taskbar
 
 		protected override void WndProc(ref Message m)
 		{
-			var handled = false;
-
-			handled = TaskbarWindowManager.DispatchMessage(ref m, TaskbarWindow);
+			var handled = TaskbarWindowManager.DispatchMessage(ref m, TaskbarWindow);
 
 			// If it's a WM_Destroy message, then also forward it to the base class (our native window)
-			if ((m.Msg == (int)WindowMessage.Destroy) ||
-			   (m.Msg == (int)WindowMessage.NCDestroy) ||
-			   ((m.Msg == (int)WindowMessage.SystemCommand) && (((int)m.WParam) == TabbedThumbnailNativeMethods.ScClose)))
+			if (m.Msg == (int)WindowMessage.Destroy ||
+			   m.Msg == (int)WindowMessage.NCDestroy ||
+			   m.Msg == (int)WindowMessage.SystemCommand && (int)m.WParam == TabbedThumbnailNativeMethods.ScClose)
 			{
 				base.WndProc(ref m);
 			}

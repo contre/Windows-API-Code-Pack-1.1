@@ -16,11 +16,11 @@ namespace Microsoft.WindowsAPICodePack.Net
 		internal NetworkConnection(INetworkConnection networkConnection) => this.networkConnection = networkConnection;
 
 		/// <summary>Gets the adapter identifier for this connection.</summary>
-		/// <value>A <see cref="System.Guid"/> object.</value>
+		/// <value>A <see cref="Guid"/> object.</value>
 		public Guid AdapterId => networkConnection.GetAdapterId();
 
 		/// <summary>Gets the unique identifier for this connection.</summary>
-		/// <value>A <see cref="System.Guid"/> object.</value>
+		/// <value>A <see cref="Guid"/> object.</value>
 		public Guid ConnectionId => networkConnection.GetConnectionId();
 
 		/// <summary>Gets a value that indicates the connectivity of this connection.</summary>
@@ -35,11 +35,11 @@ namespace Microsoft.WindowsAPICodePack.Net
 		public DomainType DomainType => networkConnection.GetDomainType();
 
 		/// <summary>Gets a value that indicates whether this connection has network connectivity.</summary>
-		/// <value>A <see cref="System.Boolean"/> value.</value>
+		/// <value>A <see cref="bool"/> value.</value>
 		public bool IsConnected => networkConnection.IsConnected;
 
 		/// <summary>Gets a value that indicates whether this connection has Internet access.</summary>
-		/// <value>A <see cref="System.Boolean"/> value.</value>
+		/// <value>A <see cref="bool"/> value.</value>
 		public bool IsConnectedToInternet => networkConnection.IsConnectedToInternet;
 
 		/// <summary>Retrieves an object that represents the network associated with this connection.</summary>

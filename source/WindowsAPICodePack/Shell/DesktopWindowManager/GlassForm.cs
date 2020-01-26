@@ -26,7 +26,7 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// </remarks>
 		public void ExcludeControlFromAeroGlass(Control control)
 		{
-			if (control == null) { throw new ArgumentNullException("control"); }
+			if (control == null) { throw new ArgumentNullException(nameof(control)); }
 
 			if (AeroGlassCompositionEnabled)
 			{
@@ -59,9 +59,6 @@ namespace Microsoft.WindowsAPICodePack.Shell
 		/// <summary>Makes the background of current window transparent</summary>
 		public void SetAeroGlassTransparency() => BackColor = Color.Transparent;
 
-		/// <summary>Catches the DWM messages to this window and fires the appropriate event.</summary>
-		/// <param name="m"></param>
-
 		/// <summary>Initializes the Form for AeroGlass</summary>
 		/// <param name="e">The arguments for this event</param>
 		protected override void OnLoad(EventArgs e)
@@ -86,7 +83,9 @@ namespace Microsoft.WindowsAPICodePack.Shell
 			}
 		}
 
-		protected override void WndProc(ref System.Windows.Forms.Message m)
+		/// <summary>Catches the DWM messages to this window and fires the appropriate event.</summary>
+		/// <param name="m"></param>
+		protected override void WndProc(ref Message m)
 		{
 			if (m.Msg == DWMMessages.WM_DWMCOMPOSITIONCHANGED
 				|| m.Msg == DWMMessages.WM_DWMNCRENDERINGCHANGED)
