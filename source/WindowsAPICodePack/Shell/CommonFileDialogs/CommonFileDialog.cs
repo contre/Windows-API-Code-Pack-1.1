@@ -185,7 +185,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         public string DefaultExtension { get; set; }
 
         /// <summary>Default file name.</summary>
-        public string DefaultFileName { get; set; }
+        public string DefaultFileName { get; set; } = string.Empty;
 
         /// <summary>Gets or sets a value that determines whether the file must exist beforehand.</summary>
         /// <value>A <see cref="System.Boolean"/> value. <b>true</b> if the file must exist.</value>
@@ -282,7 +282,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 
                 if(this is CommonSaveFileDialog)
                 {
-                    returnFilename += this.filters[this.SelectedFileTypeIndex - 1].Extensions[0];
+                    returnFilename += System.IO.Path.ChangeExtension(returnFilename, this.filters[this.SelectedFileTypeIndex - 1].Extensions[0]);
                 }
 
                 // "If extension is a null reference (Nothing in Visual Basic), the returned string contains the specified path with its
