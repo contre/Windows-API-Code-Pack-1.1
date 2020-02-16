@@ -123,7 +123,14 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         {
             rawExtension = rawExtension.Trim();
             rawExtension = rawExtension.Replace("*.", null);
-            rawExtension = rawExtension.Replace(".", null);
+
+            //remove only the first dot so multi-dotted extensions work
+            int indexOfDot = rawExtension.IndexOf('.');
+            if (indexOfDot != -1)
+            {
+                rawExtension.Remove(indexOfDot);
+            }
+
             return rawExtension;
         }
     }
