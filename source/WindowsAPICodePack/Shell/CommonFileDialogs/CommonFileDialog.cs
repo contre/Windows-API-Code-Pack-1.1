@@ -282,7 +282,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 
                 if(this is CommonSaveFileDialog)
                 {
-                    returnFilename += System.IO.Path.ChangeExtension(returnFilename, this.filters[this.SelectedFileTypeIndex - 1].Extensions[0]);
+                    returnFilename = System.IO.Path.ChangeExtension(returnFilename, this.filters[this.SelectedFileTypeIndex - 1].Extensions[0]);
                 }
 
                 // "If extension is a null reference (Nothing in Visual Basic), the returned string contains the specified path with its
