@@ -4,17 +4,17 @@ using MS.WindowsAPICodePack.Internal;
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
-	/// <summary>A Serch Connector folder in the Shell Namespace</summary>
-	public sealed class ShellSearchConnector : ShellSearchCollection
-	{
-		internal ShellSearchConnector() => CoreHelpers.ThrowIfNotWin7();
+    /// <summary>A Serch Connector folder in the Shell Namespace</summary>
+    public sealed class ShellSearchConnector : ShellSearchCollection
+    {
+        internal ShellSearchConnector() => CoreHelpers.ThrowIfNotWin7();
 
-		internal ShellSearchConnector(IShellItem2 shellItem)
-			: this() => nativeShellItem = shellItem;
+        internal ShellSearchConnector(IShellItem2 shellItem)
+            : this() => nativeShellItem = shellItem;
 
-		/// <summary>Indicates whether this feature is supported on the current platform.</summary>
-		public static new bool IsPlatformSupported =>
-				// We need Windows 7 onwards ...
-				CoreHelpers.RunningOnWin7;
-	}
+        /// <summary>Indicates whether this feature is supported on the current platform.</summary>
+        public static new bool IsPlatformSupported =>
+                // We need Windows 7 onwards ...
+                CoreHelpers.RunningOnWin7;
+    }
 }

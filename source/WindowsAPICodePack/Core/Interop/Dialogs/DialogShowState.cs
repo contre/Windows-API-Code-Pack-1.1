@@ -2,19 +2,19 @@
 
 namespace Microsoft.WindowsAPICodePack.Dialogs
 {
-	/// <summary>Dialog Show State</summary>
-	public enum DialogShowState
-	{
-		/// <summary>Pre Show</summary>
-		PreShow,
+    /// <summary>Dialog Show State</summary>
+    public enum DialogShowState
+    {
+        /// <summary>Pre Show</summary>
+        PreShow,
 
-		/// <summary>Currently Showing</summary>
-		Showing,
+        /// <summary>Currently Showing</summary>
+        Showing,
 
-		/// <summary>Currently Closing</summary>
-		Closing,
+        /// <summary>Currently Closing</summary>
+        Closing,
 
-		/// <summary>Closed</summary>
-		Closed
-	}
+        /// <summary>Closed</summary>
+        Closed
+    }
 }
