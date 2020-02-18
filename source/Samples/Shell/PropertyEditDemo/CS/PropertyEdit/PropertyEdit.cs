@@ -217,7 +217,7 @@ namespace Microsoft.WindowsAPICodePack.Shell.Samples
             Console.WriteLine(" -get <PropertyName>   Get the value for the property defined");
             Console.WriteLine("                       by its Canonical Name in <propertyName>");
             Console.WriteLine(" -set <PropertyName>   Set the value for the property defined");
-            Console.WriteLine("      <PropertyValue>	 by <PropertyName> with value <PropertyValue>");
+            Console.WriteLine("      <PropertyValue>     by <PropertyName> with value <PropertyValue>");
             Console.WriteLine(" -enum  [Filter]  Enumerate all the properties for this file.");
             Console.WriteLine("                  filtering (starting with) Filter value.");
             Console.WriteLine(" -info <PropertyName>  Get schema information on property for this file.");

@@ -133,7 +133,7 @@ namespace D2DShapes
         /// Gets a value indicating whether this instance is initialized.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance is initialized; otherwise, <c>false</c>.
+        ///     <c>true</c> if this instance is initialized; otherwise, <c>false</c>.
         /// </value>
         public bool IsInitialized
         {
@@ -184,7 +184,7 @@ namespace D2DShapes
         /// Gets a value indicating whether a compatible render target bitmap is used for cached rendering.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if [using compatible render target]; otherwise, <c>false</c>.
+        ///     <c>true</c> if [using compatible render target]; otherwise, <c>false</c>.
         /// </value>
         private bool UsingCompatibleRenderTarget
         {
@@ -303,9 +303,9 @@ namespace D2DShapes
             //Initialize the background render thread and synchronization objects
             renderSyncObject = new object();
             killThread = new ManualResetEvent(false);
-			ThreadStart ts = RenderThreadProcedure;
-			renderThread = new Thread( ts );
-			renderThread.Start();
+            ThreadStart ts = RenderThreadProcedure;
+            renderThread = new Thread( ts );
+            renderThread.Start();
         } 
         #endregion
 
