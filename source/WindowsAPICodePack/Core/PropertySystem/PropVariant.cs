@@ -24,97 +24,97 @@ namespace MS.WindowsAPICodePack.Internal
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         private static Dictionary<Type, Action<PropVariant, Array, uint>> GenerateVectorActions()
         {
-            var cache = new Dictionary<Type, Action<PropVariant, Array, uint>>
+            Dictionary<Type, Action<PropVariant, Array, uint>> cache = new Dictionary<Type, Action<PropVariant, Array, uint>>
             {
                 {
                     typeof(short),
                     (pv, array, i) =>
-    {
-        PropVariantNativeMethods.PropVariantGetInt16Elem(pv, i, out var val);
-        array.SetValue(val, i);
-    }
+                    {
+                        PropVariantNativeMethods.PropVariantGetInt16Elem(pv, i, out short val);
+                        array.SetValue(val, i);
+                    }
                 },
 
                 {
                     typeof(ushort),
                     (pv, array, i) =>
-   {
-       PropVariantNativeMethods.PropVariantGetUInt16Elem(pv, i, out var val);
-       array.SetValue(val, i);
-   }
+                    {
+                        PropVariantNativeMethods.PropVariantGetUInt16Elem(pv, i, out ushort val);
+                        array.SetValue(val, i);
+                    }
                 },
 
                 {
                     typeof(int),
                     (pv, array, i) =>
-      {
-          PropVariantNativeMethods.PropVariantGetInt32Elem(pv, i, out var val);
-          array.SetValue(val, i);
-      }
+                    {
+                        PropVariantNativeMethods.PropVariantGetInt32Elem(pv, i, out int val);
+                        array.SetValue(val, i);
+                    }
                 },
 
                 {
                     typeof(uint),
                     (pv, array, i) =>
-     {
-         PropVariantNativeMethods.PropVariantGetUInt32Elem(pv, i, out var val);
-         array.SetValue(val, i);
-     }
+                    {
+                        PropVariantNativeMethods.PropVariantGetUInt32Elem(pv, i, out uint val);
+                        array.SetValue(val, i);
+                    }
                 },
 
                 {
                     typeof(long),
                     (pv, array, i) =>
-     {
-         PropVariantNativeMethods.PropVariantGetInt64Elem(pv, i, out var val);
-         array.SetValue(val, i);
-     }
+                    {
+                        PropVariantNativeMethods.PropVariantGetInt64Elem(pv, i, out long val);
+                        array.SetValue(val, i);
+                    }
                 },
 
                 {
                     typeof(ulong),
                     (pv, array, i) =>
-    {
-        PropVariantNativeMethods.PropVariantGetUInt64Elem(pv, i, out var val);
-        array.SetValue(val, i);
-    }
+                    {
+                        PropVariantNativeMethods.PropVariantGetUInt64Elem(pv, i, out ulong val);
+                        array.SetValue(val, i);
+                    }
                 },
 
                 {
                     typeof(DateTime),
                     (pv, array, i) =>
- {
-     PropVariantNativeMethods.PropVariantGetFileTimeElem(pv, i, out var val);
+                    {
+                        PropVariantNativeMethods.PropVariantGetFileTimeElem(pv, i, out System.Runtime.InteropServices.ComTypes.FILETIME val);
 
-     var fileTime = GetFileTimeAsLong(ref val);
+                        long fileTime = GetFileTimeAsLong(ref val);
 
-     array.SetValue(DateTime.FromFileTime(fileTime), i);
- }
+                        array.SetValue(DateTime.FromFileTime(fileTime), i);
+                    }
                 },
 
                 {
                     typeof(bool),
                     (pv, array, i) =>
-     {
-         PropVariantNativeMethods.PropVariantGetBooleanElem(pv, i, out var val);
-         array.SetValue(val, i);
-     }
+                    {
+                        PropVariantNativeMethods.PropVariantGetBooleanElem(pv, i, out bool val);
+                        array.SetValue(val, i);
+                    }
                 },
 
                 {
                     typeof(double),
                     (pv, array, i) =>
-   {
-       PropVariantNativeMethods.PropVariantGetDoubleElem(pv, i, out var val);
-       array.SetValue(val, i);
-   }
+                    {
+                        PropVariantNativeMethods.PropVariantGetDoubleElem(pv, i, out double val);
+                        array.SetValue(val, i);
+                    }
                 },
 
                 {
                     typeof(float),
                     (pv, array, i) => // float
                     {
-                        var val = new float[1];
+                        float[] val = new float[1];
                         Marshal.Copy(pv._ptr2, val, (int)i, 1);
                         array.SetValue(val[0], (int)i);
                     }
@@ -123,25 +123,25 @@ namespace MS.WindowsAPICodePack.Internal
                 {
                     typeof(decimal),
                     (pv, array, i) =>
-  {
-      var val = new int[4];
-      for (var a = 0; a < val.Length; a++)
-      {
-          val[a] = Marshal.ReadInt32(pv._ptr2,
-              (int)i * sizeof(decimal) + a * sizeof(int)); //index * size + offset quarter
-                }
-      array.SetValue(new decimal(val), i);
-  }
+                    {
+                        int[] val = new int[4];
+                        for (int a = 0; a < val.Length; a++)
+                        {
+                            val[a] = Marshal.ReadInt32(pv._ptr2,
+                                (int)i * sizeof(decimal) + a * sizeof(int)); //index * size + offset quarter
+                                  }
+                        array.SetValue(new decimal(val), i);
+                    }
                 },
 
                 {
                     typeof(string),
                     (pv, array, i) =>
-   {
-       var val = string.Empty;
-       PropVariantNativeMethods.PropVariantGetStringElem(pv, i, ref val);
-       array.SetValue(val, i);
-   }
+                    {
+                        string val = string.Empty;
+                        PropVariantNativeMethods.PropVariantGetStringElem(pv, i, ref val);
+                        array.SetValue(val, i);
+                    }
                 }
             };
 
@@ -158,7 +158,7 @@ namespace MS.WindowsAPICodePack.Internal
             }
             else
             {
-                var func = GetDynamicConstructor(value.GetType());
+                Func<object, PropVariant> func = GetDynamicConstructor(value.GetType());
                 return func(value);
             }
         }
@@ -178,20 +178,21 @@ namespace MS.WindowsAPICodePack.Internal
                 if (!_cache.TryGetValue(type, out var action))
                 {
                     // iterates through all constructors
-                    var constructor = typeof(PropVariant)
+                    System.Reflection.ConstructorInfo constructor = typeof(PropVariant)
                         .GetConstructor(new Type[] { type });
 
                     if (constructor == null)
-                    { // if the method was not found, throw.
+                    {
+                        // if the method was not found, throw.
                         throw new ArgumentException(LocalizedMessages.PropVariantTypeNotSupported);
                     }
                     else // if the method was found, create an expression to call it.
                     {
                         // create parameters to action
-                        var arg = Expression.Parameter(typeof(object), "arg");
+                        ParameterExpression arg = Expression.Parameter(typeof(object), "arg");
 
                         // create an expression to invoke the constructor with an argument cast to the correct type
-                        var create = Expression.New(constructor, Expression.Convert(arg, type));
+                        NewExpression create = Expression.New(constructor, Expression.Convert(arg, type));
 
                         // compiles expression into an action delegate
                         action = Expression.Lambda<Func<object, PropVariant>>(create, arg).Compile();
@@ -352,10 +353,10 @@ namespace MS.WindowsAPICodePack.Internal
         public PropVariant(DateTime[] value)
         {
             if (value == null) { throw new ArgumentNullException("value"); }
-            var fileTimeArr =
+            System.Runtime.InteropServices.ComTypes.FILETIME[] fileTimeArr =
                 new System.Runtime.InteropServices.ComTypes.FILETIME[value.Length];
 
-            for (var i = 0; i < value.Length; i++)
+            for (int i = 0; i < value.Length; i++)
             {
                 fileTimeArr[i] = DateTimeToFileTime(value[i]);
             }
@@ -375,7 +376,7 @@ namespace MS.WindowsAPICodePack.Internal
         {
             _valueType = (ushort)VarEnum.VT_FILETIME;
 
-            var ft = DateTimeToFileTime(value);
+            System.Runtime.InteropServices.ComTypes.FILETIME ft = DateTimeToFileTime(value);
             PropVariantNativeMethods.InitPropVariantFromFileTime(ref ft, this);
         }
 
@@ -442,9 +443,9 @@ namespace MS.WindowsAPICodePack.Internal
 
             // allocate required memory for array with 128bit elements
             _ptr2 = Marshal.AllocCoTaskMem(value.Length * sizeof(decimal));
-            for (var i = 0; i < value.Length; i++)
+            for (int i = 0; i < value.Length; i++)
             {
-                var bits = decimal.GetBits(value[i]);
+                int[] bits = decimal.GetBits(value[i]);
                 Marshal.Copy(bits, 0, _ptr2, bits.Length);
             }
         }
@@ -505,15 +506,15 @@ namespace MS.WindowsAPICodePack.Internal
         {
             if (array == null) { throw new ArgumentNullException("array"); }
             const ushort vtUnknown = 13;
-            var psa = PropVariantNativeMethods.SafeArrayCreateVector(vtUnknown, 0, (uint)array.Length);
+            IntPtr psa = PropVariantNativeMethods.SafeArrayCreateVector(vtUnknown, 0, (uint)array.Length);
 
-            var pvData = PropVariantNativeMethods.SafeArrayAccessData(psa);
+            IntPtr pvData = PropVariantNativeMethods.SafeArrayAccessData(psa);
             try // to remember to release lock on data
             {
-                for (var i = 0; i < array.Length; ++i)
+                for (int i = 0; i < array.Length; ++i)
                 {
-                    var obj = array.GetValue(i);
-                    var punk = (obj != null) ? Marshal.GetIUnknownForObject(obj) : IntPtr.Zero;
+                    object obj = array.GetValue(i);
+                    IntPtr punk = (obj != null) ? Marshal.GetIUnknownForObject(obj) : IntPtr.Zero;
                     Marshal.WriteIntPtr(pvData, i * IntPtr.Size, punk);
                 }
             }
@@ -662,8 +663,8 @@ namespace MS.WindowsAPICodePack.Internal
 
         private static System.Runtime.InteropServices.ComTypes.FILETIME DateTimeToFileTime(DateTime value)
         {
-            var hFT = value.ToFileTime();
-            var ft =
+            long hFT = value.ToFileTime();
+            System.Runtime.InteropServices.ComTypes.FILETIME ft =
                 new System.Runtime.InteropServices.ComTypes.FILETIME
                 {
                     dwLowDateTime = (int)(hFT & 0xFFFFFFFF),
@@ -674,9 +675,9 @@ namespace MS.WindowsAPICodePack.Internal
 
         private object GetBlobData()
         {
-            var blobData = new byte[_int32];
+            byte[] blobData = new byte[_int32];
 
-            var pBlobData = _ptr2;
+            IntPtr pBlobData = _ptr2;
             Marshal.Copy(pBlobData, blobData, 0, _int32);
 
             return blobData;
@@ -684,7 +685,7 @@ namespace MS.WindowsAPICodePack.Internal
 
         private Array GetVector<T>()
         {
-            var count = PropVariantNativeMethods.PropVariantGetElementCount(this);
+            int count = PropVariantNativeMethods.PropVariantGetElementCount(this);
             if (count <= 0) { return null; }
 
             lock (_padlock)
@@ -711,17 +712,17 @@ namespace MS.WindowsAPICodePack.Internal
 
         private static Array CrackSingleDimSafeArray(IntPtr psa)
         {
-            var cDims = PropVariantNativeMethods.SafeArrayGetDim(psa);
+            uint cDims = PropVariantNativeMethods.SafeArrayGetDim(psa);
             if (cDims != 1)
                 throw new ArgumentException(LocalizedMessages.PropVariantMultiDimArray, "psa");
 
-            var lBound = PropVariantNativeMethods.SafeArrayGetLBound(psa, 1U);
-            var uBound = PropVariantNativeMethods.SafeArrayGetUBound(psa, 1U);
+            int lBound = PropVariantNativeMethods.SafeArrayGetLBound(psa, 1U);
+            int uBound = PropVariantNativeMethods.SafeArrayGetUBound(psa, 1U);
 
-            var n = uBound - lBound + 1; // uBound is inclusive
+            int n = uBound - lBound + 1; // uBound is inclusive
 
-            var array = new object[n];
-            for (var i = lBound; i <= uBound; ++i)
+            object[] array = new object[n];
+            for (int i = lBound; i <= uBound; ++i)
             {
                 array[i] = PropVariantNativeMethods.SafeArrayGetElement(psa, ref i);
             }
