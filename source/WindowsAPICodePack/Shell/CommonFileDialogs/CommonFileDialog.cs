@@ -121,7 +121,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         public event EventHandler<CommonFileDialogFolderChangeEventArgs> FolderChanging;
 
         /// <summary>Raised when the user changes the selection in the dialog's view.</summary>
-        public event EventHandler SelectionChanged;
+        public event EventHandler<CommonFileDialogSelectionChangedEventArgs> SelectionChanged;
 
         /// <summary>Indicates whether this feature is supported on the current platform.</summary>
         public static bool IsPlatformSupported =>
@@ -280,7 +280,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
 
                 var returnFilename = filenames[0];
 
-                if(this is CommonSaveFileDialog)
+                if (this is CommonSaveFileDialog)
                 {
                     returnFilename = System.IO.Path.ChangeExtension(returnFilename, this.filters[this.SelectedFileTypeIndex - 1].Extensions[0]);
                 }
@@ -827,7 +827,7 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
         /// Raises the <see cref="CommonFileDialog.SelectionChanged"/> event when the user changes the selection in the dialog's view.
         /// </summary>
         /// <param name="e">The event data.</param>
-        protected virtual void OnSelectionChanged(EventArgs e)
+        protected virtual void OnSelectionChanged(CommonFileDialogSelectionChangedEventArgs e)
         {
             var handler = SelectionChanged;
             if (handler != null)
@@ -1184,7 +1184,14 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
                 // Don't accept or reject the dialog, keep default settings
                 pResponse = ShellNativeMethods.FileDialogEventOverwriteResponse.Default;
 
-            public void OnSelectionChange(IFileDialog pfd) => parent.OnSelectionChanged(EventArgs.Empty);
+            public void OnSelectionChange(IFileDialog pfd)
+            {
+                pfd.GetFileName(out string text);
+                pfd.GetFolder(out IShellItem folderItem);
+                folderItem.GetDisplayName(ShellNativeMethods.ShellItemDesignNameOptions.FileSystemPath, out IntPtr folderPtr);
+                string folder = Marshal.PtrToStringAuto(folderPtr);
+                parent.OnSelectionChanged(new CommonFileDialogSelectionChangedEventArgs(folder, text));
+            }
 
             public void OnShareViolation(
                 IFileDialog pfd,
