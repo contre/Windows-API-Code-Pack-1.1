@@ -18,18 +18,19 @@
     <PackageTags>WindowsAPICodePack</PackageTags>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <TargetFrameworks>net452;net462;net472;net48;netcoreapp3.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net452;net462;net472;net48;netcoreapp3.0;netcoreapp3.1;net5.0-windows</TargetFrameworks>
     <UseWindowsForms>true</UseWindowsForms>
     <LangVersion>latest</LangVersion>
     <RootNamespace>Microsoft.WindowsAPICodePack</RootNamespace>
     <DocumentationFile>..\bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ProjectSignKey.snk</AssemblyOriginatorKeyFile>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('net2')) Or $(TargetFramework.StartsWith('net3')) Or $(TargetFramework.StartsWith('net4')) ">
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net2')) Or $(TargetFramework.StartsWith('netcoreapp3')) Or $(TargetFramework.StartsWith('net4')) Or $(TargetFramework.StartsWith('net5')) ">
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
