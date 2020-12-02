@@ -7,7 +7,6 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
-using System.Security.Cryptography;
 
 namespace Microsoft.WindowsAPICodePack.Shell
 {
@@ -16,8 +15,6 @@ namespace Microsoft.WindowsAPICodePack.Shell
     {
         /// <summary>Internal member to keep track of the native IShellItem2</summary>
         internal IShellItem2 nativeShellItem;
-
-        private static readonly MD5CryptoServiceProvider hashProvider = new MD5CryptoServiceProvider();
 
         /// <summary>A friendly name for this object that' suitable for display</summary>
         private string _internalName;
@@ -317,8 +314,15 @@ namespace Microsoft.WindowsAPICodePack.Shell
                 {
                     var pidlData = new byte[size];
                     Marshal.Copy(PIDL, pidlData, 0, (int)size);
-                    var hashData = ShellObject.hashProvider.ComputeHash(pidlData);
-                    hashValue = BitConverter.ToInt32(hashData, 0);
+
+                    // Using FNV-1a hash algorithm because a cryptographically secure algorithm is not required for this use
+                    const int p = 16777619;
+                    int hash = -2128831035;
+
+                    for (int i = 0; i < pidlData.Length; i++)
+                        hash = (hash ^ pidlData[i]) * p;
+
+                    hashValue = hash;
                 }
                 else
                 {
