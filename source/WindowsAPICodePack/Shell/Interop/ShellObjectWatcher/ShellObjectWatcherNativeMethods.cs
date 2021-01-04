@@ -6,13 +6,14 @@ using System.Runtime.InteropServices.ComTypes;
 namespace Microsoft.WindowsAPICodePack.Shell.Interop
 {
     /// <summary>Wraps the native Windows MSG structure.</summary>
+    [StructLayout(LayoutKind.Sequential)]
     public struct Message
     {
-        private readonly IntPtr lparam;
-        private readonly uint msg;
-        private readonly int time;
         private readonly IntPtr windowHandle;
+        private readonly uint msg;
         private readonly IntPtr wparam;
+        private readonly IntPtr lparam;
+        private readonly int time;
         private NativePoint point;
 
         /// <summary>Creates a new instance of the Message struct</summary>
@@ -90,19 +91,22 @@ namespace Microsoft.WindowsAPICodePack.Shell.Interop
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     internal struct WindowClassEx
     {
-        internal IntPtr BackgroundBrushHandle;
-        internal string ClassName;
-        internal IntPtr CursorHandle;
-        internal int ExtraClassBytes;
-        internal int ExtraWindowBytes;
-        internal IntPtr IconHandle;
-        internal IntPtr InstanceHandle;
-        internal string MenuName;
         internal uint Size;
-        internal IntPtr SmallIconHandle;
         internal uint Style;
 
         internal ShellObjectWatcherNativeMethods.WndProcDelegate WndProc;
+
+        internal int ExtraClassBytes;
+        internal int ExtraWindowBytes;
+        internal IntPtr InstanceHandle;
+        internal IntPtr IconHandle;
+        internal IntPtr CursorHandle;
+        internal IntPtr BackgroundBrushHandle;
+
+        internal string MenuName;
+        internal string ClassName;
+
+        internal IntPtr SmallIconHandle;
     }
 
     internal static class ShellObjectWatcherNativeMethods

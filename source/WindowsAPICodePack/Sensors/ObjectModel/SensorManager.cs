@@ -23,10 +23,11 @@ namespace Microsoft.WindowsAPICodePack.Sensors
     }
 
     /// <summary>Data associated with a sensor type GUID.</summary>
+    [StructLayout(LayoutKind.Sequential)]
     internal struct SensorTypeData
     {
-        private readonly SensorDescriptionAttribute sda;
         private readonly Type sensorType;
+        private readonly SensorDescriptionAttribute sda;
 
         public SensorTypeData(Type sensorClassType, SensorDescriptionAttribute sda)
         {

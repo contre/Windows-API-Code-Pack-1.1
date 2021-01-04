@@ -142,16 +142,17 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
             }
         }
 
+        [StructLayout(LayoutKind.Sequential)]
         private struct ACTCTX
         {
             public int cbSize;
             public uint dwFlags;
-            public string lpApplicationName;
+            public string lpSource;
+            public ushort wProcessorArchitecture;
+            public ushort wLangId;
             public string lpAssemblyDirectory;
             public string lpResourceName;
-            public string lpSource;
-            public ushort wLangId;
-            public ushort wProcessorArchitecture;
+            public string lpApplicationName;
         }
     }
 }

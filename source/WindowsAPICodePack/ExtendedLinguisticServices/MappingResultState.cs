@@ -5,10 +5,11 @@ using System;
 namespace Microsoft.WindowsAPICodePack.ExtendedLinguisticServices
 {
     /// <summary>This class serves as the result status of asynchronous calls to ELS and as the result status of linguistic exceptions.</summary>
+    [StructLayout(LayoutKind.Sequential)]
     public struct MappingResultState
     {
-        private readonly string _errorMessage;
         private readonly int _hResult;
+        private readonly string _errorMessage;
 
         internal MappingResultState(int hResult, string errorMessage)
         {
