@@ -4,6 +4,7 @@ using Microsoft.WindowsAPICodePack.Sensors.Resources;
 using MS.WindowsAPICodePack.Internal;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace Microsoft.WindowsAPICodePack.Sensors
