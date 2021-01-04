@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Microsoft.WindowsAPICodePack.Sensors</AssemblyName>
     <PackageId>Microsoft-WindowsAPICodePack-Sensors</PackageId>
-    <VersionPrefix>1.1.4</VersionPrefix>
+    <VersionPrefix>1.1.5</VersionPrefix>
     <Title>$(AssemblyName)</Title>
     <Authors>rpastric;contre;dahall</Authors>
     <Company>Microsoft</Company>
@@ -11,14 +11,14 @@
     <PackageLicenseUrl>https://github.com/contre/Windows-API-Code-Pack-1.1/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/contre/Windows-API-Code-Pack-1.1</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Description>The Sensors code for the WindowsAPICodePack. This is an updated version containing all available bug fixes for this code as of 2019-10-18.</Description>
+    <Description>The Sensors code for the WindowsAPICodePack. This is an updated version containing all available bug fixes for this code as of 2020-01-04.</Description>
     <PackageReleaseNotes>See CHANGELOG.md in project site. https://github.com/contre/Windows-API-Code-Pack-1.1/blob/master/CHANGELOG.md </PackageReleaseNotes>
     <Copyright>Copyright © 2020</Copyright>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageTags>WindowsAPICodePack</PackageTags>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <TargetFrameworks>net452;net462;net472;net48;netcoreapp3.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net452;net462;net472;net48;netcoreapp3.1;net5.0-windows</TargetFrameworks>
     <UseWindowsForms>true</UseWindowsForms>
     <LangVersion>latest</LangVersion>
     <RootNamespace>Microsoft.WindowsAPICodePack.Sensors</RootNamespace>
@@ -29,7 +29,7 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('net2')) Or $(TargetFramework.StartsWith('net3')) Or $(TargetFramework.StartsWith('net4')) ">
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net4')) ">
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
