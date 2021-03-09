@@ -815,7 +815,11 @@ namespace Microsoft.WindowsAPICodePack.Dialogs
                 }
 
                 // Set default button and add elevation icons to appropriate buttons.
-                settings.NativeConfiguration.defaultButtonIndex = FindDefaultButtonId(sourceList);
+                var defaultBtn = FindDefaultButtonId(sourceList);
+                if (defaultBtn != TaskDialogNativeMethods.NoDefaultButtonSpecified)
+                {
+                    settings.NativeConfiguration.defaultButtonIndex = defaultBtn;
+                }
 
                 ApplyElevatedIcons(settings, sourceList);
             }
